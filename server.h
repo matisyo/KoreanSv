@@ -28,8 +28,8 @@ class server
         void *newDialog(void);
         void *procesar(void);
         static void *mati_method(void *context);//ES LO UNICO QUE PUEDE TENER GUION BAJO POR LO PODEROSO QUE ES
-        static void *mati_method2(void *context);
-        //esta es privada eb realidad
+        static void *mati_method2(void *context);/ESTE ES AUN MAS PODEROSO
+        //esta es privada en realidad LO CAMBIAMOS ESTO?
         void startThread();
         //la de arriba
 

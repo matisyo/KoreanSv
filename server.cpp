@@ -116,7 +116,7 @@ void *server::newDialog(void)
     pthread_exit(NULL);
 
     }
-// nunca deberais desafiar el poder del matimethod...o sera muy tarde...fuera de joda no tokes nada aca gil
+// nunca deberais desafiar el poder del matimethod...o sera muy tarde...fuera de joda no tokes nada aca gil ah si? ven aqui
 void *server::mati_method(void *context)
             {
                 return ((server *)context)->newDialog();
@@ -134,7 +134,7 @@ void server::startThread()
 
 void server::closeAllsockets()
 {
-    //Cuando el Server tenga lista de threds hay q recorrer cerrando
+    //Cuando el Server tenga lista de threads hay q recorrer cerrando
     close(newsockfd);
     close(sockfd);
 }
