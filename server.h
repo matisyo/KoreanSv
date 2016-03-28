@@ -38,7 +38,7 @@ class server
 
 
     private:
-        wqueue m_queue;
+        multiqueue m_queue;
         void error(const char *msg);
         //void* procesar(void* obj);
         int sockfd, newsockfd, portno;

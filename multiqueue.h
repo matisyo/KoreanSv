@@ -8,18 +8,18 @@
 
 using namespace std;
 
-class wqueue
+class multiqueue
 {
     list<mensije>    m_queue;
     pthread_mutex_t  m_mutex;
     pthread_cond_t   m_condv;
 
   public:
-    wqueue() {
+    multiqueue() {
         pthread_mutex_init(&m_mutex, NULL);
         pthread_cond_init(&m_condv, NULL);
     }
-    ~wqueue() {
+    ~multiqueue() {
         pthread_mutex_destroy(&m_mutex);
         pthread_cond_destroy(&m_condv);
     }
