@@ -7,6 +7,10 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #include "Cliente.h"
+#include <iostream>
+using namespace std;
+
+
 void Cliente::error(const char *msg)
 {
     perror(msg);
@@ -63,6 +67,14 @@ void Cliente::cerrarSoket()
 }
 int main(int argc, char *argv[])
 {
+    string fileName;
+
+    cout << "Bienvenido al cliente \n";
+    cout << "Ingrese el nombre del archivo con el que desea trabajar \n";
+
+    cin >> fileName;
+    //Aca parseo con ParserCliente el archivo que desea trabajar y consigo 
+    //Las variables argc y argv que antes entraban por consola
 
     Cliente clientiti (argc,argv[1],argv[2]);
 
