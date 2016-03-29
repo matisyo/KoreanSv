@@ -1,0 +1,6 @@
+Hola, cuando tengamos server y cliente terminados, hago los cambios necesarios para meter el parser 
+Ya lo tengo hecho pero sobre una version que creo que es vieja de server y cliente.
+Aca en la pc pude poner en eclipse 1 proyecto para cada main, los 2 estan andando casi igual que antes y esta agregado/modificado para que ande con los parser.
+
+No sabia como comentar esto asi que hice un txt 
+Corta vida al KDA
