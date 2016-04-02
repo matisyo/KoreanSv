@@ -20,6 +20,7 @@ void cliente::conectar()
        error("Cliente: El cliente no se pudo conectar satisfactoriamente");
 }
 cliente::cliente(int argc, char *ip,char *port){
+	m_conected = true;
     if (argc < 3) {
        fprintf(stderr,"usage hostname port\n");
        exit(0);
@@ -52,11 +53,17 @@ void cliente::leer()
 {
     bzero(buffer,256);
     n = recv(sockfd, buffer, 255, 0);
+    string buf = buffer;
+   if (strcmp(buf.c_str(),"exit") ==0){
+	   m_conected = false;
+   }
     if (n < 0)
        error("Cliente: Error al leer del socket.");
    printf("%s\n", buffer);
 }
-
+bool cliente::checkConection(){
+	return m_conected;
+}
 void cliente::cerrarSoket()
 {
     close(sockfd);
@@ -67,8 +74,9 @@ int main(int argc, char *argv[])
     cliente* client = new cliente(argc,argv[1],argv[2]);
 
     client->conectar();
+    client->leer();
 
-    while(true){
+    while(client->checkConection()){
     	client->escribir();
     	client->leer();
     }

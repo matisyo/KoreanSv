@@ -32,7 +32,7 @@ server::server(int port, int maxC): MAX_CLIENTES(maxC)
     m_clientThreads.resize(MAX_CLIENTES);
 
     startThread();
-
+    printf("Bienvenido a servu\n");
 }
 
 server::~server()
@@ -56,11 +56,15 @@ void server::escuchar()
 void server::aceptar(){
     //Aca el accept va a pisar el cli_addr y este nuevo es el sokete que lo relaciona a ese cliente
     //Deberia meter el nuevo thread por aca
-    clilen = sizeof(cli_addr);
+	socklen_t clilen = sizeof(cli_addr);
 
-    if(getNumClientes() < MAX_CLIENTES)
+    if(getNumClientes() < MAX_CLIENTES){
         newsockfd = accept(sockfd,(struct sockaddr *) &cli_addr, &clilen);
-    else{
+    	send(newsockfd, "Server O K   \n", 21, 0);
+    }else{
+    	newsockfd = accept(sockfd,(struct sockaddr *) &cli_addr, &clilen);
+    	send(newsockfd, "exit", 5, 0);
+    	close(newsockfd);
     	sleep(1);
     	return;
     	//printf("Un cliente ha sido rechazado por falta de capacidad\n");
@@ -88,7 +92,7 @@ void server::aceptar(){
     	aumentarNumeroClientes();
 
 
-    	printf("Se creo un thread %d\n", getNumClientes());
+    	printf("Se creo un thread %d\n", m_lastID);
     	std::stringstream ss;
     	ss << "Server: Se acepto el cliente: " << inet_ntoa(cli_addr.sin_addr);
     	Logger::Instance()->LOG(ss.str(), DEBUG);

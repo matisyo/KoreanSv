@@ -9,7 +9,7 @@
 #define SRC_SERVER_LISTAINTELIGENTE_H_
 
 #include <vector>
-
+#include <stdio.h>
 
 template <typename T>
 class ListaInteligente
@@ -39,9 +39,10 @@ public:
 
 	void removeAt(int indice)
 	{
-		m_listaInterna.erase(m_listaInterna.begin() + indice);
+
+		printf("saco al %d \n",indice);
 		unsetBitset(indice);
-		m_listaInterna.resize(m_maxSize);
+
 	}
 
 	//Devuelve el indice en donde fue cargado el elemento
@@ -62,6 +63,7 @@ public:
 		//Existe lugar disponible
 		m_listaInterna[posicionDisponible] = elem;
 		setBitset(posicionDisponible);
+		printf("metio en %d \n",posicionDisponible);
 		return posicionDisponible;
 	}
 

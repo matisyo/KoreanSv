@@ -26,9 +26,11 @@ class cliente
         void escribir();
         void leer();
         void cerrarSoket();
+        bool checkConection();
 
     private:
         int sockfd, portno, n;
+        bool m_conected;
         struct sockaddr_in serv_addr;
         struct hostent *server;
         void error(const char *msg);
