@@ -54,7 +54,7 @@ void cliente::leer()
     bzero(buffer,256);
     n = recv(sockfd, buffer, 255, 0);
     string buf = buffer;
-   if (strcmp(buf.c_str(),"exit") ==0){
+   if (strcmp(buf.c_str(),"exit\n") == 0){
 	   m_conected = false;
    }
     if (n < 0)
@@ -67,22 +67,4 @@ bool cliente::checkConection(){
 void cliente::cerrarSoket()
 {
     close(sockfd);
-}
-
-int main(int argc, char *argv[])
-{
-    cliente* client = new cliente(argc,argv[1],argv[2]);
-
-    client->conectar();
-    client->leer();
-
-    while(client->checkConection()){
-    	client->escribir();
-    	client->leer();
-    }
-    client->cerrarSoket();
-
-    Logger::Instance()->Close();
-    delete client;
-    return 0;
 }

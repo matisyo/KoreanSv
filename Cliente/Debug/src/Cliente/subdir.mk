@@ -4,12 +4,15 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../src/Cliente/Menu.cpp \
 ../src/Cliente/cliente.cpp 
 
 OBJS += \
+./src/Cliente/Menu.o \
 ./src/Cliente/cliente.o 
 
 CPP_DEPS += \
+./src/Cliente/Menu.d \
 ./src/Cliente/cliente.d 
 
 

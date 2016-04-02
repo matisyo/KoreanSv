@@ -3,6 +3,7 @@
 
 server::server(int port, int maxC): MAX_CLIENTES(maxC)
 {
+	m_svRunning = true;
     pthread_mutex_init(&m_mutex, NULL);
     pthread_cond_init(&m_condv, NULL);
     //Creo Socket
@@ -10,7 +11,7 @@ server::server(int port, int maxC): MAX_CLIENTES(maxC)
          if (sockfd < 0)
             error("Error: No se pudo crear el socket");
 
-    // Limpio el struct todo en 0file:///home/matias/Desktop/Taller/server.h
+    // Limpio el struct tod o en 0file:///home/matias/Desktop/Taller/server.h
 
      bzero((char *) &serv_addr, sizeof(serv_addr));
 
@@ -30,7 +31,8 @@ server::server(int port, int maxC): MAX_CLIENTES(maxC)
     m_clientNum = 0;
     m_listaDeClientes.resize(MAX_CLIENTES);
     m_clientThreads.resize(MAX_CLIENTES);
-
+    m_queuePost.resize(MAX_CLIENTES);
+    m_clientResponseThreads.resize(MAX_CLIENTES);
     startThread();
     printf("Bienvenido a servu\n");
 }
@@ -63,7 +65,7 @@ void server::aceptar(){
     	send(newsockfd, "Server O K   \n", 21, 0);
     }else{
     	newsockfd = accept(sockfd,(struct sockaddr *) &cli_addr, &clilen);
-    	send(newsockfd, "exit", 5, 0);
+    	send(newsockfd, "exit\n", 6, 0);
     	close(newsockfd);
     	sleep(1);
     	return;
@@ -86,9 +88,10 @@ void server::aceptar(){
     		return;
     	}
     	printf("se agrego en la posicion %d \n", m_lastID);
-    	//pthread_t nuevoThread;
-    	//pthread_create(&nuevoThread, NULL, &server::mati_method, (void*)this);
+
     	pthread_create(&m_clientThreads[m_lastID], NULL, &server::mati_method, (void*)this);
+    	pthread_create(&m_clientResponseThreads[m_lastID], NULL, &server::mati_method3, (void*)this);
+
     	aumentarNumeroClientes();
 
 
@@ -103,7 +106,7 @@ void server::aceptar(){
 
 void server::escribir(int id)
 {
-    send(m_listaDeClientes.getElemAt(id), "Llego correctamente!\n", 21, 0);
+    //send(m_listaDeClientes.getElemAt(id), "Llego correctamente!\n", 21, 0);
 }
 bool server::leer(int id)
 {
@@ -137,20 +140,52 @@ bool server::leer(int id)
 
 void* server::procesar(void)
 {
-    int aux=0;
-	while(true)
+
+	while(this->checkStatus())
 	{
-		aux++;
-		if (aux ==10000000)
-		{
-			aux =0;
+
 			if (m_queue.size() != 0)
 			{
 				mensije msg = m_queue.remove();
 
+				// BLOQUE DE PROCESAMIENTO
+
+				string buf = msg.texto;
+				printf("%s \n",buf.c_str());
+				printf("comparacion %d\n",strcmp(buf.c_str(),"KillSv\n"));
+				if (strcmp(buf.c_str(),"KillSv\n") == 0 ){
+					m_svRunning = false;
+					printf("consola: ");
+				}
+
 				printf("%d: %s \n",msg.id + 1,msg.texto.c_str());
+
+				// BLOQUE DE PROCESAMIENTO
+
+				m_queuePost[msg.id].add(msg);
+
+
+
+
 			}
-		}
+
+	}
+}
+void* server::postProcesamiento(void)
+{
+	int id = this->m_lastID;
+
+	bool ciclar = true;
+	while(ciclar)
+	{
+
+			if (m_queuePost[id].size() != 0)
+			{
+				mensije msg = m_queuePost[id].remove();
+				send(m_listaDeClientes.getElemAt(id), msg.texto.c_str(), msg.texto.length(), 0);
+
+			}
+
 	}
 }
 
@@ -174,6 +209,10 @@ void *server::mati_method(void *context)
 void *server::mati_method2(void *context)
 {
 	return ((server *)context)->procesar();
+}
+void *server::mati_method3(void *context)
+{
+	return ((server *)context)->postProcesamiento();
 }
 
 
@@ -200,6 +239,7 @@ void server::closeSocket(int id)
 	printf("Se desconectó un cliente, hay lugar para un chaval mas.\n");
 	close(m_listaDeClientes.getElemAt(id));
 	m_listaDeClientes.removeAt(id);
+
 	//terminar thread
 }
 
@@ -229,20 +269,19 @@ const int server::getMaxClientes()
 {
 	return MAX_CLIENTES;
 }
-
+bool server::checkStatus()
+{
+	return m_svRunning;
+}
 
 int main(int argc, char *argv[])
 {
 	server* servidor = new server(atoi(argv[1]),atoi(argv[2]));
-	//int i = 1;
-	//pthread_t threads[servidor->getMaxClientes()];
-	//void* status;
 	servidor->escuchar();
-	while(true)
+	while(servidor->checkStatus())
 	{
 		servidor->aceptar();
 
-		//pthread_create(&threads[i], NULL, &server::mati_method, (void*)servidor);
 	}
 
 	servidor->closeAllsockets();

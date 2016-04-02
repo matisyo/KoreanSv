@@ -30,20 +30,26 @@ class server
         void closeAllsockets();
         const int getMaxClientes();
         const int getNumClientes();
+        bool checkStatus();
         ~server();
 
         //METODOS LOCOS
          void *procesar(void);
+         void *postProcesamiento(void);
          static void *mati_method(void *context);//ES LO UNICO QUE PUEDE TENER GUION BAJO POR LO PODEROSO QUE ES
          static void *mati_method2(void *context);//ESTE ES AUN MAS PODEROSO
+         static void *mati_method3(void *context);
 
     private:
 
         const int MAX_CLIENTES;
         multiqueue m_queue;
+        std::vector<multiqueue> m_queuePost;
+        bool m_svRunning;
         int m_clientNum;
         ListaInteligente<int> m_listaDeClientes;
         std::vector<pthread_t> m_clientThreads;
+        std::vector<pthread_t> m_clientResponseThreads;
 
         int m_lastID;
         pthread_mutex_t  m_mutex;
