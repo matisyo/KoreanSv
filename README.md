@@ -15,3 +15,8 @@
 ![](http://i.imgur.com/irqjHqT.gif)
 ![](http://i.imgur.com/gFcKWDM.gif)
 ![](http://forgifs.com/gallery/d/219537-2/Twerking-door-candles.gif)
+![](https://img.buzzfeed.com/buzzfeed-static/static/2014-07/18/8/enhanced/webdr09/anigif_enhanced-buzz-32587-1405685331-4.gif?no-auto)
+![](https://img.buzzfeed.com/buzzfeed-static/static/2014-07/18/8/enhanced/webdr02/anigif_enhanced-buzz-21087-1405685585-12.gif?no-auto)
+![](https://img.buzzfeed.com/buzzfeed-static/static/2014-07/18/10/enhanced/webdr09/anigif_enhanced-buzz-22145-1405693554-5.gif?no-auto)
+![](https://img.buzzfeed.com/buzzfeed-static/static/2014-07/18/10/enhanced/webdr06/anigif_enhanced-buzz-26841-1405694334-4.gif?no-auto)
+![](https://img.buzzfeed.com/buzzfeed-static/static/2014-07/18/10/enhanced/webdr06/anigif_enhanced-buzz-26841-1405694334-4.gif?no-auto)
