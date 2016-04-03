@@ -21,3 +21,9 @@ HACER MENU Y FUNCIONALIDAD
 CREAR 1 THREAD PARALELO PARA RECV DE CLIENETE PUEDE SER UTIL?? DEBATIR
 
 Q CIERRE TODO CORRECTAMENTE SI MUERE EL SERVER?? ESTO SE HACE??
+
+Juampa 4:0 //##############//
+Arregle a la version de hace unas horas q lea archivos del parser tomando como filename el argv[1]
+Depsues viendo como hacer el menu, vi que Cliente no estaba nunca cargando la lista de mensajes, asi que agregue eso al .h y al constructor. Asi probando rapido pude hacer q en vez de preguntar (escriba su mensaje) imprima todos los mensajes posibles y deberia decidir uno de los q tiene. Y ahi mismo tendriamos q removerlo del vector ese. Deberia andar bien :D
+Me fui a dormir, mañana agrego mis cambios a lo  ultimo q este hecho, me aseguro q yo no rompa nada y subo
+slds
