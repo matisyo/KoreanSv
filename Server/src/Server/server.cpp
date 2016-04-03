@@ -161,7 +161,7 @@ void* server::procesar(void)
 			if (m_queue.size() != 0)
 			{
 				ServerMessage serverMsg = m_queue.remove();
-				DataMessage dataMessage = m_alanTuring->decodeMessage(serverMsg.networkMessage.msg_Data);
+				DataMessage dataMessage = m_alanTuring->decodeMessage(serverMsg.networkMessage);
 				string messageID(dataMessage.msg_ID);
 
 				// BLOQUE DE PROCESAMIENTO
@@ -328,7 +328,7 @@ bool server::procesarMensaje(const ServerMessage serverMsg)
 {
 	bool procesamientoExitoso = true;;
 	NetworkMessage netMsg = serverMsg.networkMessage;
-	DataMessage dataMsg = m_alanTuring->decodeMessage(netMsg.msg_Data);
+	DataMessage dataMsg = m_alanTuring->decodeMessage(netMsg);
 	std::string stringValue(dataMsg.msg_value);
 	printf("Procesando mensaje con ID: %s \n", dataMsg.msg_ID);
 

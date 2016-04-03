@@ -8,6 +8,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <bitset>
 void cliente::error(const char *msg)
 {
 	Logger::Instance()->LOG(msg, ERROR);
@@ -50,7 +51,7 @@ void cliente::escribir()
 	//deberia recogerlo del xml
 	Mensaje mensaje;
 	mensaje.id = "mensaje1";
-	mensaje.tipo = "string";
+	mensaje.tipo = "char";
     printf("Por favor. Ingrese valor mensaje: ");
     char buf[256];
     bzero(buf,256);
@@ -92,11 +93,11 @@ void cliente::leer()
     	   exit(-1);
        }
    }
+
    printf("Se leyeron %d bytes del mensaje ya procesado.\n", n);
    NetworkMessage netMsgRecibido = m_alanTuring->decode(buffer);
    mostrarMensaje(netMsgRecibido);
 
-   printf("%s\n", buffer);
 }
 bool cliente::checkConection(){
 	return m_conected;
@@ -108,7 +109,7 @@ void cliente::cerrarSoket()
 
 void cliente::mostrarMensaje(NetworkMessage networkMessage)
 {
-	DataMessage dataMsg = m_alanTuring->decodeMessage(networkMessage.msg_Data);
+	DataMessage dataMsg = m_alanTuring->decodeMessage(networkMessage);
 	string messageID(dataMsg.msg_ID);
 	std::stringstream ss;
 	if ((dataMsg.msg_status == '-') || (dataMsg.msg_status == 'I'))
@@ -131,20 +132,31 @@ void cliente::mostrarMensaje(NetworkMessage networkMessage)
 	if ((networkMessage.msg_Code[0] == 's') && (networkMessage.msg_Code[1] == 't') && (networkMessage.msg_Code[2] == 'r'))
 	{
 		printf("Tipo de Mensaje: string \n");
+
 		string valorMensaje(dataMsg.msg_value);
-		char decoded[200];
-		for (int i = 0; i < 3;i++)
-			printf("char i: %c", dataMsg.msg_value[i]);
-		//printf("Valor del Mensaje: %s \n", valorMensaje.c_str());
+		printf("Valor del Mensaje: %s \n", valorMensaje.c_str());
 	}
-	//int msg
-	/*if ((networkMessage.msg_Code[0] == 'i') && (networkMessage.msg_Code[1] == 'n') && (networkMessage.msg_Code[2] == 't'))
+	if ((networkMessage.msg_Code[0] == 'i') && (networkMessage.msg_Code[1] == 'n') && (networkMessage.msg_Code[2] == 't'))
 	{
 		printf("Tipo de Mensaje: int \n");
 		string valorMensaje(dataMsg.msg_value);
 		int valorInt = stoi(dataMsg.msg_value);
-		printf("Valor del Mensaje: %s \n", valorMensaje.c_str());
-	}*/
+		printf("Valor del Mensaje: %d \n", valorInt);
+	}
+	if ((networkMessage.msg_Code[0] == 'd') && (networkMessage.msg_Code[1] == 'b') && (networkMessage.msg_Code[2] == 'l'))
+	{
+		printf("Tipo de Mensaje: double \n");
+		string valorMensaje(dataMsg.msg_value);
+		double valorDouble = stod(dataMsg.msg_value);
+		printf("Valor del Mensaje: %f \n", valorDouble);
+	}
+	if ((networkMessage.msg_Code[0] == 'c') && (networkMessage.msg_Code[1] == 'h') && (networkMessage.msg_Code[2] == 'r'))
+	{
+		printf("Tipo de Mensaje: double \n");
+		string valorMensaje(dataMsg.msg_value);
+		char valorChar = valorMensaje.at(0);
+		printf("Valor del Mensaje: %c \n", valorChar);
+	}
 }
 
 bool cliente::lecturaExitosa(int bytesLeidos)

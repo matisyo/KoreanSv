@@ -41,7 +41,7 @@ public:
 	//los decode reciben buffers de tamaño 256
 	NetworkMessage decode (char* codigoEnigma);
 	unsigned short decodeLength(char* codigoEnigma);
-	DataMessage decodeMessage (char* datosCodigoEnigma);
+	DataMessage decodeMessage (NetworkMessage netMsg);
 
 	void setNetworkMessageStatus(NetworkMessage* networkMessage, char statusCode);
 

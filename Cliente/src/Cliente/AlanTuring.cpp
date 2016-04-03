@@ -56,10 +56,23 @@ unsigned short AlanTuring::decodeLength(char* codigoEnigma)
 	return messageLength;
 }
 
-DataMessage AlanTuring::decodeMessage (char* datosCodigoEnigma)
+DataMessage AlanTuring::decodeMessage (NetworkMessage netMsg)
 {
 	DataMessage dataMsg;
-	memcpy(&dataMsg, datosCodigoEnigma, sizeof(DataMessage));
+	memcpy(&dataMsg, netMsg.msg_Data, sizeof(DataMessage));
+
+	std::string msgID(dataMsg.msg_ID);
+
+	int pos = msgID.find("$");
+	string id(msgID.substr(0, pos));
+
+	msgID.erase(0, pos + 1);
+
+	string valor(msgID);
+
+	memcpy(dataMsg.msg_ID, id.c_str(), MESSAGE_ID_BYTES_LIMIT);
+	memcpy(dataMsg.msg_value, valor.c_str(), MESSAGE_VALUE_SIZE);
+
 	return dataMsg;
 }
 
@@ -106,29 +119,39 @@ void AlanTuring::encodeMessage(NetworkMessage* netMsg, const Mensaje mensaje)
 	DataMessage dataMsg;
 
 	dataMsg.msg_status = '-';
+	string id(mensaje.id.c_str());
+	id.append("$");
 
 	//copia el ID extraido del xml en el struct DataMessage
 	bzero(dataMsg.msg_ID,MESSAGE_ID_BYTES_LIMIT);
-	strncpy(dataMsg.msg_ID, mensaje.id.c_str(), MESSAGE_ID_BYTES_LIMIT);
+	memcpy(dataMsg.msg_ID, id.c_str(), MESSAGE_ID_BYTES_LIMIT);
 
 	//copia el valor string al buffer de DataMeessage
 	bzero(dataMsg.msg_value, MESSAGE_VALUE_SIZE);
-	strncpy(dataMsg.msg_value, mensaje.valor.c_str(), MESSAGE_VALUE_SIZE);
+	if (mensaje.id.length() < MESSAGE_ID_BYTES_LIMIT)
+	{
+		memcpy(dataMsg.msg_ID + id.length(), mensaje.valor.c_str(), MESSAGE_ID_BYTES_LIMIT - id.length());
+		memcpy(dataMsg.msg_value, mensaje.valor.c_str() + MESSAGE_ID_BYTES_LIMIT - id.length(), MESSAGE_VALUE_SIZE);
+	}
+	else
+		memcpy(dataMsg.msg_value, mensaje.valor.c_str(), MESSAGE_VALUE_SIZE);
 
 	//network message length
-	netMsg->msg_Length = MESSAGE_LENGTH_BYTES + MESSAGE_CODE_BYTES + 1 +mensaje.id.length() + mensaje.valor.length();
+	netMsg->msg_Length = MESSAGE_LENGTH_BYTES + MESSAGE_CODE_BYTES + 1 +id.length() + mensaje.valor.length();
 
 	//network message data
 	bzero(netMsg->msg_Data, MESSAGE_DATA_SIZE);
 	memcpy(netMsg->msg_Data, &dataMsg, MESSAGE_DATA_SIZE);
+
 }
 
 
 void AlanTuring::setNetworkMessageStatus(NetworkMessage* networkMessage, char statusCode)
 {
-	DataMessage dataMessage = decodeMessage(networkMessage->msg_Data);
+	//DataMessage dataMessage = decodeMessage(*networkMessage);
+	DataMessage dataMessage;
+	memcpy(&dataMessage, networkMessage->msg_Data, sizeof(DataMessage));
 	dataMessage.msg_status = statusCode;
-
 	bzero(networkMessage->msg_Data, MESSAGE_DATA_SIZE);
 	memcpy(networkMessage->msg_Data, &dataMessage, sizeof(dataMessage));
 
