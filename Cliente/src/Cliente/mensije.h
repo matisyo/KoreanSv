@@ -3,7 +3,7 @@
 #include <string>
 #include <string.h>
 
-class mensije
+class ServerMessage
 {
     public:
 

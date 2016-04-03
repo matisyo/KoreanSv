@@ -4,6 +4,8 @@
 server::server(int port, int maxC): MAX_CLIENTES(maxC)
 {
 	m_svRunning = true;
+	m_alanTuring = new AlanTuring();
+
     pthread_mutex_init(&m_mutex, NULL);
     pthread_cond_init(&m_condv, NULL);
     //Creo Socket
@@ -41,6 +43,9 @@ server::~server()
 {
 	closeAllsockets();
 	m_listaDeClientes.clear();
+	m_queuePost.clear();
+
+	delete m_alanTuring;
     pthread_mutex_destroy(&m_mutex);
     pthread_cond_destroy(&m_condv);
 }
@@ -52,25 +57,28 @@ void server::error(const char *msg)
 
 void server::escuchar()
 {
-    //Se frena el thread hasta que escucha a alguien CREO
-    listen(sockfd,5);
+	int success = 0;
+    success = listen(sockfd, MAX_CLIENTES);
+    if (success < 0)
+    {
+    	Logger::Instance()->LOG("Server: El server no se pudo configurar satisfactoriamente", ERROR);
+    	exit(-1);
+    }
 }
 void server::aceptar(){
     //Aca el accept va a pisar el cli_addr y este nuevo es el sokete que lo relaciona a ese cliente
     //Deberia meter el nuevo thread por aca
 	socklen_t clilen = sizeof(cli_addr);
-
     if(getNumClientes() < MAX_CLIENTES){
         newsockfd = accept(sockfd,(struct sockaddr *) &cli_addr, &clilen);
-    	send(newsockfd, "Server O K   \n", 21, 0);
+    	//send(newsockfd, "Server O K   \n", 21, 0);
     }else{
+    	//Informa al socket solicitante, que el server ya no posee capacidad
     	newsockfd = accept(sockfd,(struct sockaddr *) &cli_addr, &clilen);
-    	send(newsockfd, "exit\n", 6, 0);
+    	//send(newsockfd, "exit\n", 6, 0);
     	close(newsockfd);
     	sleep(1);
     	return;
-    	//printf("Un cliente ha sido rechazado por falta de capacidad\n");
-    	//Logger::Instance()->LOG("Server: Cliente rechazado. El servidor no puede aceptar más clientes.", WARN);
 	}
     if (newsockfd < 0)
     {
@@ -113,28 +121,34 @@ bool server::leer(int id)
     //Reseteo el buffer que se va a completar con nuevos mensajes
     bzero(buffer,256);
     int n = recv(m_listaDeClientes.getElemAt(id), buffer, 255, 0);
-    if (n < 0)
-    {
-    	//Cliente Desconectado
-    	closeSocket(id);
-    	printf("leyo -1 el recv\n");
+
+    if (!lecturaExitosa(n, id))
     	return false;
 
-    }
-    if (n == 0)
+    printf("Se leyeron %d bytes.\n", n);
+    int messageLength = (int)m_alanTuring->decodeLength(buffer);
+
+    //loopea hasta haber leido la totalidad de los bytes necarios
+    while (n < messageLength)
     {
-    	//Cliente se desconecto?
-    	closeSocket(id);
-    	printf("leyo 0 el recv\n");
-    	return false;
+    	n = recv(m_listaDeClientes.getElemAt(id), buffer, 255, 0);
+    	printf("Se leyeron %d bytes.", n);
+        if (!lecturaExitosa(n, id))
+        	return false;
     }
 
-    string my_str2 (buffer);
+    NetworkMessage netMsgRecibido = m_alanTuring->decode(buffer);
+
+    ServerMessage serverMsg;
+    serverMsg.clientID = id;
+    serverMsg.networkMessage = netMsgRecibido;
+ /*string my_str2 (buffer);
     mensije msg;
     msg.id = id;
-    msg.texto = my_str2;
+    msg.texto = my_str2;*/
 
-    m_queue.add(msg);
+    m_queue.add(serverMsg);
+    printf("Se agrego un mensaje a la cola satisfactoriamente.\n");
     return true;
 }
 
@@ -146,26 +160,40 @@ void* server::procesar(void)
 
 			if (m_queue.size() != 0)
 			{
-				mensije msg = m_queue.remove();
+				ServerMessage serverMsg = m_queue.remove();
+				DataMessage dataMessage = m_alanTuring->decodeMessage(serverMsg.networkMessage.msg_Data);
+				string messageID(dataMessage.msg_ID);
 
 				// BLOQUE DE PROCESAMIENTO
+				bool mensajeValido = procesarMensaje(serverMsg);
 
-				string buf = msg.texto;
+				if (!mensajeValido)
+				{
+					std::stringstream ss;
+					ss << "El Mensaje con ID: " << messageID.c_str() << " fue rechazado.";
+					Logger::Instance()->LOG(ss.str(), DEBUG);
+					m_alanTuring->setNetworkMessageStatus(&serverMsg.networkMessage, 'I');
+
+				}
+				printf("mensaje valido\n");
+				std::stringstream ss;
+				ss << "El Mensaje con ID: " << messageID.c_str() << " fue procesado correctamente.";
+				Logger::Instance()->LOG(ss.str(), DEBUG);
+				m_alanTuring->setNetworkMessageStatus(&serverMsg.networkMessage, 'V');
+
+				//FUNCION ANTIGUA
+				/*string buf = msg.texto;
 				printf("%s \n",buf.c_str());
 				printf("comparacion %d\n",strcmp(buf.c_str(),"KillSv\n"));
 				if (strcmp(buf.c_str(),"KillSv\n") == 0 ){
 					m_svRunning = false;
 					printf("consola: ");
 				}
-
-				printf("%d: %s \n",msg.id + 1,msg.texto.c_str());
+				printf("%d: %s \n",msg.id + 1,msg.texto.c_str());*/
 
 				// BLOQUE DE PROCESAMIENTO
-
-				m_queuePost[msg.id].add(msg);
-
-
-
+			    printf("Se agrego el mensaje a la cola de mensajes procesados.\n");
+				m_queuePost[serverMsg.clientID].add(serverMsg);
 
 			}
 
@@ -181,8 +209,10 @@ void* server::postProcesamiento(void)
 
 			if (m_queuePost[id].size() != 0)
 			{
-				mensije msg = m_queuePost[id].remove();
-				send(m_listaDeClientes.getElemAt(id), msg.texto.c_str(), msg.texto.length(), 0);
+				ServerMessage msg = m_queuePost[id].remove();
+				char bufferEscritura[MESSAGE_BUFFER_SIZE];
+				int msgLength = m_alanTuring->encodeNetworkMessage(msg.networkMessage, bufferEscritura);
+				send(m_listaDeClientes.getElemAt(id),bufferEscritura , msgLength, 0);
 
 			}
 
@@ -274,18 +304,49 @@ bool server::checkStatus()
 	return m_svRunning;
 }
 
-int main(int argc, char *argv[])
+bool server::lecturaExitosa(int bytesLeidos, int clientID)
 {
-	server* servidor = new server(atoi(argv[1]),atoi(argv[2]));
-	servidor->escuchar();
-	while(servidor->checkStatus())
+    if (bytesLeidos < 0)
+    {
+    	//Cliente Desconectado
+    	closeSocket(clientID);
+    	printf("leyo -1 el recv\n");
+    	return false;
+
+    }
+    if (bytesLeidos == 0)
+    {
+    	//Cliente Desconectado. Hay diferencias con recibir -1? Sino lo ponemos todo junto, hacen lo mismo
+    	closeSocket(clientID);
+    	printf("leyo 0 el recv\n");
+    	return false;
+    }
+    return true;
+}
+
+bool server::procesarMensaje(const ServerMessage serverMsg)
+{
+	bool procesamientoExitoso = true;;
+	NetworkMessage netMsg = serverMsg.networkMessage;
+	DataMessage dataMsg = m_alanTuring->decodeMessage(netMsg.msg_Data);
+	std::string stringValue(dataMsg.msg_value);
+	printf("Procesando mensaje con ID: %s \n", dataMsg.msg_ID);
+
+	//int msg
+	if ((netMsg.msg_Code[0] == 'i') && (netMsg.msg_Code[1] == 'n') && (netMsg.msg_Code[2] == 't'))
 	{
-		servidor->aceptar();
-
+		procesamientoExitoso = (StringHelper::validateInt(stringValue));
 	}
-
-	servidor->closeAllsockets();
-    delete servidor;
-    Logger::Instance()->Close();
-    return 0;
+	//char msg
+	if ((netMsg.msg_Code[0] == 'c') && (netMsg.msg_Code[1] == 'h') && (netMsg.msg_Code[2] == 'r'))
+	{
+		procesamientoExitoso = (StringHelper::validateChar(stringValue));
+	}
+	//char msg
+	if ((netMsg.msg_Code[0] == 'd') && (netMsg.msg_Code[1] == 'b') && (netMsg.msg_Code[2] == 'l'))
+	{
+		procesamientoExitoso = (StringHelper::validateDouble(stringValue));
+	}
+	//Por ahora no hay validacion para valores string
+	return procesamientoExitoso;
 }

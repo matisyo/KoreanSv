@@ -4,12 +4,15 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../src/Server/AlanTuring.cpp \
 ../src/Server/server.cpp 
 
 OBJS += \
+./src/Server/AlanTuring.o \
 ./src/Server/server.o 
 
 CPP_DEPS += \
+./src/Server/AlanTuring.d \
 ./src/Server/server.d 
 
 

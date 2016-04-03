@@ -12,7 +12,7 @@
 
 #include "Parser.h"
 #include "../Logger.h"
-#include "../tiposDefinidos.h"
+#include "../TiposDefinidos.h"
 #include "../pugixml/pugixml.hpp"
 #include <vector>
 #include <string>

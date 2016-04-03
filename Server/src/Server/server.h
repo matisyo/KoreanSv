@@ -2,8 +2,9 @@
 #define SERVER_H
 
 #include "ListaInteligente.h"
-#include "mensije.h"
+#include "AlanTuring.h"
 #include "multiqueue.h"
+#include "../Utils/StringHelper.h"
 #include "../Utils/Logger.h"
 
 #include <stdio.h>
@@ -17,6 +18,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include "ServerMessage.h"
 
 
 class server
@@ -43,6 +45,7 @@ class server
     private:
 
         const int MAX_CLIENTES;
+        AlanTuring* m_alanTuring;
         multiqueue m_queue;
         std::vector<multiqueue> m_queuePost;
         bool m_svRunning;
@@ -61,11 +64,13 @@ class server
         struct sockaddr_in serv_addr, cli_addr;
         pthread_t threadDeProcesos;
 
+        bool lecturaExitosa(int bytesLeidos, int clientID);
         void closeSocket(int id);
         void reducirNumeroClientes();
         void aumentarNumeroClientes();
         void startThread();
         void *newDialog(void);
+        bool procesarMensaje(const ServerMessage serverMsg);
         void error(const char *msg);
 
 };

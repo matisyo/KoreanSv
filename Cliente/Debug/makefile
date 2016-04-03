@@ -12,6 +12,7 @@ RM := rm -rf
 -include src/Utils/Parser/subdir.mk
 -include src/Utils/subdir.mk
 -include src/Cliente/subdir.mk
+-include src/subdir.mk
 -include subdir.mk
 -include objects.mk
 

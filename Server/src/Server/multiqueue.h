@@ -2,16 +2,16 @@
 #ifndef MULTIQUEUE_H
 #define MULTIQUEUE_H
 
+#include "../Utils/TiposDefinidos.h"
+#include "ServerMessage.h"
 #include <pthread.h>
 #include <list>
-
-#include "../Server/mensije.h"
 
 using namespace std;
 
 class multiqueue
 {
-    list<mensije>    m_queue;
+    list<ServerMessage> m_queue;
     pthread_mutex_t  m_mutex;
     pthread_cond_t   m_condv;
 
@@ -24,18 +24,18 @@ class multiqueue
         pthread_mutex_destroy(&m_mutex);
         pthread_cond_destroy(&m_condv);
     }
-    void add(mensije item) {
+    void add(ServerMessage item) {
         pthread_mutex_lock(&m_mutex);
         m_queue.push_back(item);
         pthread_cond_signal(&m_condv);
         pthread_mutex_unlock(&m_mutex);
     }
-    mensije remove() {
+    ServerMessage remove() {
         pthread_mutex_lock(&m_mutex);
         while (m_queue.size() == 0) {
             pthread_cond_wait(&m_condv, &m_mutex);
         }
-        mensije item = m_queue.front();
+        ServerMessage item = m_queue.front();
         m_queue.pop_front();
         pthread_mutex_unlock(&m_mutex);
         return item;

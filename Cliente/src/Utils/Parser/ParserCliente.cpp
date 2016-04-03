@@ -216,7 +216,12 @@ bool ParserCliente::validarTipoDeDato(std::string& tipoDatoString)
 
 bool ParserCliente::validarMensajeID(std::string& tipoDatoString)
 {
-	return !tipoDatoString.empty();
+	if (tipoDatoString.empty())
+		return false;
+	if (tipoDatoString.length() > MESSAGE_ID_BYTES_LIMIT)
+		return false;
+
+	return true;
 }
 bool ParserCliente::validarValorMensaje(std::string& valorMensajeString)
 {

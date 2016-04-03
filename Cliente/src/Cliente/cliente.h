@@ -9,12 +9,14 @@
 #include <pthread.h>
 #include <string>
 #include <string.h>
+#include <sstream>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include "../Cliente/mensije.h"
 #include "../Cliente/multiqueue.h"
+#include "AlanTuring.h";
 
 
 
@@ -22,6 +24,7 @@ class cliente
 {
     public:
         cliente(int argc, char *ip,char *port);
+        ~cliente();
         void conectar();
         void escribir();
         void leer();
@@ -29,6 +32,7 @@ class cliente
         bool checkConection();
 
     private:
+        AlanTuring* m_alanTuring;
         int sockfd, portno, n;
         bool m_conected;
         struct sockaddr_in serv_addr;
@@ -36,6 +40,9 @@ class cliente
         void error(const char *msg);
 
         char buffer[256];
+
+        bool lecturaExitosa(int bytesLeidos);
+        void mostrarMensaje(NetworkMessage networkMessage);
 
 };
 
