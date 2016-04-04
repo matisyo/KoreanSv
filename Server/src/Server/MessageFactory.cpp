@@ -33,7 +33,7 @@ Mensaje MessageFactory::createMessage(const std::string& msgID,const std::string
 		mensajeCreado.tipo = "char";
 		break;
 	case msgString:
-		mensajeCreado.tipo = "char";
+		mensajeCreado.tipo = "string";
 		break;
 	case msgExit:
 		mensajeCreado.tipo = "exit";
