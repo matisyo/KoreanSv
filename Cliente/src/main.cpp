@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     cliente* client = new cliente(argc,argv[1],argv[2]);
 
     client->conectar();
-    //client->leer();
+    client->leer();
 
     while(client->checkConection()){
     	client->escribir();

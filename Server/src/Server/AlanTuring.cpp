@@ -112,6 +112,20 @@ void AlanTuring::fillMsgData(NetworkMessage* netMsg, const Mensaje mensaje)
 		netMsg->msg_Code[2] = 'r';
 		encodeMessage(netMsg, mensaje);
 	}
+	if ((strcmp(mensaje.tipo.c_str(), "exit")) == 0)
+	{
+		netMsg->msg_Code[0] = 'e';
+		netMsg->msg_Code[1] = 'x';
+		netMsg->msg_Code[2] = 't';
+		encodeMessage(netMsg, mensaje);
+	}
+	if ((strcmp(mensaje.tipo.c_str(), "connected")) == 0)
+	{
+		netMsg->msg_Code[0] = 'c';
+		netMsg->msg_Code[1] = 'n';
+		netMsg->msg_Code[2] = 't';
+		encodeMessage(netMsg, mensaje);
+	}
 }
 
 void AlanTuring::encodeMessage(NetworkMessage* netMsg, const Mensaje mensaje)

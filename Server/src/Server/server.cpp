@@ -52,6 +52,7 @@ server::~server()
 void server::error(const char *msg)
 {
 	Logger::Instance()->LOG(msg, ERROR);
+	Logger::Instance()->Close();
     exit(1);
 }
 
@@ -71,10 +72,14 @@ void server::aceptar(){
 	socklen_t clilen = sizeof(cli_addr);
     if(getNumClientes() < MAX_CLIENTES){
         newsockfd = accept(sockfd,(struct sockaddr *) &cli_addr, &clilen);
+        Mensaje connectedMessage = MessageFactory::Instance()->createMessage("mensajeConeccion", "Conectado al Server\n", msgConnected);
+        sendMsg(newsockfd, connectedMessage);
     	//send(newsockfd, "Server O K   \n", 21, 0);
     }else{
     	//Informa al socket solicitante, que el server ya no posee capacidad
     	newsockfd = accept(sockfd,(struct sockaddr *) &cli_addr, &clilen);
+        Mensaje exitMessage = MessageFactory::Instance()->createMessage("servidorLLeno", "El Servidor está lleno\n", msgExit);
+        sendMsg(newsockfd, exitMessage);
     	//send(newsockfd, "exit\n", 6, 0);
     	close(newsockfd);
     	sleep(1);
@@ -114,8 +119,17 @@ void server::aceptar(){
 
 void server::escribir(int id)
 {
+
     //send(m_listaDeClientes.getElemAt(id), "Llego correctamente!\n", 21, 0);
 }
+
+void server::sendMsg(int socketReceptor, Mensaje msg)
+{
+	char bufferEscritura[MESSAGE_BUFFER_SIZE];
+	int msgLength = m_alanTuring->encodeXMLMessage(msg, bufferEscritura);
+	send(socketReceptor,bufferEscritura , msgLength, 0);
+}
+
 bool server::leer(int id)
 {
     //Reseteo el buffer que se va a completar con nuevos mensajes
@@ -316,7 +330,7 @@ bool server::lecturaExitosa(int bytesLeidos, int clientID)
     }
     if (bytesLeidos == 0)
     {
-    	//Cliente Desconectado. Hay diferencias con recibir -1? Sino lo ponemos todo junto, hacen lo mismo
+    	//Cliente Desconectado. Hay diferencias con recibir -1? Sino lo ponemos to do junto, hacen lo mismo
     	closeSocket(clientID);
     	printf("leyo 0 el recv\n");
     	return false;

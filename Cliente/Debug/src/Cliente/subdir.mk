@@ -6,16 +6,19 @@
 CPP_SRCS += \
 ../src/Cliente/AlanTuring.cpp \
 ../src/Cliente/Menu.cpp \
+../src/Cliente/MessageFactory.cpp \
 ../src/Cliente/cliente.cpp 
 
 OBJS += \
 ./src/Cliente/AlanTuring.o \
 ./src/Cliente/Menu.o \
+./src/Cliente/MessageFactory.o \
 ./src/Cliente/cliente.o 
 
 CPP_DEPS += \
 ./src/Cliente/AlanTuring.d \
 ./src/Cliente/Menu.d \
+./src/Cliente/MessageFactory.d \
 ./src/Cliente/cliente.d 
 
 

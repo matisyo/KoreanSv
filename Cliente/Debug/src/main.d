@@ -3,7 +3,8 @@ src/main.d: ../src/main.cpp ../src/Cliente/cliente.h \
  ../src/Cliente/../Cliente/mensije.h \
  ../src/Cliente/../Cliente/multiqueue.h \
  ../src/Cliente/../Cliente/../Cliente/mensije.h \
- ../src/Cliente/AlanTuring.h ../src/Cliente/../Utils/TiposDefinidos.h
+ ../src/Cliente/AlanTuring.h ../src/Cliente/../Utils/TiposDefinidos.h \
+ ../src/Cliente/MessageFactory.h
 
 ../src/Cliente/cliente.h:
 
@@ -20,3 +21,5 @@ src/main.d: ../src/main.cpp ../src/Cliente/cliente.h \
 ../src/Cliente/AlanTuring.h:
 
 ../src/Cliente/../Utils/TiposDefinidos.h:
+
+../src/Cliente/MessageFactory.h:

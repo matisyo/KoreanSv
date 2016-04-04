@@ -2,6 +2,10 @@
 #define CLIENTE_H
 
 #include "../Utils/Logger.h"
+#include "../Cliente/mensije.h"
+#include "../Cliente/multiqueue.h"
+#include "AlanTuring.h"
+#include "MessageFactory.h"
 
 #include <stdio.h>
 #include <queue>
@@ -14,11 +18,6 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include "../Cliente/mensije.h"
-#include "../Cliente/multiqueue.h"
-#include "AlanTuring.h";
-
-
 
 class cliente
 {
@@ -42,7 +41,9 @@ class cliente
         char buffer[256];
 
         bool lecturaExitosa(int bytesLeidos);
-        void mostrarMensaje(NetworkMessage networkMessage);
+        void procesarMensaje(NetworkMessage networkMessage);
+        void sendMsg(Mensaje msg);
+        bool validarMensaje(DataMessage dataMsg);
 
 };
 

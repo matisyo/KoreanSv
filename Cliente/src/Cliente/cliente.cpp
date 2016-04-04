@@ -12,6 +12,7 @@
 void cliente::error(const char *msg)
 {
 	Logger::Instance()->LOG(msg, ERROR);
+	Logger::Instance()->Close();
     exit(0);
 }
 
@@ -51,7 +52,7 @@ void cliente::escribir()
 	//deberia recogerlo del xml
 	Mensaje mensaje;
 	mensaje.id = "mensaje1";
-	mensaje.tipo = "char";
+	mensaje.tipo = "string";
     printf("Por favor. Ingrese valor mensaje: ");
     char buf[256];
     bzero(buf,256);
@@ -68,6 +69,15 @@ void cliente::escribir()
     if (n < 0)
     	Logger::Instance()->LOG("Cliente: No se pudo enviar el mensaje.", WARN);
 }
+
+void cliente::sendMsg(Mensaje msg)
+{
+	char bufferEscritura[MESSAGE_BUFFER_SIZE];
+	int msgLength = m_alanTuring->encodeXMLMessage(msg, bufferEscritura);
+	send(sockfd, bufferEscritura , msgLength, 0);
+}
+
+
 void cliente::leer()
 {
     bzero(buffer,256);
@@ -96,7 +106,7 @@ void cliente::leer()
 
    printf("Se leyeron %d bytes del mensaje ya procesado.\n", n);
    NetworkMessage netMsgRecibido = m_alanTuring->decode(buffer);
-   mostrarMensaje(netMsgRecibido);
+   procesarMensaje(netMsgRecibido);
 
 }
 bool cliente::checkConection(){
@@ -107,37 +117,24 @@ void cliente::cerrarSoket()
     close(sockfd);
 }
 
-void cliente::mostrarMensaje(NetworkMessage networkMessage)
+void cliente::procesarMensaje(NetworkMessage networkMessage)
 {
 	DataMessage dataMsg = m_alanTuring->decodeMessage(networkMessage);
-	string messageID(dataMsg.msg_ID);
-	std::stringstream ss;
-	if ((dataMsg.msg_status == '-') || (dataMsg.msg_status == 'I'))
-	{
-		ss.clear();
-		ss << "El Mensaje con ID: " << messageID.c_str() << " fue rechazado.";
-		Logger::Instance()->LOG(ss.str(), DEBUG);
-		ss << "\n";
-		printf("%s", ss.str().c_str());
-	}
-	if (dataMsg.msg_status == 'V')
-	{
-		ss.clear();
-		ss << "El Mensaje con ID: " << messageID.c_str() << " fue procesado correctamente.";
-		Logger::Instance()->LOG(ss.str(), DEBUG);
-		ss << "\n";
-		printf("%s", ss.str().c_str());
-	}
+
 	//string msg
 	if ((networkMessage.msg_Code[0] == 's') && (networkMessage.msg_Code[1] == 't') && (networkMessage.msg_Code[2] == 'r'))
 	{
-		printf("Tipo de Mensaje: string \n");
+		if (!validarMensaje(dataMsg))
+			return;
 
+		printf("Tipo de Mensaje: string \n");
 		string valorMensaje(dataMsg.msg_value);
 		printf("Valor del Mensaje: %s \n", valorMensaje.c_str());
 	}
 	if ((networkMessage.msg_Code[0] == 'i') && (networkMessage.msg_Code[1] == 'n') && (networkMessage.msg_Code[2] == 't'))
 	{
+		if (!validarMensaje(dataMsg))
+			return;
 		printf("Tipo de Mensaje: int \n");
 		string valorMensaje(dataMsg.msg_value);
 		int valorInt = stoi(dataMsg.msg_value);
@@ -145,6 +142,8 @@ void cliente::mostrarMensaje(NetworkMessage networkMessage)
 	}
 	if ((networkMessage.msg_Code[0] == 'd') && (networkMessage.msg_Code[1] == 'b') && (networkMessage.msg_Code[2] == 'l'))
 	{
+		if (!validarMensaje(dataMsg))
+			return;
 		printf("Tipo de Mensaje: double \n");
 		string valorMensaje(dataMsg.msg_value);
 		double valorDouble = stod(dataMsg.msg_value);
@@ -152,11 +151,59 @@ void cliente::mostrarMensaje(NetworkMessage networkMessage)
 	}
 	if ((networkMessage.msg_Code[0] == 'c') && (networkMessage.msg_Code[1] == 'h') && (networkMessage.msg_Code[2] == 'r'))
 	{
-		printf("Tipo de Mensaje: double \n");
+		if (!validarMensaje(dataMsg))
+			return;
+		printf("Tipo de Mensaje: char \n");
 		string valorMensaje(dataMsg.msg_value);
 		char valorChar = valorMensaje.at(0);
 		printf("Valor del Mensaje: %c \n", valorChar);
 	}
+	if ((networkMessage.msg_Code[0] == 'c') && (networkMessage.msg_Code[1] == 'n') && (networkMessage.msg_Code[2] == 't'))
+	{
+		//El cliente se conecto con exito.
+		printf("Conección con el server exitosa. \n");
+		Logger::Instance()->LOG("Cliente: Conección al servidor exitosa.\n", DEBUG);
+		//string valorMensaje(dataMsg.msg_value);
+		//char valorChar = valorMensaje.at(0);
+		//printf("Valor del Mensaje: %c \n", valorChar);
+	}
+	if ((networkMessage.msg_Code[0] == 'e') && (networkMessage.msg_Code[1] == 'x') && (networkMessage.msg_Code[2] == 't'))
+	{
+		//El cliente se conecto con exito.
+		m_conected = false;
+		printf("No se pudo conectar al servidor. El servidor está lleno.\n");
+		Logger::Instance()->LOG("Cliente: No se pudo conectar al servidor. El servidor está lleno.\n", DEBUG);
+		//string valorMensaje(dataMsg.msg_value);
+		//char valorChar = valorMensaje.at(0);
+		//printf("Valor del Mensaje: %c \n", valorChar);
+	}
+}
+
+bool cliente::validarMensaje(DataMessage dataMsg)
+{
+	bool mensajeValido = true;
+	string messageID(dataMsg.msg_ID);
+	std::stringstream ss;
+	if ((dataMsg.msg_status == '-') || (dataMsg.msg_status == 'I'))
+	{
+		mensajeValido = false;
+		ss.clear();
+		ss << "El Mensaje con ID: " << messageID.c_str() << " fue rechazado.";
+		Logger::Instance()->LOG(ss.str(), DEBUG);
+		ss << "\n";
+		printf("%s", ss.str().c_str());
+
+	}
+	if (dataMsg.msg_status == 'V')
+	{
+		mensajeValido = true;
+		ss.clear();
+		ss << "El Mensaje con ID: " << messageID.c_str() << " fue procesado correctamente.";
+		Logger::Instance()->LOG(ss.str(), DEBUG);
+		ss << "\n";
+		printf("%s", ss.str().c_str());
+	}
+	return mensajeValido;
 }
 
 bool cliente::lecturaExitosa(int bytesLeidos)

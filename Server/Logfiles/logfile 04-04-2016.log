@@ -1,0 +1,14 @@
+  ===============================================
+    Comienzo del Log ( 04-04-2016 a las 15:56 ) 
+  ===============================================
+
+  DEBUG: Server: Se acepto el cliente: 192.168.0.11
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 192.168.0.11
+  DEBUG: El Mensaje con ID: mensaje1 fue rechazado.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 192.168.0.11
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: Server: Se desconectó un cliente.

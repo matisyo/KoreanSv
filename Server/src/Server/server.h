@@ -4,6 +4,7 @@
 #include "ListaInteligente.h"
 #include "AlanTuring.h"
 #include "multiqueue.h"
+#include "MessageFactory.h"
 #include "../Utils/StringHelper.h"
 #include "../Utils/Logger.h"
 
@@ -72,6 +73,7 @@ class server
         void *newDialog(void);
         bool procesarMensaje(const ServerMessage serverMsg);
         void error(const char *msg);
+        void sendMsg(int socketReceptor, Mensaje msg);
 
 };
 

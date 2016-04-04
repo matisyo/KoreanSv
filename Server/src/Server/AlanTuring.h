@@ -21,7 +21,8 @@
  *chr: envia un char
  *dbl: envia un double
  *str: envia un string
- *
+ *cnt: cliente conectado
+ *ext: pide el cierre del receptor
  */
 /*
  * Message Status
