@@ -130,6 +130,8 @@ bool ParserCliente::extraerMensajes(const pugi::xml_document* doc)
 		   exito = false;
 		   break;
 	   }
+	   if ((strcmp(tipo.c_str(), "char") == 0) && valor.length() > 1)
+	 		   quitarEspacios(valor);
 
 	   mensaje.id = id;
 	   mensaje.tipo = tipo;
@@ -225,6 +227,8 @@ bool ParserCliente::validarMensajeID(std::string& tipoDatoString)
 }
 bool ParserCliente::validarValorMensaje(std::string& valorMensajeString)
 {
+	if((strcmp(valorMensajeString.c_str(), "char")==0)&&valorMensajeString.length() >1 )
+		quitarEspacios(valorMensajeString);
 	return !valorMensajeString.empty();
 }
 

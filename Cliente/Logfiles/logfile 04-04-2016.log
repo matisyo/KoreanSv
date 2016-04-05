@@ -187,3 +187,11 @@
     Finaliza el Log ( 04-04-2016 a las 23:45 ) 
   ===============================================
 
+  ===============================================
+    Comienzo del Log ( 04-04-2016 a las 23:58 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: El Mensaje con ID: Mensaje3 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje5 fue procesado correctamente.

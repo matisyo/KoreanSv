@@ -1,0 +1,83 @@
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 00:01 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: El Mensaje con ID: Mensaje5 fue procesado correctamente.
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 00:03 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: El Mensaje con ID: Mensaje5 fue procesado correctamente.
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 00:03 ) 
+  ===============================================
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 00:42 ) 
+  ===============================================
+
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 00:42 ) 
+  ===============================================
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 00:44 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: El Mensaje con ID: Mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje5 fue procesado correctamente.
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 00:46 ) 
+  ===============================================
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 00:47 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: El Mensaje con ID: Mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje2 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje3 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje4 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje5 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje2 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje3 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje4 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje5 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje2 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje3 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje4 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje5 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje2 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje3 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje4 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje5 fue procesado correctamente.
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 01:02 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: El Mensaje con ID: Mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje2 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje3 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje4 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje5 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje2 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje3 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje4 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje5 fue procesado correctamente.

@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include "Utils/Logger.h"
 #include "Utils/Parser/ParserCliente.h"
+#include <unistd.h>
 #include <iostream>
 using namespace std;
 
@@ -40,7 +41,9 @@ int main(int argc, char *argv[])
 	   	 }
 	   	cout << 3+i << " - Salir \n";
 		int salida = (3+i);
+		cout << (4+i) << " - Ciclar \n";
 		char salidaEnChar = salida + '0';
+		char ciclarEnChar = (salida+1) + '0';
 	   	cin >> eleccion;
 
 	    if(eleccion == '1')
@@ -55,7 +58,7 @@ int main(int argc, char *argv[])
 	   	   	//delete client;
 	   	   	return 0;
 	     }
-  	    else if(eleccion >= '3' and eleccion < salidaEnChar )
+  	    else if((eleccion >= '3' and eleccion < salidaEnChar) or eleccion == ciclarEnChar )
   	    	cout << "No se puede enviar un mensaje sin estar conectado \n";
   	    else
 	       	cout << "Ingreso un comando inválido";
@@ -76,15 +79,15 @@ int main(int argc, char *argv[])
 			int i = 0;
 			for(i;i< listaDeMensajes.size();i++)
 			{
-				cout << 3+i << " - Mensaje "
-					 << listaDeMensajes[i].id << ", "
-					 << listaDeMensajes[i].tipo << ", "
-					 << listaDeMensajes[i].valor << "\n";
+				cout << 3+i << " - Enviar el Mensaje "
+					 << listaDeMensajes[i].id << "\n";
 			}
 			cout << 3+i << " - Salir \n";
+			cout << 4+i << " - Ciclar \n";
 			cin >> option;
 			int salida = (3+i);
 			char salidaEnChar = salida + '0';
+			char ciclarEnChar = (salida+1) + '0';
 
 			if(option == '1')
 	   	    	cout << "Ya esta conectado al servidor  \n";
@@ -105,6 +108,23 @@ int main(int argc, char *argv[])
 	   	    	mensajeAEnviar = listaDeMensajes[indice];
 	   	    	condicion = false;
 	   	    }
+	   	    else if(option == ciclarEnChar)
+	   	    {
+	   	    	unsigned int frecuencia;
+	   	    	cout << "Ingrese el tiempo deseado en milisegundos: \n";
+	   	    	cin >> frecuencia;
+	   	    	cout << " \n";
+	   	    	int freq;
+	   	    	for(int counter = 0; counter< listaDeMensajes.size();counter++)
+	   	    	{
+	   	   			cout << "Se enviará el mensaje: "
+	   	   			<< listaDeMensajes[counter].id << "\n";
+	   	   			client->escribir(listaDeMensajes[counter]);
+	   	   			client->leer();
+	   	   			freq = frecuencia*1000;
+	   	   			usleep(freq);
+	   	    	}
+	   	    }
 	   	    else
 	   	    	cout << "Ingreso un comando inválido";
 	   	}
@@ -117,5 +137,12 @@ int main(int argc, char *argv[])
 	delete client;
     return 0;
 
+}
+
+void wait (int segundos)
+{
+	clock_t endwait;
+	endwait = clock() + segundos*CLOCKS_PER_SEC;
+	while(clock() < endwait){}
 }
 
