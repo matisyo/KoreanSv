@@ -131,3 +131,11 @@
 
 =======
 >>>>>>> 3b872fb86dec9a0bb9b7b4180225671429cecafa
+  ===============================================
+    Comienzo del Log ( 04-04-2016 a las 23:02 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: El Mensaje con ID: Mensaje4 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje5 fue procesado correctamente.

@@ -38,8 +38,8 @@ int main(int argc, char *argv[])
    	    		 << listaDeMensajes[i].tipo << ", "
    	    		 << listaDeMensajes[i].valor << "\n";
 	   	 }
-	   	cout << 4+i << " - Salir \n";
-		int salida = (4+i);
+	   	cout << 3+i << " - Salir \n";
+		int salida = (3+i);
 		char salidaEnChar = salida + '0';
 	   	cin >> eleccion;
 
@@ -81,10 +81,10 @@ int main(int argc, char *argv[])
 					 << listaDeMensajes[i].tipo << ", "
 					 << listaDeMensajes[i].valor << "\n";
 			}
-			cout << 4+i << " - Salir \n";
+			cout << 3+i << " - Salir \n";
 			cin >> option;
 			condicion = false;
-			int salida = (4+i);
+			int salida = (3+i);
 			char salidaEnChar = salida + '0';
 	   	    if(option == '1')
 	   	    	cout << "Ya esta conectado al servidor  \n";
