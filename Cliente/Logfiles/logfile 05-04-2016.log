@@ -430,3 +430,10 @@
     Finaliza el Log ( 05-04-2016 a las 18:23 ) 
   ===============================================
 
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 18:38 ) 
+  ===============================================
+
+  ERROR: Archivo 127.0.0.1 dañado. Error Description: File was not found.
+  ERROR: No se pudo parsear con éxito el archivo XML: 127.0.0.1.
+  WARNING: No se pudo parsear con éxito el archivo XML: 127.0.0.1.Se cargará el archivo default: src/Utils/Default/cliente.xml.

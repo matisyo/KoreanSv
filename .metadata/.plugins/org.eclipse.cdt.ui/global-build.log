@@ -1,0 +1,84 @@
+18:37:43 **** Clean-only build of configuration Debug for project Cliente ****
+make clean 
+rm -rf  ./src/Utils/pugixml/pugixml.o  ./src/Utils/Parser/ParserCliente.o ./src/Utils/Parser/ParserServidor.o  ./src/Utils/Logger.o  ./src/Cliente/AlanTuring.o ./src/Cliente/Menu.o ./src/Cliente/MessageFactory.o ./src/Cliente/cliente.o  ./src/main.o  ./src/Utils/pugixml/pugixml.d  ./src/Utils/Parser/ParserCliente.d ./src/Utils/Parser/ParserServidor.d  ./src/Utils/Logger.d  ./src/Cliente/AlanTuring.d ./src/Cliente/Menu.d ./src/Cliente/MessageFactory.d ./src/Cliente/cliente.d  ./src/main.d  Cliente
+ 
+18:37:43 **** Build of configuration Debug for project Cliente ****
+make all 
+Building file: ../src/Utils/pugixml/pugixml.cpp
+Invoking: Cross G++ Compiler
+g++ -D__cplusplus=201103L -O0 -g3 -Wall -c -fmessage-length=0 -std=c++11 -lpthread -MMD -MP -MF"src/Utils/pugixml/pugixml.d" -MT"src/Utils/pugixml/pugixml.d" -o "src/Utils/pugixml/pugixml.o" "../src/Utils/pugixml/pugixml.cpp"
+Finished building: ../src/Utils/pugixml/pugixml.cpp
+ 
+Building file: ../src/Utils/Parser/ParserCliente.cpp
+Invoking: Cross G++ Compiler
+g++ -D__cplusplus=201103L -O0 -g3 -Wall -c -fmessage-length=0 -std=c++11 -lpthread -MMD -MP -MF"src/Utils/Parser/ParserCliente.d" -MT"src/Utils/Parser/ParserCliente.d" -o "src/Utils/Parser/ParserCliente.o" "../src/Utils/Parser/ParserCliente.cpp"
+Finished building: ../src/Utils/Parser/ParserCliente.cpp
+ 
+Building file: ../src/Utils/Parser/ParserServidor.cpp
+Invoking: Cross G++ Compiler
+g++ -D__cplusplus=201103L -O0 -g3 -Wall -c -fmessage-length=0 -std=c++11 -lpthread -MMD -MP -MF"src/Utils/Parser/ParserServidor.d" -MT"src/Utils/Parser/ParserServidor.d" -o "src/Utils/Parser/ParserServidor.o" "../src/Utils/Parser/ParserServidor.cpp"
+Finished building: ../src/Utils/Parser/ParserServidor.cpp
+ 
+Building file: ../src/Utils/Logger.cpp
+Invoking: Cross G++ Compiler
+g++ -D__cplusplus=201103L -O0 -g3 -Wall -c -fmessage-length=0 -std=c++11 -lpthread -MMD -MP -MF"src/Utils/Logger.d" -MT"src/Utils/Logger.d" -o "src/Utils/Logger.o" "../src/Utils/Logger.cpp"
+Finished building: ../src/Utils/Logger.cpp
+ 
+Building file: ../src/Cliente/AlanTuring.cpp
+Invoking: Cross G++ Compiler
+g++ -D__cplusplus=201103L -O0 -g3 -Wall -c -fmessage-length=0 -std=c++11 -lpthread -MMD -MP -MF"src/Cliente/AlanTuring.d" -MT"src/Cliente/AlanTuring.d" -o "src/Cliente/AlanTuring.o" "../src/Cliente/AlanTuring.cpp"
+Finished building: ../src/Cliente/AlanTuring.cpp
+ 
+Building file: ../src/Cliente/Menu.cpp
+Invoking: Cross G++ Compiler
+g++ -D__cplusplus=201103L -O0 -g3 -Wall -c -fmessage-length=0 -std=c++11 -lpthread -MMD -MP -MF"src/Cliente/Menu.d" -MT"src/Cliente/Menu.d" -o "src/Cliente/Menu.o" "../src/Cliente/Menu.cpp"
+Finished building: ../src/Cliente/Menu.cpp
+ 
+Building file: ../src/Cliente/MessageFactory.cpp
+Invoking: Cross G++ Compiler
+g++ -D__cplusplus=201103L -O0 -g3 -Wall -c -fmessage-length=0 -std=c++11 -lpthread -MMD -MP -MF"src/Cliente/MessageFactory.d" -MT"src/Cliente/MessageFactory.d" -o "src/Cliente/MessageFactory.o" "../src/Cliente/MessageFactory.cpp"
+Finished building: ../src/Cliente/MessageFactory.cpp
+ 
+Building file: ../src/Cliente/cliente.cpp
+Invoking: Cross G++ Compiler
+g++ -D__cplusplus=201103L -O0 -g3 -Wall -c -fmessage-length=0 -std=c++11 -lpthread -MMD -MP -MF"src/Cliente/cliente.d" -MT"src/Cliente/cliente.d" -o "src/Cliente/cliente.o" "../src/Cliente/cliente.cpp"
+Finished building: ../src/Cliente/cliente.cpp
+ 
+Building file: ../src/main.cpp
+Invoking: Cross G++ Compiler
+g++ -D__cplusplus=201103L -O0 -g3 -Wall -c -fmessage-length=0 -std=c++11 -lpthread -MMD -MP -MF"src/main.d" -MT"src/main.d" -o "src/main.o" "../src/main.cpp"
+../src/main.cpp: In function ‘int main(int, char**)’:
+../src/main.cpp:35:14: warning: statement has no effect [-Wunused-value]
+         for(i;i< listaDeMensajes.size();i++)
+              ^
+../src/main.cpp:35:39: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+         for(i;i< listaDeMensajes.size();i++)
+                                       ^
+../src/main.cpp:79:9: warning: statement has no effect [-Wunused-value]
+    for(i;i< listaDeMensajes.size();i++)
+         ^
+../src/main.cpp:79:34: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+    for(i;i< listaDeMensajes.size();i++)
+                                  ^
+../src/main.cpp:109:18: warning: statement has no effect [-Wunused-value]
+             for(i;i< listaDeMensajes.size();i++)
+                  ^
+../src/main.cpp:109:43: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+             for(i;i< listaDeMensajes.size();i++)
+                                           ^
+../src/main.cpp:167:62: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+           for(int counter = 0; counter< listaDeMensajes.size();counter++)
+                                                              ^
+Finished building: ../src/main.cpp
+ 
+Building target: Cliente
+Invoking: Cross G++ Linker
+g++  -o "Cliente"  ./src/Utils/pugixml/pugixml.o  ./src/Utils/Parser/ParserCliente.o ./src/Utils/Parser/ParserServidor.o  ./src/Utils/Logger.o  ./src/Cliente/AlanTuring.o ./src/Cliente/Menu.o ./src/Cliente/MessageFactory.o ./src/Cliente/cliente.o  ./src/main.o   -lpthread
+Finished building target: Cliente
+ 
+18:38:09 **** Incremental Build of configuration Debug for project Cliente ****
+make all 
+make: Nothing to be done for `all'.
+18:38:50 **** Incremental Build of configuration Debug for project Cliente ****
+make all 
+make: Nothing to be done for `all'.

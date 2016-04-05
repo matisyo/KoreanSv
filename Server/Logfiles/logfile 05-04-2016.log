@@ -234,3 +234,10 @@
   DEBUG: Server: Se desconectó un cliente.
   DEBUG: Server: Se desconectó un cliente.
   DEBUG: Server: Se desconectó un cliente.
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 18:37 ) 
+  ===============================================
+
+  ERROR: Archivo 15152 dañado. Error Description: File was not found.
+  ERROR: No se pudo parsear el archivo XML: 15152. 
+  WARNING: No se pudo parsear el archivo XML: 15152. Se cargará el archivo default: src/Utils/Default/servidor.xml.
