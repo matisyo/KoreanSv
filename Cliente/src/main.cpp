@@ -39,11 +39,12 @@ int main(int argc, char *argv[])
    	    		 << listaDeMensajes[i].tipo << ", "
    	    		 << listaDeMensajes[i].valor << "\n";
 	   	 }
-	   	cout << 3+i << " - Salir \n";
-		int salida = (3+i);
-		cout << (4+i) << " - Ciclar \n";
+   	    cout << (3+i) << " - Ciclar \n";
+	   	cout << 4+i << " - Salir \n";
+		int salida = (4+i);
+
 		char salidaEnChar = salida + '0';
-		char ciclarEnChar = (salida+1) + '0';
+		char ciclarEnChar = (salida-1) + '0';
 	   	cin >> eleccion;
 
 	    if(eleccion == '1')
@@ -58,10 +59,10 @@ int main(int argc, char *argv[])
 	   	   	//delete client;
 	   	   	return 0;
 	     }
-  	    else if((eleccion >= '3' and eleccion < salidaEnChar) or eleccion == ciclarEnChar )
+  	    else if(eleccion >= '3' and eleccion <= ciclarEnChar)
   	    	cout << "No se puede enviar un mensaje sin estar conectado \n";
   	    else
-	       	cout << "Ingreso un comando inválido";
+	       	cout << "Ingreso un comando inválido \n";
 	 }
 	client->conectar();
 	client->leer();
@@ -82,12 +83,13 @@ int main(int argc, char *argv[])
 				cout << 3+i << " - Enviar el Mensaje "
 					 << listaDeMensajes[i].id << "\n";
 			}
-			cout << 3+i << " - Salir \n";
-			cout << 4+i << " - Ciclar \n";
+
+			cout << 3+i << " - Ciclar \n";
+			cout << 4+i << " - Salir \n";
 			cin >> option;
-			int salida = (3+i);
+			int salida = (4+i);
 			char salidaEnChar = salida + '0';
-			char ciclarEnChar = (salida+1) + '0';
+			char ciclarEnChar = (salida-1) + '0';
 
 			if(option == '1')
 	   	    	cout << "Ya esta conectado al servidor  \n";
@@ -101,7 +103,7 @@ int main(int argc, char *argv[])
 	   	    	//delete client;
 	   	    	return 0;
 	   	    }
-	   	    else if(option >= '3' and option < salidaEnChar )
+	   	    else if(option >= '3' and option < ciclarEnChar )
 	   	    {
 	   	    	cout << "Se enviara el mensaje :" << (int)option -48 << "\n";
 	   	    	int indice = (int)option - 51;
@@ -139,10 +141,4 @@ int main(int argc, char *argv[])
 
 }
 
-void wait (int segundos)
-{
-	clock_t endwait;
-	endwait = clock() + segundos*CLOCKS_PER_SEC;
-	while(clock() < endwait){}
-}
 
