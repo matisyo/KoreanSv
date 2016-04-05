@@ -103,3 +103,330 @@
     Finaliza el Log ( 05-04-2016 a las 01:13 ) 
   ===============================================
 
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 02:12 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: El Mensaje con ID: Mensaje5 fue procesado correctamente.
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 02:12 ) 
+  ===============================================
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 02:13 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: El Mensaje con ID: Mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje2 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje3 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje4 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje5 fue procesado correctamente.
+  ERROR: Cliente: El cliente no se pudo conectar satisfactoriamente
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 02:14 ) 
+  ===============================================
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 03:03 ) 
+  ===============================================
+
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 03:03 ) 
+  ===============================================
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 03:04 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: El Mensaje con ID: Mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje2 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje3 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje4 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje5 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje2 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje3 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje4 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje5 fue procesado correctamente.
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 03:05 ) 
+  ===============================================
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 03:05 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  ERROR: Cliente: El cliente no se pudo conectar satisfactoriamente
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 03:06 ) 
+  ===============================================
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 17:12 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  ERROR: Cliente: El cliente no se pudo conectar satisfactoriamente
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 17:13 ) 
+  ===============================================
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 17:15 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: El Mensaje con ID: Mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje2 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje3 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje4 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje5 fue procesado correctamente.
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 17:16 ) 
+  ===============================================
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 17:24 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  ERROR: Cliente: El cliente no se pudo conectar satisfactoriamente
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 17:25 ) 
+  ===============================================
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 17:28 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  ERROR: Cliente: El cliente no se pudo conectar satisfactoriamente
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 17:28 ) 
+  ===============================================
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 17:36 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: El Mensaje con ID: Mensaje1 fue procesado correctamente.
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: El Mensaje con ID: Mensaje1 fue procesado correctamente.
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 17:39 ) 
+  ===============================================
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 17:39 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 17:40 ) 
+  ===============================================
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 17:42 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 17:43 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 17:43 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 17:43 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: Cliente: No se pudo conectar al servidor. El servidor está lleno.
+
+  DEBUG: Cliente: No se pudo conectar al servidor. El servidor está lleno.
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: El Mensaje con ID: Mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje1 fue procesado correctamente.
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 17:49 ) 
+  ===============================================
+
+  DEBUG: Cliente: No se pudo conectar al servidor. El servidor está lleno.
+
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 17:49 ) 
+  ===============================================
+
+  DEBUG: El Mensaje con ID: Mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje3 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: Mensaje5 fue procesado correctamente.
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: El Mensaje con ID: Mensaje1 fue procesado correctamente.
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 17:52 ) 
+  ===============================================
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 18:08 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 18:09 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 18:09 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 18:11 ) 
+  ===============================================
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 18:12 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 18:12 ) 
+  ===============================================
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 18:14 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  ERROR: Cliente: El cliente no se pudo conectar satisfactoriamente
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 18:17 ) 
+  ===============================================
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 18:18 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 18:18 ) 
+  ===============================================
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 18:19 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 18:19 ) 
+  ===============================================
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 18:21 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 18:22 ) 
+  ===============================================
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 18:22 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 18:22 ) 
+  ===============================================
+
+  ===============================================
+    Comienzo del Log ( 05-04-2016 a las 18:23 ) 
+  ===============================================
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+  DEBUG: Cliente: Conección al servidor exitosa.
+
+
+  ===============================================
+    Finaliza el Log ( 05-04-2016 a las 18:23 ) 
+  ===============================================
+

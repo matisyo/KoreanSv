@@ -209,6 +209,14 @@ void* server::procesar(void)
 			    printf("Se agrego el mensaje a la cola de mensajes procesados.\n");
 				m_queuePost[serverMsg.clientID].add(serverMsg);
 
+
+				//exit msg
+				if ((serverMsg.networkMessage.msg_Code[0] == 'e') && (serverMsg.networkMessage.msg_Code[1] == 'x') && (serverMsg.networkMessage.msg_Code[2] == 't'))
+				{
+					//no sirve
+					closeSocket(serverMsg.clientID);
+				}
+
 			}
 
 	}
@@ -280,10 +288,12 @@ void server::closeSocket(int id)
 {
 	Logger::Instance()->LOG("Server: Se desconectó un cliente.", DEBUG);
 	reducirNumeroClientes();
-	printf("Se desconectó un cliente, hay lugar para un chaval mas.\n");
+
+
 	close(m_listaDeClientes.getElemAt(id));
 	m_listaDeClientes.removeAt(id);
-
+	int largoListaDeClientes = getNumClientes();
+	printf("Se desconectó un cliente, hay lugar para %d chaval/es mas.\n",MAX_CLIENTES - largoListaDeClientes);
 	//terminar thread
 }
 
@@ -343,6 +353,8 @@ bool server::procesarMensaje(const ServerMessage serverMsg)
 	bool procesamientoExitoso = true;;
 	NetworkMessage netMsg = serverMsg.networkMessage;
 	DataMessage dataMsg = m_alanTuring->decodeMessage(netMsg);
+
+
 	std::string stringValue(dataMsg.msg_value);
 	printf("Procesando mensaje con ID: %s \n", dataMsg.msg_ID);
 
@@ -356,10 +368,16 @@ bool server::procesarMensaje(const ServerMessage serverMsg)
 	{
 		procesamientoExitoso = (StringHelper::validateChar(stringValue));
 	}
-	//char msg
+	//double msg
 	if ((netMsg.msg_Code[0] == 'd') && (netMsg.msg_Code[1] == 'b') && (netMsg.msg_Code[2] == 'l'))
 	{
 		procesamientoExitoso = (StringHelper::validateDouble(stringValue));
+	}
+	//exit msg
+	if ((netMsg.msg_Code[0] == 'e') && (netMsg.msg_Code[1] == 'x') && (netMsg.msg_Code[2] == 't'))
+	{
+		//no sirve
+
 	}
 	//Por ahora no hay validacion para valores string
 	return procesamientoExitoso;

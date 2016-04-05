@@ -32,10 +32,11 @@ class cliente
         void leer();
         void cerrarSoket();
         bool checkConection();
+        int sockfd, portno, n;
 
     private:
         AlanTuring* m_alanTuring;
-        int sockfd, portno, n;
+
         bool m_conected;
         struct sockaddr_in serv_addr;
         struct hostent *server;

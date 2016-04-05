@@ -26,8 +26,8 @@ void cliente::conectar()
 }
 void cliente::desconectar()
 {
-
-
+	Mensaje exitMessage = MessageFactory::Instance()->createMessage("mensajeExit", "Desconectado del Server\n", msgExit);
+	sendMsg(exitMessage);
 }
 
 cliente::cliente(int argc, string ip, int port, std::vector<Mensaje> listaDeMensajesCargados){
@@ -53,6 +53,7 @@ cliente::cliente(int argc, string ip, int port, std::vector<Mensaje> listaDeMens
 cliente::~cliente()
 {
 	delete m_alanTuring;
+	listaDeMensajes.clear();
 }
 
 void cliente::escribir(Mensaje mensaje)
@@ -173,6 +174,7 @@ void cliente::procesarMensaje(NetworkMessage networkMessage)
 	{
 		//El cliente se conecto con exito.
 		m_conected = false;
+
 		printf("No se pudo conectar al servidor. El servidor está lleno.\n");
 		Logger::Instance()->LOG("Cliente: No se pudo conectar al servidor. El servidor está lleno.\n", DEBUG);
 		//string valorMensaje(dataMsg.msg_value);
