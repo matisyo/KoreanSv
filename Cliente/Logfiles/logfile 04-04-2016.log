@@ -14,7 +14,11 @@
   DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
   DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
   ===============================================
+<<<<<<< HEAD
     Comienzo del Log ( 04-04-2016 a las 18:20 ) 
+=======
+    Comienzo del Log ( 04-04-2016 a las 17:14 ) 
+>>>>>>> 3b872fb86dec9a0bb9b7b4180225671429cecafa
   ===============================================
 
   DEBUG: Cliente: Conección al servidor exitosa.
@@ -22,6 +26,7 @@
   DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
   DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
   DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+<<<<<<< HEAD
   ===============================================
     Comienzo del Log ( 04-04-2016 a las 18:26 ) 
   ===============================================
@@ -100,10 +105,16 @@
 
   ===============================================
     Comienzo del Log ( 04-04-2016 a las 19:41 ) 
+=======
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  ===============================================
+    Comienzo del Log ( 04-04-2016 a las 17:16 ) 
+>>>>>>> 3b872fb86dec9a0bb9b7b4180225671429cecafa
   ===============================================
 
   DEBUG: Cliente: Conección al servidor exitosa.
 
+<<<<<<< HEAD
   DEBUG: El Mensaje con ID: Mensaje2 fue procesado correctamente.
   DEBUG: El Mensaje con ID: Mensaje1 fue procesado correctamente.
   DEBUG: El Mensaje con ID: Mensaje3 fue procesado correctamente.
@@ -118,3 +129,5 @@
     Finaliza el Log ( 04-04-2016 a las 19:42 ) 
   ===============================================
 
+=======
+>>>>>>> 3b872fb86dec9a0bb9b7b4180225671429cecafa
