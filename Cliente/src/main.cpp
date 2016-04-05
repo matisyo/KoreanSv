@@ -83,10 +83,10 @@ int main(int argc, char *argv[])
 			}
 			cout << 3+i << " - Salir \n";
 			cin >> option;
-			condicion = false;
 			int salida = (3+i);
 			char salidaEnChar = salida + '0';
-	   	    if(option == '1')
+
+			if(option == '1')
 	   	    	cout << "Ya esta conectado al servidor  \n";
 	   	    else if (option == '2')
 	   	    	cout << "Se va a desconectar del servidor \n";
@@ -103,12 +103,10 @@ int main(int argc, char *argv[])
 	   	    	cout << "Se enviara el mensaje :" << (int)option -48 << "\n";
 	   	    	int indice = (int)option - 51;
 	   	    	mensajeAEnviar = listaDeMensajes[indice];
+	   	    	condicion = false;
 	   	    }
 	   	    else
-	   	    {
 	   	    	cout << "Ingreso un comando inválido";
-	   	    	condicion = true;
-	   	    }
 	   	}
 		client->escribir(mensajeAEnviar);
 		client->leer();

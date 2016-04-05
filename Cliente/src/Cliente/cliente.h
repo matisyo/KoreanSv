@@ -27,6 +27,7 @@ class cliente
         cliente(int argc, string ip,int port, std::vector<Mensaje> listaDeMensajesCargados );
         ~cliente();
         void conectar();
+        void desconectar();
         void escribir(Mensaje mensaje);
         void leer();
         void cerrarSoket();

@@ -24,6 +24,12 @@ void cliente::conectar()
     if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
        error("Cliente: El cliente no se pudo conectar satisfactoriamente");
 }
+void cliente::desconectar()
+{
+
+
+}
+
 cliente::cliente(int argc, string ip, int port, std::vector<Mensaje> listaDeMensajesCargados){
 	m_conected = true;
 	m_alanTuring = new AlanTuring();
@@ -51,7 +57,7 @@ cliente::~cliente()
 
 void cliente::escribir(Mensaje mensaje)
 {
-
+	/*
     char bufferEscritura[MESSAGE_BUFFER_SIZE];
     bzero(bufferEscritura,MESSAGE_BUFFER_SIZE);
     int msgLength = m_alanTuring->encodeXMLMessage(mensaje, bufferEscritura);
@@ -60,13 +66,17 @@ void cliente::escribir(Mensaje mensaje)
     printf("Se enviaron %d bytes \n", n);
     if (n < 0)
     	Logger::Instance()->LOG("Cliente: No se pudo enviar el mensaje.", WARN);
+	*/
+	sendMsg(mensaje);
 }
 
 void cliente::sendMsg(Mensaje msg)
 {
 	char bufferEscritura[MESSAGE_BUFFER_SIZE];
 	int msgLength = m_alanTuring->encodeXMLMessage(msg, bufferEscritura);
-	send(sockfd, bufferEscritura , msgLength, 0);
+	int n =  send(sockfd, bufferEscritura , msgLength, 0);
+    if (n < 0)
+    	Logger::Instance()->LOG("Cliente: No se pudo enviar el mensaje.", WARN);
 }
 
 
