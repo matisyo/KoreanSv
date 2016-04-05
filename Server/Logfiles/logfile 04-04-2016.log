@@ -12,3 +12,127 @@
   DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
   DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
   DEBUG: Server: Se desconectó un cliente.
+  ===============================================
+    Comienzo del Log ( 04-04-2016 a las 16:38 ) 
+  ===============================================
+
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  ===============================================
+    Comienzo del Log ( 04-04-2016 a las 17:14 ) 
+  ===============================================
+
+  ERROR: Server: No se enlazo correctamente el socket del server.
+
+  ===============================================
+    Finaliza el Log ( 04-04-2016 a las 17:14 ) 
+  ===============================================
+
+  DEBUG: Server: Se desconectó un cliente.
+  ===============================================
+    Comienzo del Log ( 04-04-2016 a las 17:14 ) 
+  ===============================================
+
+  DEBUG: Server: Se acepto el cliente: 25.111.233.4
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 25.111.233.4
+  ===============================================
+    Comienzo del Log ( 04-04-2016 a las 23:12 ) 
+  ===============================================
+
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  ===============================================
+    Comienzo del Log ( 04-04-2016 a las 23:39 ) 
+  ===============================================
+
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  ===============================================
+    Comienzo del Log ( 04-04-2016 a las 23:42 ) 
+  ===============================================
+
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  ===============================================
+    Comienzo del Log ( 04-04-2016 a las 23:43 ) 
+  ===============================================
+
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  ===============================================
+    Comienzo del Log ( 04-04-2016 a las 23:45 ) 
+  ===============================================
+
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: El Mensaje con ID: mensaje1 fue procesado correctamente.
+  DEBUG: Server: Se desconectó un cliente.
+  DEBUG: Server: Se acepto el cliente: 127.0.0.1
+  DEBUG: Server: Se desconectó un cliente.

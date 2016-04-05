@@ -45,6 +45,18 @@ public:
 
 	}
 
+
+	std::vector<int> getAllClientsID()
+	{
+		std::vector<int> elemetosValidos;
+		for (int i = 0; i < m_bitset.size(); i++)
+		{
+			if (m_bitset[i])
+				elemetosValidos.push_back(i);
+		}
+		return elemetosValidos;
+	}
+
 	//Devuelve el indice en donde fue cargado el elemento
 	//Devuelve -1 si no pudo cargar el elemento;
 	int add (T elem)
@@ -66,6 +78,8 @@ public:
 		printf("metio en %d \n",posicionDisponible);
 		return posicionDisponible;
 	}
+
+
 
 	void clear()
 	{

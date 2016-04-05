@@ -47,18 +47,14 @@ cliente::~cliente()
 	delete m_alanTuring;
 }
 
-void cliente::escribir()
+void cliente::escribir(string numeroDeFoto)
 {
 	//deberia recogerlo del xml
 	Mensaje mensaje;
 	mensaje.id = "mensaje1";
-	mensaje.tipo = "string";
-    printf("Por favor. Ingrese valor mensaje: ");
-    char buf[256];
-    bzero(buf,256);
-    fgets(buf,255,stdin);
-    string msgIngresado(buf);
-    mensaje.valor = msgIngresado;
+	mensaje.tipo = "int";
+
+    mensaje.valor = numeroDeFoto;
 
     char bufferEscritura[MESSAGE_BUFFER_SIZE];
     bzero(bufferEscritura,MESSAGE_BUFFER_SIZE);
@@ -78,14 +74,11 @@ void cliente::sendMsg(Mensaje msg)
 }
 
 
-void cliente::leer()
+string cliente::leer()
 {
     bzero(buffer,256);
-    n = recv(sockfd, buffer, 255, 0);
-    /*string buf = buffer;
-   if (strcmp(buf.c_str(),"exit\n") == 0){
-	   m_conected = false;
-   }*/
+    n = read(sockfd, buffer, 255);
+    printf("jajajaja rompe");
    if (!lecturaExitosa(n))
    {
 	   //Se perdio la conexion con el server
@@ -106,7 +99,14 @@ void cliente::leer()
 
    printf("Se leyeron %d bytes del mensaje ya procesado.\n", n);
    NetworkMessage netMsgRecibido = m_alanTuring->decode(buffer);
-   procesarMensaje(netMsgRecibido);
+   DataMessage dataMsg = m_alanTuring->decodeMessage(netMsgRecibido);
+   //procesarMensaje(netMsgRecibido);
+
+   string valorMensaje(dataMsg.msg_value);
+   printf("Valor del Mensaje: %s why riot\n", valorMensaje.c_str());
+
+   return valorMensaje;
+
 
 }
 bool cliente::checkConection(){
@@ -163,9 +163,8 @@ void cliente::procesarMensaje(NetworkMessage networkMessage)
 		//El cliente se conecto con exito.
 		printf("Conección con el server exitosa. \n");
 		Logger::Instance()->LOG("Cliente: Conección al servidor exitosa.\n", DEBUG);
-		//string valorMensaje(dataMsg.msg_value);
-		//char valorChar = valorMensaje.at(0);
-		//printf("Valor del Mensaje: %c \n", valorChar);
+		string valorMensaje(dataMsg.msg_value);
+		printf("Valor del Mensaje: %s \n", valorMensaje.c_str());
 	}
 	if ((networkMessage.msg_Code[0] == 'e') && (networkMessage.msg_Code[1] == 'x') && (networkMessage.msg_Code[2] == 't'))
 	{

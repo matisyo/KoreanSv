@@ -11,6 +11,7 @@ RM := rm -rf
 -include src/Utils/pugixml/subdir.mk
 -include src/Utils/Parser/subdir.mk
 -include src/Utils/subdir.mk
+-include src/Resources/Images/subdir.mk
 -include src/Cliente/subdir.mk
 -include src/subdir.mk
 -include subdir.mk

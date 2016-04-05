@@ -23,9 +23,9 @@ C_UPPER_DEPS :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
-src/Server \
-src/Utils \
-src/Utils/Parser \
-src/Utils/pugixml \
 src \
+src/Utils/pugixml \
+src/Utils/Parser \
+src/Utils \
+src/Server \
 

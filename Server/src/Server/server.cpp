@@ -207,8 +207,10 @@ void* server::procesar(void)
 
 				// BLOQUE DE PROCESAMIENTO
 			    printf("Se agrego el mensaje a la cola de mensajes procesados.\n");
-				m_queuePost[serverMsg.clientID].add(serverMsg);
-
+			    std::vector<int> vec_de_ids_aux = m_listaDeClientes.getAllClientsID();
+			    for(int loco:vec_de_ids_aux){
+			    	m_queuePost[loco].add(serverMsg);
+			    }
 			}
 
 	}
@@ -223,6 +225,7 @@ void* server::postProcesamiento(void)
 
 			if (m_queuePost[id].size() != 0)
 			{
+				printf("%d\n",m_queuePost[id].size());
 				ServerMessage msg = m_queuePost[id].remove();
 				char bufferEscritura[MESSAGE_BUFFER_SIZE];
 				int msgLength = m_alanTuring->encodeNetworkMessage(msg.networkMessage, bufferEscritura);

@@ -25,8 +25,8 @@ class cliente
         cliente(int argc, char *ip,char *port);
         ~cliente();
         void conectar();
-        void escribir();
-        void leer();
+        void escribir(string numeroDeFoto);
+        string leer();
         void cerrarSoket();
         bool checkConection();
 
