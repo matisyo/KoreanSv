@@ -6,6 +6,7 @@
 #include "../Cliente/multiqueue.h"
 #include "AlanTuring.h"
 #include "MessageFactory.h"
+#include "../Utils/TiposDefinidos.h"
 
 #include <stdio.h>
 #include <queue>
@@ -19,13 +20,14 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
+
 class cliente
 {
     public:
-        cliente(int argc, char *ip,char *port);
+        cliente(int argc, string ip,int port, std::vector<Mensaje> listaDeMensajesCargados );
         ~cliente();
         void conectar();
-        void escribir();
+        void escribir(Mensaje mensaje);
         void leer();
         void cerrarSoket();
         bool checkConection();
@@ -37,6 +39,7 @@ class cliente
         struct sockaddr_in serv_addr;
         struct hostent *server;
         void error(const char *msg);
+        std::vector<Mensaje> listaDeMensajes;
 
         char buffer[256];
 

@@ -9,6 +9,9 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #include <bitset>
+#include <iostream>
+using namespace std;
+
 void cliente::error(const char *msg)
 {
 	Logger::Instance()->LOG(msg, ERROR);
@@ -21,18 +24,16 @@ void cliente::conectar()
     if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
        error("Cliente: El cliente no se pudo conectar satisfactoriamente");
 }
-cliente::cliente(int argc, char *ip,char *port){
+cliente::cliente(int argc, string ip, int port, std::vector<Mensaje> listaDeMensajesCargados){
 	m_conected = true;
 	m_alanTuring = new AlanTuring();
-    if (argc < 3) {
-       fprintf(stderr,"usage hostname port\n");
-       exit(0);
-    }
-    portno = atoi(port);
+
+    portno = port;
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0)
     	error("Cliente: Error en la creación del socket");
-    server = gethostbyname(ip);// en caso de no ser ip si es ip anda igual
+    const char* ip1 = ip.c_str();
+    server = gethostbyname(ip1);
     if (server == NULL) {
     	error("Cliente: No se pudo encontrar el servidor ingresado");
     }
@@ -40,6 +41,7 @@ cliente::cliente(int argc, char *ip,char *port){
     serv_addr.sin_family = AF_INET;
     bcopy((char *)server->h_addr,(char *)&serv_addr.sin_addr.s_addr,server->h_length);
     serv_addr.sin_port = htons(portno);
+    listaDeMensajes = listaDeMensajesCargados;
 
 }
 cliente::~cliente()
@@ -47,18 +49,8 @@ cliente::~cliente()
 	delete m_alanTuring;
 }
 
-void cliente::escribir()
+void cliente::escribir(Mensaje mensaje)
 {
-	//deberia recogerlo del xml
-	Mensaje mensaje;
-	mensaje.id = "mensaje1";
-	mensaje.tipo = "string";
-    printf("Por favor. Ingrese valor mensaje: ");
-    char buf[256];
-    bzero(buf,256);
-    fgets(buf,255,stdin);
-    string msgIngresado(buf);
-    mensaje.valor = msgIngresado;
 
     char bufferEscritura[MESSAGE_BUFFER_SIZE];
     bzero(bufferEscritura,MESSAGE_BUFFER_SIZE);
