@@ -19,19 +19,24 @@ void cliente::error(const char *msg)
     exit(0);
 }
 
-void cliente::conectar()
+bool cliente::conectar()
 {
     if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
-       error("Cliente: El cliente no se pudo conectar satisfactoriamente");
+    {
+    	Logger::Instance()->LOG("Cliente: El cliente no se pudo conectar satisfactoriamente", WARN);
+       return false;
+    }
+    m_connected = true;
+    return true;
 }
 void cliente::desconectar()
 {
-	m_conected = false;
+	m_connected = false;
 	cerrarSoket();
 }
 
 cliente::cliente(int argc, string ip, int port, std::vector<Mensaje> listaDeMensajesCargados){
-	m_conected = true;
+	m_connected = true;
 	m_alanTuring = new AlanTuring();
 
     portno = port;
@@ -111,8 +116,8 @@ void cliente::leer()
    procesarMensaje(netMsgRecibido);
 
 }
-bool cliente::checkConection(){
-	return m_conected;
+bool cliente::isConnected(){
+	return m_connected;
 }
 void cliente::cerrarSoket()
 {
@@ -172,7 +177,7 @@ void cliente::procesarMensaje(NetworkMessage networkMessage)
 	if ((networkMessage.msg_Code[0] == 'e') && (networkMessage.msg_Code[1] == 'x') && (networkMessage.msg_Code[2] == 't'))
 	{
 		//El cliente se conecto con exito.
-		m_conected = false;
+		m_connected = false;
 		printf("No se pudo conectar al servidor. El servidor está lleno.\n");
 		Logger::Instance()->LOG("Cliente: No se pudo conectar al servidor. El servidor está lleno.\n", DEBUG);
 		//string valorMensaje(dataMsg.msg_value);

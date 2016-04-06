@@ -25,9 +25,10 @@ int main(int argc, char *argv[])
     int porto = parsersito->getConexionInfo().puerto;
     std::vector<Mensaje> listaDeMensajes = parsersito->getListaMensajes() ;
 
-
+    MostrarMenu:
+	cout << "\n";
+	char eleccion = 0;
 	cliente* client = new cliente(argc,ip,porto, listaDeMensajes);
-    char eleccion = 0;
 
     while(eleccion != '1'){
 	    cout << "1 - Para conectar \n";
@@ -44,39 +45,46 @@ int main(int argc, char *argv[])
 		char salidaEnChar = salida + '0';
 		char ciclarEnChar = (salida-1) + '0';
 	   	cin >> eleccion;
-
+	   	cout << "\n";
 	    if(eleccion == '1')
-	   	    	cout << "Se va a conectar al servidor \n";
+	   	    	cout << "Conectando con el servidor...\n";
 	    else if (eleccion == '2')
-	   	    	cout << "No esta conectado a ningún servidor. No se ha podido desconectar \n";
+	   	    	cout << "No esta conectado a ningún servidor. No se ha podido desconectar.\n";
 	    else if(eleccion == salidaEnChar)
    	    {
-	    	cout << "Se cerrará el cliente \n";
+   	    	cout << "Se ha cerrado el cliente.\n";
 	   	   	client->cerrarSoket();
 	   	   	Logger::Instance()->Close();
-	   	   	//delete client;
+	   	   	delete client;
 	   	   	return 0;
 	     }
   	    else if(eleccion >= '3' and eleccion <= ciclarEnChar)
   	    	cout << "No se puede enviar un mensaje sin estar conectado \n";
   	    else
-	       	cout << "Ingreso un comando inválido \n";
+	       	cout << "Por favor, ingrese un comando válido. \n";
 	 }
-	client->conectar();
+
+	if (!client->conectar())
+	{
+		printf("No se pudo establecer conexión con el servidor.\n");
+		goto MostrarMenu;
+	}
 	client->leer();
 
-	while(client->checkConection())
+
+	while(client->isConnected())
 	{
-		Mensaje mensajeAEnviar = listaDeMensajes[0];//Mensaje para que compile declarado, se va a cambiar
+		Mensaje mensajeAEnviar;//Mensaje para que compile declarado, se va a cambiar
 		//Si o si cuando se elija un mensaje valido del vector de Mensajes del cliente
 		bool condicion = true;
 		char option;
+		cout << "\n";
 		while(condicion){
 			cout << "Opciones: \n";
 			cout << "1 - Conectar \n";
 			cout << "2 - Desconectar \n";
 			int i = 0;
-			for(;i< listaDeMensajes.size();i++)
+			for(;i < listaDeMensajes.size();i++)
 			{
 				cout << 3+i << " - Enviar el Mensaje "
 					 << listaDeMensajes[i].id << "\n";
@@ -88,18 +96,21 @@ int main(int argc, char *argv[])
 			int salida = (4+i);
 			char salidaEnChar = salida + '0';
 			char ciclarEnChar = (salida-1) + '0';
+		   	cout << "\n";
 
 			if(option == '1')
-	   	    	cout << "Ya esta conectado al servidor  \n";
+	   	    	cout << "Ya esta conectado al servidor. \n";
 	   	    else if (option == '2')
 	   	    {
 	   	    	client->desconectar();
 	   	    	cout << "El cliente se ha desconectado del servidor. \n";
+	   	    	delete client;
+	   	    	goto MostrarMenu;
 	   	    }
 	   	    else if(option == salidaEnChar)
 	   	    {
 	   	    	client->cerrarSoket();
-	   	    	cout << "El cliente ha sido cerrado. \n";
+	   	    	cout << "Se ha cerrado el cliente.\n";
 	   	    	Logger::Instance()->Close();
 	   	    	//delete client;
 	   	    	return 0;
@@ -109,6 +120,8 @@ int main(int argc, char *argv[])
 	   	    	cout << "Se enviara el mensaje :" << (int)option -48 << "\n";
 	   	    	int indice = (int)option - 51;
 	   	    	mensajeAEnviar = listaDeMensajes[indice];
+	   			client->escribir(mensajeAEnviar);
+	   			client->leer();
 	   	    	condicion = false;
 	   	    }
 	   	    else if(option == ciclarEnChar)
@@ -129,10 +142,8 @@ int main(int argc, char *argv[])
 	   	    	}
 	   	    }
 	   	    else
-	   	    	cout << "Ingreso un comando inválido";
+		       	cout << "Por favor, ingrese un comando válido. \n";
 	   	}
-		client->escribir(mensajeAEnviar);
-		client->leer();
 	}
 	client->cerrarSoket();
 

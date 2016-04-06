@@ -26,17 +26,17 @@ class cliente
     public:
         cliente(int argc, string ip,int port, std::vector<Mensaje> listaDeMensajesCargados );
         ~cliente();
-        void conectar();
+        bool conectar();
         void desconectar();
         void escribir(Mensaje mensaje);
         void leer();
         void cerrarSoket();
-        bool checkConection();
+        bool isConnected();
 
     private:
         AlanTuring* m_alanTuring;
         int sockfd, portno, n;
-        bool m_conected;
+        bool m_connected;
         struct sockaddr_in serv_addr;
         struct hostent *server;
         void error(const char *msg);
