@@ -70,30 +70,30 @@ void server::aceptar(){
     //Aca el accept va a pisar el cli_addr y este nuevo es el sokete que lo relaciona a ese cliente
     //Deberia meter el nuevo thread por aca
 	socklen_t clilen = sizeof(cli_addr);
-    if(getNumClientes() < MAX_CLIENTES){
-        newsockfd = accept(sockfd,(struct sockaddr *) &cli_addr, &clilen);
-        Mensaje connectedMessage = MessageFactory::Instance()->createMessage("mensajeConeccion", "", msgConnected);
-        sendMsg(newsockfd, connectedMessage);
-    	//send(newsockfd, "Server O K   \n", 21, 0);
-    }else{
-    	//Informa al socket solicitante, que el server ya no posee capacidad
-    	newsockfd = accept(sockfd,(struct sockaddr *) &cli_addr, &clilen);
-    	std::stringstream ss;
-    	ss <<"Server: No se pudo aceptar al cliente " << inet_ntoa(cli_addr.sin_addr) << " por falta de capacidad.";
-    	Logger::Instance()->LOG(ss.str(), WARN);
 
-        Mensaje serverFullMessage = MessageFactory::Instance()->createMessage("svfull", "", msgServerFull);
-        sendMsg(newsockfd, serverFullMessage);
-    	//send(newsockfd, "exit\n", 6, 0);
-    	close(newsockfd);
-    	sleep(1);
-    	return;
-	}
+	 newsockfd = accept(sockfd,(struct sockaddr *) &cli_addr, &clilen);
+	 if(getNumClientes() < MAX_CLIENTES)
+	 {
+		 Mensaje connectedMessage = MessageFactory::Instance()->createMessage("mensajeConeccion", "", msgConnected);
+		 sendMsg(newsockfd, connectedMessage);
+	 }
+	 else
+	 {
+		 std::stringstream ss;
+		 ss <<"Server: No se pudo aceptar al cliente " << inet_ntoa(cli_addr.sin_addr) << " por falta de capacidad.";
+		 Logger::Instance()->LOG(ss.str(), WARN);
+
+		 Mensaje serverFullMessage = MessageFactory::Instance()->createMessage("svfull", "", msgServerFull);
+		 sendMsg(newsockfd, serverFullMessage);
+		 close(newsockfd);
+		 return;
+	 }
+
     if (newsockfd < 0)
     {
     	std::stringstream ss;
-    	ss <<"Server: No se pudo aceptar al cliente " << inet_ntoa(cli_addr.sin_addr);
-    	Logger::Instance()->LOG(ss.str(), WARN);
+    	ss <<"Server: No se pudo aceptar al cliente " << inet_ntoa(cli_addr.sin_addr) << ".";
+    	Logger::Instance()->LOG(ss.str(), ERROR);
     	return;
     }
     else{
