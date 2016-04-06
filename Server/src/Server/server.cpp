@@ -194,11 +194,14 @@ void* server::procesar(void)
 					m_alanTuring->setNetworkMessageStatus(&serverMsg.networkMessage, 'I');
 
 				}
-				printf("mensaje valido\n");
-				std::stringstream ss;
-				ss << "Server: El Mensaje con ID: " << messageID.c_str() << " fue procesado correctamente.";
-				Logger::Instance()->LOG(ss.str(), DEBUG);
-				m_alanTuring->setNetworkMessageStatus(&serverMsg.networkMessage, 'V');
+				else
+				{
+					printf("mensaje valido\n");
+					std::stringstream ss;
+					ss << "Server: El Mensaje con ID: " << messageID.c_str() << " fue procesado correctamente.";
+					Logger::Instance()->LOG(ss.str(), DEBUG);
+					m_alanTuring->setNetworkMessageStatus(&serverMsg.networkMessage, 'V');
+				}
 
 				//FUNCION ANTIGUA
 				/*string buf = msg.texto;
