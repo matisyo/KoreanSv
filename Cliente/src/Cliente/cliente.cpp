@@ -26,8 +26,8 @@ void cliente::conectar()
 }
 void cliente::desconectar()
 {
-
-
+	m_conected = false;
+	cerrarSoket();
 }
 
 cliente::cliente(int argc, string ip, int port, std::vector<Mensaje> listaDeMensajesCargados){

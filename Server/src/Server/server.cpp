@@ -280,7 +280,7 @@ void server::closeSocket(int id)
 {
 	Logger::Instance()->LOG("Server: Se desconectó un cliente.", DEBUG);
 	reducirNumeroClientes();
-	printf("Se desconectó un cliente, hay lugar para un chaval mas.\n");
+	printf("Se desconectó un cliente, hay lugar para %d chaval/es mas.\n",MAX_CLIENTES - getNumClientes());
 	close(m_listaDeClientes.getElemAt(id));
 	m_listaDeClientes.removeAt(id);
 

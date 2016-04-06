@@ -16,6 +16,7 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
+	//argv[1] es el pathdel archivo cliente.xml
 	std::string fileName(argv[1]);
 
 	ParserCliente* parsersito = new ParserCliente();
@@ -32,12 +33,9 @@ int main(int argc, char *argv[])
 	    cout << "1 - Para conectar \n";
 	    cout << "2 - Para desconectar \n";
    	    int i = 0;
-   	    for(i;i< listaDeMensajes.size();i++)
+   	    for(;i< listaDeMensajes.size();i++)
 	  	{
-   	    	cout << 3+i << " - Mensaje "
-   	    		 << listaDeMensajes[i].id << ", "
-   	    		 << listaDeMensajes[i].tipo << ", "
-   	    		 << listaDeMensajes[i].valor << "\n";
+   	    	cout << 3+i << " - Enviar el Mensaje " << listaDeMensajes[i].id << "\n";
 	   	 }
    	    cout << (3+i) << " - Ciclar \n";
 	   	cout << 4+i << " - Salir \n";
@@ -78,7 +76,7 @@ int main(int argc, char *argv[])
 			cout << "1 - Conectar \n";
 			cout << "2 - Desconectar \n";
 			int i = 0;
-			for(i;i< listaDeMensajes.size();i++)
+			for(;i< listaDeMensajes.size();i++)
 			{
 				cout << 3+i << " - Enviar el Mensaje "
 					 << listaDeMensajes[i].id << "\n";
@@ -94,11 +92,14 @@ int main(int argc, char *argv[])
 			if(option == '1')
 	   	    	cout << "Ya esta conectado al servidor  \n";
 	   	    else if (option == '2')
-	   	    	cout << "Se va a desconectar del servidor \n";
+	   	    {
+	   	    	client->desconectar();
+	   	    	cout << "El cliente se ha desconectado del servidor. \n";
+	   	    }
 	   	    else if(option == salidaEnChar)
 	   	    {
-	   	    	cout << "Se cerrará el cliente \n";
 	   	    	client->cerrarSoket();
+	   	    	cout << "El cliente ha sido cerrado. \n";
 	   	    	Logger::Instance()->Close();
 	   	    	//delete client;
 	   	    	return 0;
