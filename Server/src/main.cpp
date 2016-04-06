@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 
 	server* servidor = new server(porto, maxClientes);
 	servidor->escuchar();
-	while(servidor->checkStatus())
+	while(servidor->isRunning())
 	{
 		servidor->aceptar();
 

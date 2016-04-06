@@ -78,6 +78,11 @@ void server::aceptar(){
     }else{
     	//Informa al socket solicitante, que el server ya no posee capacidad
     	newsockfd = accept(sockfd,(struct sockaddr *) &cli_addr, &clilen);
+
+    	std::stringstream ss;
+    	ss <<"Server: No se pudo aceptar al cliente " << inet_ntoa(cli_addr.sin_addr) << " por falta de capacidad.";
+    	Logger::Instance()->LOG(ss.str(), WARN);
+
         Mensaje exitMessage = MessageFactory::Instance()->createMessage("servidorLLeno", "El Servidor está lleno\n", msgExit);
         sendMsg(newsockfd, exitMessage);
     	//send(newsockfd, "exit\n", 6, 0);
@@ -169,7 +174,7 @@ bool server::leer(int id)
 void* server::procesar(void)
 {
 
-	while(this->checkStatus())
+	while(this->isRunning())
 	{
 
 			if (m_queue.size() != 0)
@@ -184,14 +189,14 @@ void* server::procesar(void)
 				if (!mensajeValido)
 				{
 					std::stringstream ss;
-					ss << "El Mensaje con ID: " << messageID.c_str() << " fue rechazado.";
+					ss << "Server: El Mensaje con ID: " << messageID.c_str() << " fue rechazado.";
 					Logger::Instance()->LOG(ss.str(), DEBUG);
 					m_alanTuring->setNetworkMessageStatus(&serverMsg.networkMessage, 'I');
 
 				}
 				printf("mensaje valido\n");
 				std::stringstream ss;
-				ss << "El Mensaje con ID: " << messageID.c_str() << " fue procesado correctamente.";
+				ss << "Server: El Mensaje con ID: " << messageID.c_str() << " fue procesado correctamente.";
 				Logger::Instance()->LOG(ss.str(), DEBUG);
 				m_alanTuring->setNetworkMessageStatus(&serverMsg.networkMessage, 'V');
 
@@ -313,7 +318,7 @@ const int server::getMaxClientes()
 {
 	return MAX_CLIENTES;
 }
-bool server::checkStatus()
+bool server::isRunning()
 {
 	return m_svRunning;
 }
@@ -344,7 +349,11 @@ bool server::procesarMensaje(const ServerMessage serverMsg)
 	NetworkMessage netMsg = serverMsg.networkMessage;
 	DataMessage dataMsg = m_alanTuring->decodeMessage(netMsg);
 	std::string stringValue(dataMsg.msg_value);
+
 	printf("Procesando mensaje con ID: %s \n", dataMsg.msg_ID);
+	std::stringstream ss;
+	ss <<"Server: Procesando mensaje con ID: " << dataMsg.msg_ID << ".";
+	Logger::Instance()->LOG(ss.str(), DEBUG);
 
 	//int msg
 	if ((netMsg.msg_Code[0] == 'i') && (netMsg.msg_Code[1] == 'n') && (netMsg.msg_Code[2] == 't'))

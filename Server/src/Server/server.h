@@ -33,7 +33,7 @@ class server
         void closeAllsockets();
         const int getMaxClientes();
         const int getNumClientes();
-        bool checkStatus();
+        bool isRunning();
         ~server();
 
         //METODOS LOCOS

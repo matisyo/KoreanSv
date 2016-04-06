@@ -39,6 +39,7 @@ void cliente::desconectar()
 {
 	m_connected = false;
 	cerrarSoket();
+	Logger::Instance()->LOG("Cliente: El cliente se ha desconectado satisfactoriamente", DEBUG);
 }
 
 cliente::cliente(int argc, string ip, int port, std::vector<Mensaje> listaDeMensajesCargados){
@@ -88,6 +89,10 @@ void cliente::sendMsg(Mensaje msg)
 	int n =  send(sockfd, bufferEscritura , msgLength, 0);
     if (n < 0)
     	Logger::Instance()->LOG("Cliente: No se pudo enviar el mensaje.", WARN);
+
+	std::stringstream ss;
+	ss << "Cliente: Se ha enviado con éxito el mensaje con ID: " << msg.id.c_str() << ".";
+	Logger::Instance()->LOG(ss.str(), DEBUG);
 }
 
 

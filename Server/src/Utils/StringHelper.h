@@ -11,19 +11,21 @@
 #include <string>
 #include <cstring>
 #include <stdexcept>
+#include <algorithm>
 
 class StringHelper
 {
 public:
-	static bool validateInt(const std::string& stringToValidate)
+	static bool validateInt(std::string& stringToValidate)
 	{
+		quitarEspacios(stringToValidate);
 		for (uint i = 0 ; i < stringToValidate.length(); i++)
 		{
 			if (!std::isdigit(stringToValidate[i]))
 				return false;
 		}
 		try {
-		  int convertedNumber = stoi(stringToValidate);
+		  stoi(stringToValidate);
 		}
 		catch(std::invalid_argument& e){
 		  return false;
@@ -35,15 +37,19 @@ public:
 		return true;
 	}
 
-	static bool validateChar(const std::string& stringToValidate)
+	static bool validateChar(std::string& stringToValidate)
 	{
 		if (stringToValidate.length() > 1)
+		{
+			quitarEspacios(stringToValidate);
 			return false;
+		}
 		return true;
 	}
 
-	static bool validateDouble(const std::string& stringToValidate)
+	static bool validateDouble(std::string& stringToValidate)
 	{
+		quitarEspacios(stringToValidate);
 		bool pointFound = false;
 		for (uint i = 0 ; i < stringToValidate.length(); i++)
 		{
@@ -57,7 +63,7 @@ public:
 				return false;
 		}
 		try {
-		  double convertedNumber = stod(stringToValidate);
+		  stod(stringToValidate);
 		}
 		catch(std::invalid_argument& e){
 		  return false;
@@ -67,6 +73,14 @@ public:
 		}
 
 		return true;
+	}
+private:
+	static void quitarEspacios(std::string& texto)
+	{
+		texto.erase(std::remove_if(texto.begin(),
+					texto.end(),
+					[](char c) { return (std::isspace(c));})
+		, texto.end());
 	}
 };
 
