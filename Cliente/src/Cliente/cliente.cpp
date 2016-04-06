@@ -21,6 +21,12 @@ void cliente::error(const char *msg)
 
 bool cliente::conectar()
 {
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd < 0)
+    {
+    	Logger::Instance()->LOG("Cliente: Error en la creación del socket", ERROR);
+    	return false;
+    }
     if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
     {
     	Logger::Instance()->LOG("Cliente: El cliente no se pudo conectar satisfactoriamente", WARN);
@@ -40,9 +46,9 @@ cliente::cliente(int argc, string ip, int port, std::vector<Mensaje> listaDeMens
 	m_alanTuring = new AlanTuring();
 
     portno = port;
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    /*sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0)
-    	error("Cliente: Error en la creación del socket");
+    	error("Cliente: Error en la creación del socket");*/
     const char* ip1 = ip.c_str();
     server = gethostbyname(ip1);
     if (server == NULL) {

@@ -25,10 +25,11 @@ int main(int argc, char *argv[])
     int porto = parsersito->getConexionInfo().puerto;
     std::vector<Mensaje> listaDeMensajes = parsersito->getListaMensajes() ;
 
+	cliente* client = new cliente(argc,ip,porto, listaDeMensajes);
+
     MostrarMenu:
 	cout << "\n";
 	char eleccion = 0;
-	cliente* client = new cliente(argc,ip,porto, listaDeMensajes);
 
     while(eleccion != '1'){
 	    cout << "1 - Para conectar \n";
@@ -104,7 +105,6 @@ int main(int argc, char *argv[])
 	   	    {
 	   	    	client->desconectar();
 	   	    	cout << "El cliente se ha desconectado del servidor. \n";
-	   	    	delete client;
 	   	    	goto MostrarMenu;
 	   	    }
 	   	    else if(option == salidaEnChar)
