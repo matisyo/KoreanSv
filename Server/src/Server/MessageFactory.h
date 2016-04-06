@@ -18,7 +18,8 @@ enum MsgCode
 	msgChar,
 	msgString,
 	msgExit,
-	msgConnected
+	msgConnected,
+	msgServerFull
 };
 
 

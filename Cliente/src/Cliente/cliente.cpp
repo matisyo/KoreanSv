@@ -33,7 +33,8 @@ bool cliente::conectar()
        return false;
     }
     m_connected = true;
-    return true;
+	leer();
+    return m_connected;
 }
 void cliente::desconectar()
 {
@@ -187,13 +188,22 @@ void cliente::procesarMensaje(NetworkMessage networkMessage)
 	}
 	if ((networkMessage.msg_Code[0] == 'e') && (networkMessage.msg_Code[1] == 'x') && (networkMessage.msg_Code[2] == 't'))
 	{
-		//El cliente se conecto con exito.
-		m_connected = false;
-		printf("No se pudo conectar al servidor. El servidor está lleno.\n");
-		Logger::Instance()->LOG("Cliente: No se pudo conectar al servidor. El servidor está lleno.\n", DEBUG);
+		//El cliente fue pateado
+		desconectar();
+		printf("El cliente ha sido desconectado del server.\n");
+		Logger::Instance()->LOG("Cliente: El cliente ha sido desconectado del server.", DEBUG);
 		//string valorMensaje(dataMsg.msg_value);
 		//char valorChar = valorMensaje.at(0);
 		//printf("Valor del Mensaje: %c \n", valorChar);
+	}
+	if ((networkMessage.msg_Code[0] == 'f') && (networkMessage.msg_Code[1] == 'u') && (networkMessage.msg_Code[2] == 'l'))
+	{
+		//El server esta lleno. Patear
+		desconectar();
+		m_connected = false;
+
+		printf("El servidor está lleno.\n");
+		Logger::Instance()->LOG("Cliente: No se pudo conectar al servidor. El servidor está lleno.", DEBUG);
 	}
 }
 

@@ -23,6 +23,7 @@
  *str: envia un string
  *cnt: cliente conectado
  *ext: pide el cierre del receptor
+ *ful: servidor lleno
  */
 /*
  * Message Status

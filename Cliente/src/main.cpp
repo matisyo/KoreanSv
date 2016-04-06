@@ -70,8 +70,6 @@ int main(int argc, char *argv[])
 		printf("No se pudo establecer conexión con el servidor.\n");
 		goto MostrarMenu;
 	}
-	client->leer();
-
 
 	while(client->isConnected())
 	{
@@ -117,6 +115,7 @@ int main(int argc, char *argv[])
 	   	    }
 	   	    else if(option >= '3' and option < ciclarEnChar )
 	   	    {
+	   	    	cout << "\n";
 	   	    	cout << "Se enviara el mensaje :" << (int)option -48 << "\n";
 	   	    	int indice = (int)option - 51;
 	   	    	mensajeAEnviar = listaDeMensajes[indice];

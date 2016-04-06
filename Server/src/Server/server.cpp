@@ -72,19 +72,18 @@ void server::aceptar(){
 	socklen_t clilen = sizeof(cli_addr);
     if(getNumClientes() < MAX_CLIENTES){
         newsockfd = accept(sockfd,(struct sockaddr *) &cli_addr, &clilen);
-        Mensaje connectedMessage = MessageFactory::Instance()->createMessage("mensajeConeccion", "Conectado al Server\n", msgConnected);
+        Mensaje connectedMessage = MessageFactory::Instance()->createMessage("mensajeConeccion", "", msgConnected);
         sendMsg(newsockfd, connectedMessage);
     	//send(newsockfd, "Server O K   \n", 21, 0);
     }else{
     	//Informa al socket solicitante, que el server ya no posee capacidad
     	newsockfd = accept(sockfd,(struct sockaddr *) &cli_addr, &clilen);
-
     	std::stringstream ss;
     	ss <<"Server: No se pudo aceptar al cliente " << inet_ntoa(cli_addr.sin_addr) << " por falta de capacidad.";
     	Logger::Instance()->LOG(ss.str(), WARN);
 
-        Mensaje exitMessage = MessageFactory::Instance()->createMessage("servidorLLeno", "El Servidor está lleno\n", msgExit);
-        sendMsg(newsockfd, exitMessage);
+        Mensaje serverFullMessage = MessageFactory::Instance()->createMessage("svfull", "", msgServerFull);
+        sendMsg(newsockfd, serverFullMessage);
     	//send(newsockfd, "exit\n", 6, 0);
     	close(newsockfd);
     	sleep(1);

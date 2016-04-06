@@ -126,6 +126,13 @@ void AlanTuring::fillMsgData(NetworkMessage* netMsg, const Mensaje mensaje)
 		netMsg->msg_Code[2] = 't';
 		encodeMessage(netMsg, mensaje);
 	}
+	if ((strcmp(mensaje.tipo.c_str(), "serverfull")) == 0)
+	{
+		netMsg->msg_Code[0] = 'f';
+		netMsg->msg_Code[1] = 'u';
+		netMsg->msg_Code[2] = 'l';
+		encodeMessage(netMsg, mensaje);
+	}
 }
 
 void AlanTuring::encodeMessage(NetworkMessage* netMsg, const Mensaje mensaje)

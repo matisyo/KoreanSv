@@ -41,6 +41,9 @@ Mensaje MessageFactory::createMessage(const std::string& msgID,const std::string
 	case msgConnected:
 		mensajeCreado.tipo = "connected";
 		break;
+	case msgServerFull:
+		mensajeCreado.tipo = "serverfull";
+		break;
 
 	default:
 		mensajeCreado.tipo = "string";
