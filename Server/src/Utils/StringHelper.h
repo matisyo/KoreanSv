@@ -19,7 +19,7 @@ public:
 	static bool validateInt(std::string& stringToValidate)
 	{
 		quitarEspacios(stringToValidate);
-		for (uint i = 0 ; i < stringToValidate.length(); i++)
+		for (unsigned int i = 0 ; i < stringToValidate.length(); i++)
 		{
 			if (!std::isdigit(stringToValidate[i]))
 				return false;
@@ -42,7 +42,8 @@ public:
 		if (stringToValidate.length() > 1)
 		{
 			quitarEspacios(stringToValidate);
-			return false;
+			if (stringToValidate.length() > 1)
+				return false;
 		}
 		return true;
 	}
@@ -51,7 +52,7 @@ public:
 	{
 		quitarEspacios(stringToValidate);
 		bool pointFound = false;
-		for (uint i = 0 ; i < stringToValidate.length(); i++)
+		for (unsigned int i = 0 ; i < stringToValidate.length(); i++)
 		{
 			if (stringToValidate[i] == '.')
 			{

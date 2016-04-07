@@ -1,15 +1,5 @@
 #include "cliente.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
-#include <bitset>
-#include <iostream>
 using namespace std;
 
 void cliente::error(const char *msg)
@@ -27,6 +17,9 @@ bool cliente::conectar()
     	Logger::Instance()->LOG("Cliente: Error en la creación del socket", ERROR);
     	return false;
     }
+
+    setTimeOut();
+
     if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
     {
     	Logger::Instance()->LOG("Cliente: El cliente no se pudo conectar satisfactoriamente", WARN);
@@ -97,7 +90,7 @@ void cliente::sendMsg(Mensaje msg)
 }
 
 
-void cliente::leer()
+bool cliente::leer()
 {
     bzero(buffer,256);
     n = recv(sockfd, buffer, 255, 0);
@@ -108,7 +101,7 @@ void cliente::leer()
    if (!lecturaExitosa(n))
    {
 	   //Se perdio la conexion con el server
-	   exit(-1);
+	   return false;
    }
    int messageLength = (int)m_alanTuring->decodeLength(buffer);
    //loopea hasta haber leido la totalidad de los bytes necarios
@@ -119,13 +112,14 @@ void cliente::leer()
        if (!lecturaExitosa(n))
        {
     	   //se perdio la conexion con el server
-    	   exit(-1);
+    	  return false;
        }
    }
 
-   printf("Se leyeron %d bytes del mensaje ya procesado.\n", n);
    NetworkMessage netMsgRecibido = m_alanTuring->decode(buffer);
    procesarMensaje(netMsgRecibido);
+
+   return true;
 
 }
 bool cliente::isConnected(){
@@ -134,6 +128,23 @@ bool cliente::isConnected(){
 void cliente::cerrarSoket()
 {
     close(sockfd);
+}
+
+void cliente::setTimeOut()
+{
+    struct timeval timeout;
+    timeout.tv_sec = TIMEOUT_SECONDS;
+    timeout.tv_usec = TIMEOUT_MICROSECONDS;
+
+    if (setsockopt (sockfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout)) < 0)
+    {
+    	Logger::Instance()->LOG("Cliente: No se pudo setear un timeout en la conexion con el servidor.", WARN);
+    }
+
+    if (setsockopt (sockfd, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout, sizeof(timeout)) < 0)
+    {
+    	Logger::Instance()->LOG("Cliente: No se pudo setear un timeout en la conexion con el servidor.", WARN);
+    }
 }
 
 void cliente::procesarMensaje(NetworkMessage networkMessage)
@@ -239,12 +250,12 @@ bool cliente::lecturaExitosa(int bytesLeidos)
     if (n < 0)
     {
     	//Se perdio la coneccion con el server
-    	cerrarSoket();
+    	desconectar();
     	return false;
     }
 	if (n == 0){
 		//Se perdio la coneccion con el server
-		cerrarSoket();
+		desconectar();
 		return false;
     }
 	return true;

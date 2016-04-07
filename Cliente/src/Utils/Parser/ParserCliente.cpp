@@ -130,8 +130,6 @@ bool ParserCliente::extraerMensajes(const pugi::xml_document* doc)
 		   exito = false;
 		   break;
 	   }
-	   if ((strcmp(tipo.c_str(), "char") == 0) && valor.length() > 1)
-	 		   quitarEspacios(valor);
 
 	   mensaje.id = id;
 	   mensaje.tipo = tipo;
@@ -139,8 +137,34 @@ bool ParserCliente::extraerMensajes(const pugi::xml_document* doc)
 	   m_listaMensajes.push_back(mensaje);
 	}
 
+	if (!validarDuplicados())
+		exito = false;
+
 	return exito;
 }
+bool ParserCliente::validarDuplicados()
+{
+	for (unsigned int i = 0; i < m_listaMensajes.size(); ++i)
+	{
+		for (unsigned int j = 0; j < m_listaMensajes.size(); ++j)
+		{
+			if (i == j)
+				continue;
+			if (strcmp(m_listaMensajes[i].id.c_str(), m_listaMensajes[j].id.c_str()) == 0)
+				return false;
+		}
+	}
+	return true;
+}
+
+/*void ParserCliente::limpiarValores (std::string& tipo, std::string& valor)
+{
+	   if ((strcmp(tipo.c_str(), "char") == 0) && valor.length() > 1)
+	 		   quitarEspacios(valor);
+	   if ((strcmp(tipo.c_str(), "int") == 0) || ((strcmp(tipo.c_str(), "double") == 0)))
+		   quitarEspacios(valor);
+}*/
+
 
 bool ParserCliente::extraerConexionInfo(const pugi::xml_document* doc, bool isLoadingDefault)
 {
@@ -200,6 +224,7 @@ bool ParserCliente::extraerConexionInfoDefault()
 
 	return true;
 }
+
 
 bool ParserCliente::validarTipoDeDato(std::string& tipoDatoString)
 {

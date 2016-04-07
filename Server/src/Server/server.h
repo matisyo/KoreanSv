@@ -21,6 +21,8 @@
 #include <arpa/inet.h>
 #include "ServerMessage.h"
 
+#define TIMEOUT_SECONDS 5
+#define TIMEOUT_MICROSECONDS 0
 
 class server
 {
@@ -71,9 +73,10 @@ class server
         void aumentarNumeroClientes();
         void startThread();
         void *newDialog(void);
-        bool procesarMensaje(const ServerMessage serverMsg);
+        bool procesarMensaje(ServerMessage* serverMsg);
         void error(const char *msg);
         void sendMsg(int socketReceptor, Mensaje msg);
+        //void setTimeOut(int socketID);
 
 };
 

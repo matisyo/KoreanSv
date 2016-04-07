@@ -19,7 +19,12 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <netdb.h>
+#include <iostream>
+#include <sys/time.h>
 
+#define TIMEOUT_SECONDS 5
+#define TIMEOUT_MICROSECONDS 0
 
 class cliente
 {
@@ -29,8 +34,7 @@ class cliente
         bool conectar();
         void desconectar();
         void escribir(Mensaje mensaje);
-        void leer();
-        void cerrarSoket();
+        bool leer();
         bool isConnected();
 
     private:
@@ -44,10 +48,12 @@ class cliente
 
         char buffer[256];
 
-        bool lecturaExitosa(int bytesLeidos);
+        void cerrarSoket();
         void procesarMensaje(NetworkMessage networkMessage);
         void sendMsg(Mensaje msg);
+        void setTimeOut();
         bool validarMensaje(DataMessage dataMsg);
+        bool lecturaExitosa(int bytesLeidos);
 
 };
 

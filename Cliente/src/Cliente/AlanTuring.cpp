@@ -66,7 +66,7 @@ DataMessage AlanTuring::decodeMessage (NetworkMessage netMsg)
 	int pos = msgID.find("$");
 	string id(msgID.substr(0, pos));
 
-	msgID.erase(0, pos + 1);
+	msgID.erase(0, pos + 2);
 
 	string valor(msgID);
 
@@ -164,6 +164,27 @@ void AlanTuring::encodeMessage(NetworkMessage* netMsg, const Mensaje mensaje)
 	bzero(netMsg->msg_Data, MESSAGE_DATA_SIZE);
 	memcpy(netMsg->msg_Data, &dataMsg, MESSAGE_DATA_SIZE);
 
+}
+
+void AlanTuring::changeDataValue(NetworkMessage* networkMessage, const std::string& newValue)
+{
+	DataMessage dataMessage;
+	memcpy(&dataMessage, networkMessage->msg_Data, sizeof(DataMessage));
+
+	string id(dataMessage.msg_ID);
+	id.append("$");
+	//dataMessage.msg_value = statusCode;
+	bzero(dataMessage.msg_ID,MESSAGE_ID_BYTES_LIMIT);
+	memcpy(dataMessage.msg_ID, id.c_str(), MESSAGE_ID_BYTES_LIMIT);
+
+	bzero(dataMessage.msg_value, MESSAGE_VALUE_SIZE);
+	if (id.length() < MESSAGE_ID_BYTES_LIMIT)
+	{
+		memcpy(dataMessage.msg_ID + id.length(), newValue.c_str(), MESSAGE_ID_BYTES_LIMIT - id.length());
+		memcpy(dataMessage.msg_value, newValue.c_str() + MESSAGE_ID_BYTES_LIMIT - id.length(), MESSAGE_VALUE_SIZE);
+	}
+	else
+		memcpy(dataMessage.msg_value, newValue.c_str(), MESSAGE_VALUE_SIZE);
 }
 
 

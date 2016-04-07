@@ -65,6 +65,8 @@ private:
 	//Mensaje ID y valor de mensaje solo chekea que el campo no esté vacío, ya que un string puede ser cualquier cosa.
 	bool validarMensajeID(std::string& tipoDatoString);
 	bool validarValorMensaje(std::string& valorMensajeString);
+	bool validarDuplicados();
+	//void limpiarValores (std::string& tipo, std::string& valor);
 };
 
 

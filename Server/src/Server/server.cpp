@@ -98,6 +98,8 @@ void server::aceptar(){
     }
     else{
     	//Crea el cliente
+    	//setTimeOut(newsockfd);
+
     	m_lastID = m_listaDeClientes.add(newsockfd);
     	if (m_lastID < 0)
     	{
@@ -183,13 +185,14 @@ void* server::procesar(void)
 				string messageID(dataMessage.msg_ID);
 
 				// BLOQUE DE PROCESAMIENTO
-				bool mensajeValido = procesarMensaje(serverMsg);
+				bool mensajeValido = procesarMensaje(&serverMsg);
 
 				if (!mensajeValido)
 				{
 					std::stringstream ss;
 					ss << "Server: El Mensaje con ID: " << messageID.c_str() << " fue rechazado.";
 					Logger::Instance()->LOG(ss.str(), DEBUG);
+					printf("mensaje rechazado\n");
 					m_alanTuring->setNetworkMessageStatus(&serverMsg.networkMessage, 'I');
 
 				}
@@ -325,6 +328,23 @@ bool server::isRunning()
 	return m_svRunning;
 }
 
+/*void server::setTimeOut(int socketID)
+{
+    struct timeval timeout;
+    timeout.tv_sec = TIMEOUT_SECONDS;
+    timeout.tv_usec = TIMEOUT_MICROSECONDS;
+
+    if (setsockopt (socketID, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout)) < 0)
+    {
+    	Logger::Instance()->LOG("Server: Error seteando timeout.", WARN);
+    }
+
+    if (setsockopt (socketID, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout, sizeof(timeout)) < 0)
+    {
+    	Logger::Instance()->LOG("Server: Error seteando timeout.", WARN);
+    }
+}*/
+
 bool server::lecturaExitosa(int bytesLeidos, int clientID)
 {
     if (bytesLeidos < 0)
@@ -345,10 +365,10 @@ bool server::lecturaExitosa(int bytesLeidos, int clientID)
     return true;
 }
 
-bool server::procesarMensaje(const ServerMessage serverMsg)
+bool server::procesarMensaje(ServerMessage* serverMsg)
 {
 	bool procesamientoExitoso = true;;
-	NetworkMessage netMsg = serverMsg.networkMessage;
+	NetworkMessage netMsg = serverMsg->networkMessage;
 	DataMessage dataMsg = m_alanTuring->decodeMessage(netMsg);
 	std::string stringValue(dataMsg.msg_value);
 
@@ -356,6 +376,8 @@ bool server::procesarMensaje(const ServerMessage serverMsg)
 	std::stringstream ss;
 	ss <<"Server: Procesando mensaje con ID: " << dataMsg.msg_ID << ".";
 	Logger::Instance()->LOG(ss.str(), DEBUG);
+
+	printf("Valor dle mensaje: %s\n", stringValue.c_str());
 
 	//int msg
 	if ((netMsg.msg_Code[0] == 'i') && (netMsg.msg_Code[1] == 'n') && (netMsg.msg_Code[2] == 't'))
@@ -372,6 +394,9 @@ bool server::procesarMensaje(const ServerMessage serverMsg)
 	{
 		procesamientoExitoso = (StringHelper::validateDouble(stringValue));
 	}
-	//Por ahora no hay validacion para valores string
+
+	if (procesamientoExitoso)
+		m_alanTuring->changeDataValue(&netMsg, stringValue);
+
 	return procesamientoExitoso;
 }

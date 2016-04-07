@@ -45,6 +45,8 @@ public:
 	unsigned short decodeLength(char* codigoEnigma);
 	DataMessage decodeMessage (NetworkMessage netMsg);
 
+	//modificadores de NetworkMessage
+	void changeDataValue(NetworkMessage* networkMessage, const std::string& newValue);
 	void setNetworkMessageStatus(NetworkMessage* networkMessage, char statusCode);
 
 	/*intMessage decodeIntMessage(char* datosCodigoEnigma);

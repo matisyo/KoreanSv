@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
 	    else if(eleccion == salidaEnChar)
    	    {
    	    	cout << "Se ha cerrado el cliente.\n";
-	   	   	client->cerrarSoket();
+	   	   	client->desconectar();
 	   	   	Logger::Instance()->Close();
 	   	   	delete client;
 	   	   	return 0;
@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
 	   	    }
 	   	    else if(option == salidaEnChar)
 	   	    {
-	   	    	client->cerrarSoket();
+	   	    	client->desconectar();
 	   	    	cout << "Se ha cerrado el cliente.\n";
 	   	    	Logger::Instance()->Close();
 	   	    	//delete client;
@@ -120,7 +120,12 @@ int main(int argc, char *argv[])
 	   	    	int indice = (int)option - 51;
 	   	    	mensajeAEnviar = listaDeMensajes[indice];
 	   			client->escribir(mensajeAEnviar);
-	   			client->leer();
+   	   			if (!client->leer())
+   	   			{
+   	   				Logger::Instance()->LOG("Cliente: Se ha perdido la conexión con el servidor.", WARN);
+   	   				printf("Se ha perdido la conexión con el servidor.\n");
+   	   				goto MostrarMenu;
+   	   			}
 	   	    	condicion = false;
 	   	    }
 	   	    else if(option == ciclarEnChar)
@@ -135,7 +140,12 @@ int main(int argc, char *argv[])
 	   	   			cout << "Se enviará el mensaje: "
 	   	   			<< listaDeMensajes[counter].id << "\n";
 	   	   			client->escribir(listaDeMensajes[counter]);
-	   	   			client->leer();
+	   	   			if (!client->leer())
+	   	   			{
+	   	   				Logger::Instance()->LOG("Cliente: Se ha perdido la conexión con el servidor.", WARN);
+	   	   				printf("Se ha perdido la conexión con el servidor.\n");
+	   	   				goto MostrarMenu;
+	   	   			}
 	   	   			freq = frecuencia*1000;
 	   	   			usleep(freq);
 	   	    	}
@@ -144,7 +154,8 @@ int main(int argc, char *argv[])
 		       	cout << "Por favor, ingrese un comando válido. \n";
 	   	}
 	}
-	client->cerrarSoket();
+
+	client->desconectar();
 
 	Logger::Instance()->Close();
 	delete client;
