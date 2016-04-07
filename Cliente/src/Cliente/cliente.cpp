@@ -37,7 +37,7 @@ void cliente::desconectar()
 }
 
 cliente::cliente(int argc, string ip, int port, std::vector<Mensaje> listaDeMensajesCargados){
-	m_connected = true;
+	m_connected = false;
 	m_alanTuring = new AlanTuring();
 
     portno = port;

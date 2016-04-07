@@ -1,0 +1,12 @@
+!SESSION 2016-04-07 03:45:26.817 -----------------------------------------------
+eclipse.buildId=debbuild
+java.version=1.7.0_85
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86
+
+!ENTRY org.eclipse.cdt.core 1 0 2016-04-07 03:46:39.387
+!MESSAGE Indexed 'Server' (8 sources, 193 headers) in 28.55 sec: 19,833 declarations; 46,642 references; 41 unresolved inclusions; 0 syntax errors; 652 unresolved names (0.97%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2016-04-07 03:47:25.337
+!MESSAGE Indexed 'Cliente' (9 sources, 259 headers) in 30.52 sec: 33,895 declarations; 70,451 references; 0 unresolved inclusions; 0 syntax errors; 10 unresolved names (0.01%)

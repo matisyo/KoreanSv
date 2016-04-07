@@ -1,0 +1,25 @@
+04:00:05 **** Incremental Build of configuration Debug for project Cliente ****
+make all 
+Building file: ../src/Cliente/Menu.cpp
+Invoking: Cross G++ Compiler
+g++ -D__cplusplus=201103L -O0 -g3 -Wall -c -fmessage-length=0 -std=c++11 -lpthread -MMD -MP -MF"src/Cliente/Menu.d" -MT"src/Cliente/Menu.d" -o "src/Cliente/Menu.o" "../src/Cliente/Menu.cpp"
+../src/Cliente/Menu.cpp: In member function ‘void Menu::mostrarMenu(std::vector<Mensaje>)’:
+../src/Cliente/Menu.cpp:49:32: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(;i < listaDeMensajes.size();i++)
+                                ^
+Finished building: ../src/Cliente/Menu.cpp
+ 
+Building target: Cliente
+Invoking: Cross G++ Linker
+g++  -o "Cliente"  ./src/Utils/pugixml/pugixml.o  ./src/Utils/Parser/ParserCliente.o ./src/Utils/Parser/ParserServidor.o  ./src/Utils/Logger.o  ./src/Cliente/AlanTuring.o ./src/Cliente/Menu.o ./src/Cliente/MessageFactory.o ./src/Cliente/cliente.o  ./src/main.o   -lpthread
+Finished building target: Cliente
+ 
+04:00:19 **** Incremental Build of configuration Debug for project Server ****
+make all 
+make: Nothing to be done for `all'.
+04:00:27 **** Incremental Build of configuration Debug for project Cliente ****
+make all 
+make: Nothing to be done for `all'.
+04:01:06 **** Incremental Build of configuration Debug for project Cliente ****
+make all 
+make: Nothing to be done for `all'.

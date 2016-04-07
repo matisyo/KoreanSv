@@ -10,14 +10,20 @@
 #include <stdio.h>
 #include "Utils/Logger.h"
 #include "Utils/Parser/ParserCliente.h"
+#include "Cliente/Menu.h"
 #include <unistd.h>
 #include <iostream>
 using namespace std;
 
 int main(int argc, char *argv[])
 {
+
+	std::string fileName;
+	if(argc <= 2)
+		std::string fileName = "default";
 	//argv[1] es el pathdel archivo cliente.xml
-	std::string fileName(argv[1]);
+	else
+		std::string fileName(argv[1]);
 
 	ParserCliente* parsersito = new ParserCliente();
     parsersito->parsearDocumento(fileName);
@@ -26,135 +32,66 @@ int main(int argc, char *argv[])
     std::vector<Mensaje> listaDeMensajes = parsersito->getListaMensajes() ;
 
 	cliente* client = new cliente(argc,ip,porto, listaDeMensajes);
+	Menu* menu = new Menu();
 
-    MostrarMenu:
-	cout << "\n";
-	char eleccion = 0;
+	MostrarMenuDesconectado:
+	bool conectado = true;
 
-    while(eleccion != '1'){
-	    cout << "1 - Para conectar \n";
-	    cout << "2 - Para desconectar \n";
-   	    int i = 0;
-   	    for(;i< listaDeMensajes.size();i++)
-	  	{
-   	    	cout << 3+i << " - Enviar el Mensaje " << listaDeMensajes[i].id << "\n";
-	   	 }
-   	    cout << (3+i) << " - Ciclar \n";
-	   	cout << 4+i << " - Salir \n";
-		int salida = (4+i);
-
-		char salidaEnChar = salida + '0';
-		char ciclarEnChar = (salida-1) + '0';
-	   	cin >> eleccion;
-	   	cout << "\n";
-	    if(eleccion == '1')
-	   	    	cout << "Conectando con el servidor...\n";
-	    else if (eleccion == '2')
-	   	    	cout << "No esta conectado a ningún servidor. No se ha podido desconectar.\n";
-	    else if(eleccion == salidaEnChar)
-   	    {
-   	    	cout << "Se ha cerrado el cliente.\n";
-	   	   	client->desconectar();
-	   	   	Logger::Instance()->Close();
-	   	   	delete client;
-	   	   	return 0;
-	     }
-  	    else if(eleccion >= '3' and eleccion <= ciclarEnChar)
-  	    	cout << "No se puede enviar un mensaje sin estar conectado \n";
-  	    else
-	       	cout << "Por favor, ingrese un comando válido. \n";
-	 }
-
-	if (!client->conectar())
+	while(conectado)
 	{
-		printf("No se pudo establecer conexión con el servidor.\n");
-		goto MostrarMenu;
-	}
-
-	while(client->isConnected())
-	{
-		Mensaje mensajeAEnviar;//Mensaje para que compile declarado, se va a cambiar
-		//Si o si cuando se elija un mensaje valido del vector de Mensajes del cliente
-		bool condicion = true;
-		char option;
-		cout << "\n";
-		while(condicion){
-			cout << "Opciones: \n";
-			cout << "1 - Conectar \n";
-			cout << "2 - Desconectar \n";
-			int i = 0;
-			for(;i < listaDeMensajes.size();i++)
+		conectado = client->isConnected();
+		//cout << conectado; Para debug para ver si esta conectado el client o no
+		std::string eleccion = menu->menuzazo(conectado, listaDeMensajes);
+		int comando = menu->cmpOptionMenu(eleccion, conectado, listaDeMensajes.size()+4);
+		if(comando == 1 and !conectado)//Me quiero conectar y estoy desconectado
+			if (!client->conectar())
+				{
+					printf("No se pudo establecer conexión con el servidor.\n");
+					conectado = true;
+				}
+			else
 			{
-				cout << 3+i << " - Enviar el Mensaje "
-					 << listaDeMensajes[i].id << "\n";
+				conectado = true;
 			}
-
-			cout << 3+i << " - Ciclar \n";
-			cout << 4+i << " - Salir \n";
-			cin >> option;
-			int salida = (4+i);
-			char salidaEnChar = salida + '0';
-			char ciclarEnChar = (salida-1) + '0';
-		   	cout << "\n";
-
-			if(option == '1')
-	   	    	cout << "Ya esta conectado al servidor. \n";
-	   	    else if (option == '2')
-	   	    {
-	   	    	client->desconectar();
-	   	    	cout << "El cliente se ha desconectado del servidor. \n";
-	   	    	goto MostrarMenu;
-	   	    }
-	   	    else if(option == salidaEnChar)
-	   	    {
-	   	    	client->desconectar();
-	   	    	cout << "Se ha cerrado el cliente.\n";
-	   	    	Logger::Instance()->Close();
-	   	    	//delete client;
-	   	    	return 0;
-	   	    }
-	   	    else if(option >= '3' and option < ciclarEnChar )
-	   	    {
-	   	    	cout << "\n";
-	   	    	cout << "Se enviara el mensaje :" << (int)option -48 << "\n";
-	   	    	int indice = (int)option - 51;
-	   	    	mensajeAEnviar = listaDeMensajes[indice];
-	   			client->escribir(mensajeAEnviar);
-   	   			if (!client->leer())
-   	   			{
-   	   				Logger::Instance()->LOG("Cliente: Se ha perdido la conexión con el servidor.", WARN);
-   	   				printf("Se ha perdido la conexión con el servidor.\n");
-   	   				goto MostrarMenu;
-   	   			}
-	   	    	condicion = false;
-	   	    }
-	   	    else if(option == ciclarEnChar)
-	   	    {
-	   	    	unsigned int frecuencia;
-	   	    	cout << "Ingrese el tiempo deseado en milisegundos: \n";
-	   	    	cin >> frecuencia;
-	   	    	cout << " \n";
-	   	    	int freq;
-	   	    	for(int counter = 0; counter< listaDeMensajes.size();counter++)
-	   	    	{
-	   	   			cout << "Se enviará el mensaje: "
-	   	   			<< listaDeMensajes[counter].id << "\n";
-	   	   			client->escribir(listaDeMensajes[counter]);
-	   	   			if (!client->leer())
-	   	   			{
-	   	   				Logger::Instance()->LOG("Cliente: Se ha perdido la conexión con el servidor.", WARN);
-	   	   				printf("Se ha perdido la conexión con el servidor.\n");
-	   	   				goto MostrarMenu;
-	   	   			}
-	   	   			freq = frecuencia*1000;
-	   	   			usleep(freq);
-	   	    	}
-	   	    }
-	   	    else
-		       	cout << "Por favor, ingrese un comando válido. \n";
-	   	}
+		else if((comando == 1 and conectado)or(comando == 2 and !conectado)or(comando == 3 and !conectado) )
+		//me quiero conectar pero ya estoy conectado, me quiero desconectar pero no estoy conectado
+		//Quiero ciclar o mandar mensajes pero estoy desconectado
+		{
+			conectado = true;
+		}
+		else if(comando == 3 and conectado)//Mando un mensaje y estoy conectado
+		{
+			int indice = stoi(eleccion) - 3;
+			Mensaje mensajeAEnviar = listaDeMensajes[indice];
+			cout << "Se enviara el mensaje :" << mensajeAEnviar.id << "\n";
+			client->escribir(mensajeAEnviar);
+			if (!client->leer())
+			{
+				Logger::Instance()->LOG("Cliente: Se ha perdido la conexión con el servidor. \n", WARN);
+			   	printf("Se ha perdido la conexión con el servidor.\n");
+			 }
+		}
+		else if(comando == 4)//Ciclo y estoy conectado
+		{
+			int lostConnection = menu->ciclar(listaDeMensajes, client);
+			if (lostConnection == -1)
+			{
+				client->desconectar();
+			}
+			else
+				conectado =true;
+		}
+		else if (comando == 2 and conectado)
+		{
+			client->desconectar();
+		}
+		else if(comando == -1)
+		{
+			conectado = false;
+		}
+		else
+			conectado = true;
 	}
-
 	client->desconectar();
 
 	Logger::Instance()->Close();
@@ -162,5 +99,4 @@ int main(int argc, char *argv[])
     return 0;
 
 }
-
 

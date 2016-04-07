@@ -8,7 +8,8 @@ src/main.d: ../src/main.cpp ../src/Cliente/cliente.h \
  ../src/Utils/Parser/ParserCliente.h ../src/Utils/Parser/Parser.h \
  ../src/Utils/Parser/../Logger.h ../src/Utils/Parser/../TiposDefinidos.h \
  ../src/Utils/Parser/../pugixml/pugixml.hpp \
- ../src/Utils/Parser/../pugixml/pugiconfig.hpp
+ ../src/Utils/Parser/../pugixml/pugiconfig.hpp ../src/Cliente/Menu.h \
+ ../src/Cliente/cliente.h
 
 ../src/Cliente/cliente.h:
 
@@ -41,3 +42,7 @@ src/main.d: ../src/main.cpp ../src/Cliente/cliente.h \
 ../src/Utils/Parser/../pugixml/pugixml.hpp:
 
 ../src/Utils/Parser/../pugixml/pugiconfig.hpp:
+
+../src/Cliente/Menu.h:
+
+../src/Cliente/cliente.h:
