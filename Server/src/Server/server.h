@@ -76,7 +76,7 @@ class server
         bool procesarMensaje(ServerMessage* serverMsg);
         void error(const char *msg);
         void sendMsg(int socketReceptor, Mensaje msg);
-        //void setTimeOut(int socketID);
+        void setTimeOut(int socketID);
 
 };
 

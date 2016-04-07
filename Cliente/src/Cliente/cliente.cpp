@@ -185,8 +185,8 @@ void cliente::procesarMensaje(NetworkMessage networkMessage)
 			return;
 		printf("Tipo de Mensaje: char \n");
 		string valorMensaje(dataMsg.msg_value);
-		char valorChar = valorMensaje.at(0);
-		printf("Valor del Mensaje: %c \n", valorChar);
+		char valorChar  = valorMensaje.at(0);
+		printf("Valor del Mensaje: %s \n", valorMensaje.c_str());
 	}
 	if ((networkMessage.msg_Code[0] == 'c') && (networkMessage.msg_Code[1] == 'n') && (networkMessage.msg_Code[2] == 't'))
 	{

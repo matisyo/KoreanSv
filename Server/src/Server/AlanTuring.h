@@ -46,7 +46,7 @@ public:
 	DataMessage decodeMessage (NetworkMessage netMsg);
 
 	//modificadores de NetworkMessage
-	void changeDataValue(NetworkMessage* networkMessage, const std::string& newValue);
+	void changeDataValue(NetworkMessage* networkMessage, std::string& newValue);
 	void setNetworkMessageStatus(NetworkMessage* networkMessage, char statusCode);
 
 	/*intMessage decodeIntMessage(char* datosCodigoEnigma);

@@ -98,7 +98,7 @@ void server::aceptar(){
     }
     else{
     	//Crea el cliente
-    	//setTimeOut(newsockfd);
+    	setTimeOut(newsockfd);
 
     	m_lastID = m_listaDeClientes.add(newsockfd);
     	if (m_lastID < 0)
@@ -328,22 +328,22 @@ bool server::isRunning()
 	return m_svRunning;
 }
 
-/*void server::setTimeOut(int socketID)
+void server::setTimeOut(int socketID)
 {
     struct timeval timeout;
     timeout.tv_sec = TIMEOUT_SECONDS;
     timeout.tv_usec = TIMEOUT_MICROSECONDS;
 
-    if (setsockopt (socketID, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout)) < 0)
+   /* if (setsockopt (socketID, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout)) < 0)
     {
     	Logger::Instance()->LOG("Server: Error seteando timeout.", WARN);
-    }
+    }*/
 
     if (setsockopt (socketID, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout, sizeof(timeout)) < 0)
     {
     	Logger::Instance()->LOG("Server: Error seteando timeout.", WARN);
     }
-}*/
+}
 
 bool server::lecturaExitosa(int bytesLeidos, int clientID)
 {
@@ -396,7 +396,7 @@ bool server::procesarMensaje(ServerMessage* serverMsg)
 	}
 
 	if (procesamientoExitoso)
-		m_alanTuring->changeDataValue(&netMsg, stringValue);
+		m_alanTuring->changeDataValue(&serverMsg->networkMessage, stringValue);
 
 	return procesamientoExitoso;
 }
