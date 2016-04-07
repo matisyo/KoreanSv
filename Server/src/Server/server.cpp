@@ -10,8 +10,11 @@ server::server(int port, int maxC): MAX_CLIENTES(maxC)
     pthread_cond_init(&m_condv, NULL);
     //Creo Socket
     sockfd =  socket(AF_INET, SOCK_STREAM, 0);
-         if (sockfd < 0)
-            error("Error: No se pudo crear el socket");
+    if (sockfd < 0)
+    	error("Error: No se pudo crear el socket");
+
+    int optval = 1;
+	setsockopt(sockfd, SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval));
 
     // Limpio el struct tod o en 0file:///home/matias/Desktop/Taller/server.h
 
@@ -98,7 +101,7 @@ void server::aceptar(){
     }
     else{
     	//Crea el cliente
-    	setTimeOut(newsockfd);
+    	//setTimeOut(newsockfd);
 
     	m_lastID = m_listaDeClientes.add(newsockfd);
     	if (m_lastID < 0)
