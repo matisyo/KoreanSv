@@ -1,9 +1,3 @@
-/*
- * main.cpp
- *
- *  Created on: Apr 3, 2016
- *      Author: gonzalo
- */
 
 #include "Cliente/cliente.h"
 #include <string>

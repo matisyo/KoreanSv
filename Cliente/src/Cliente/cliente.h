@@ -38,7 +38,9 @@ class cliente
         bool leer();
         bool isConnected();
         bool checkServerConnection();
-
+        void *queContas(void);
+        void hilo();
+        static void *mati_method(void *context);
         void sendTimeOutMsg();
 
     private:
