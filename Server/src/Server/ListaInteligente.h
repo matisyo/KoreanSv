@@ -67,6 +67,15 @@ public:
 		return posicionDisponible;
 	}
 
+	bool addAt(int indice, T elem)
+	{
+		if (indice >= m_listaInterna.size())
+			return false;
+		m_listaInterna[indice] = elem;
+		setBitset(indice);
+		return true;
+	}
+
 	void clear()
 	{
 		m_listaInterna.clear();

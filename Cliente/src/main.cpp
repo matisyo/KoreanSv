@@ -19,11 +19,11 @@ int main(int argc, char *argv[])
 {
 
 	std::string fileName;
-	if(argc <= 2)
-		std::string fileName = "default";
-	//argv[1] es el pathdel archivo cliente.xml
+	if(argc < 2)
+		fileName = "src/Utils/Default/cliente.xml";
+	//argv[1] es el path del archivo cliente.xml
 	else
-		std::string fileName(argv[1]);
+		fileName.assign(argv[1]);
 
 	ParserCliente* parsersito = new ParserCliente();
     parsersito->parsearDocumento(fileName);
@@ -34,12 +34,12 @@ int main(int argc, char *argv[])
 	cliente* client = new cliente(argc,ip,porto, listaDeMensajes);
 	Menu* menu = new Menu();
 
-	MostrarMenuDesconectado:
 	bool conectado = true;
 
 	while(conectado)
 	{
 		conectado = client->isConnected();
+
 		//cout << conectado; Para debug para ver si esta conectado el client o no
 		std::string eleccion = menu->menuzazo(conectado, listaDeMensajes);
 		int comando = menu->cmpOptionMenu(eleccion, conectado, listaDeMensajes.size()+4);
@@ -83,7 +83,8 @@ int main(int argc, char *argv[])
 		}
 		else if (comando == 2 and conectado)
 		{
-			client->desconectar();
+			client->sendTimeOutMsg();
+			//client->desconectar();
 		}
 		else if(comando == -1)
 		{

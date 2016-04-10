@@ -9,11 +9,11 @@ using namespace std;
 int main(int argc, char *argv[])
 {
 	std::string fileName;
-	if(argc <= 2)
-		std::string fileName = "default";
-	//argv[1] es el pathdel archivo cliente.xml
+	if(argc < 2)
+		fileName = "src/Utils/Default/servidor.xml";
+	//argv[1] es el path del archivo cliente.xml
 	else
-		std::string fileName(argv[1]);
+		fileName.assign(argv[1]);
 
 	ParserServidor* servidorParser = new ParserServidor();
 	servidorParser->parsearDocumento(fileName);

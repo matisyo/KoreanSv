@@ -35,6 +35,7 @@ server::server(int port, int maxC): MAX_CLIENTES(maxC)
 
     m_clientNum = 0;
     m_listaDeClientes.resize(MAX_CLIENTES);
+    m_listaTimeOuts.resize(MAX_CLIENTES);
     m_clientThreads.resize(MAX_CLIENTES);
     m_queuePost.resize(MAX_CLIENTES);
     m_clientResponseThreads.resize(MAX_CLIENTES);
@@ -46,6 +47,7 @@ server::~server()
 {
 	closeAllsockets();
 	m_listaDeClientes.clear();
+	m_listaTimeOuts.clear();
 	m_queuePost.clear();
 
 	delete m_alanTuring;
@@ -103,28 +105,52 @@ void server::aceptar(){
     	//Crea el cliente
     	//setTimeOut(newsockfd);
 
-    	m_lastID = m_listaDeClientes.add(newsockfd);
-    	if (m_lastID < 0)
-    	{
-    		Logger::Instance()->LOG("Server: Cliente rechazado. El servidor no puede aceptar más clientes.", WARN);
-    		return;
-    	}
-    	printf("se agrego en la posicion %d \n", m_lastID);
-
-    	pthread_create(&m_clientThreads[m_lastID], NULL, &server::mati_method, (void*)this);
-    	pthread_create(&m_clientResponseThreads[m_lastID], NULL, &server::mati_method3, (void*)this);
-
-    	aumentarNumeroClientes();
-
-
-    	printf("Se creo un thread %d\n", m_lastID);
-    	std::stringstream ss;
-    	ss << "Server: Se acepto el cliente: " << inet_ntoa(cli_addr.sin_addr);
-    	Logger::Instance()->LOG(ss.str(), DEBUG);
+    	crearCliente(newsockfd);
 	}
 
 }
 
+bool server::crearCliente (int clientSocket)
+{
+	//m_lastID almacena el indice de la lista Inteligente en el que el cliente fue agregado
+	m_lastID = m_listaDeClientes.add(clientSocket);
+
+	if (m_lastID < 0)
+	{
+		Logger::Instance()->LOG("Server: Cliente rechazado. El servidor no puede aceptar más clientes.", WARN);
+		return false;
+	}
+	agregarTimeOutTimer(m_lastID);
+
+	printf("se agrego en la posicion %d \n", m_lastID);
+
+	pthread_create(&m_clientThreads[m_lastID], NULL, &server::mati_method, (void*)this);
+	pthread_create(&m_clientResponseThreads[m_lastID], NULL, &server::mati_method3, (void*)this);
+
+	aumentarNumeroClientes();
+
+	printf("Se creo un thread %d\n", m_lastID);
+	std::stringstream ss;
+	ss << "Server: Se acepto el cliente: " << inet_ntoa(cli_addr.sin_addr);
+	Logger::Instance()->LOG(ss.str(), DEBUG);
+
+	return true;
+}
+
+void server::agregarTimeOutTimer(int clientPosition)
+{
+	Timer* timeOutTimer = new Timer();
+	m_listaTimeOuts.addAt(clientPosition, timeOutTimer);
+
+	//comienza el timer
+	m_listaTimeOuts.getElemAt(clientPosition)->Start();
+}
+void server::removeTimeOutTimer(int clientPosition)
+{
+	if (m_listaTimeOuts.getElemAt(clientPosition))
+		delete m_listaTimeOuts.getElemAt(clientPosition);
+	m_listaTimeOuts.removeAt(clientPosition);
+}
 
 void server::escribir(int id)
 {
@@ -160,6 +186,10 @@ bool server::leer(int id)
         	return false;
     }
 
+    //resetea el timer de timeout
+    printf("Timer del cliente %d = %Lf\n", id, (long double)m_listaTimeOuts.getElemAt(id)->GetTicks()/CLOCKS_PER_SEC);
+    m_listaTimeOuts.getElemAt(id)->Reset();
+
     NetworkMessage netMsgRecibido = m_alanTuring->decode(buffer);
 
     ServerMessage serverMsg;
@@ -180,6 +210,7 @@ void* server::procesar(void)
 
 	while(this->isRunning())
 	{
+
 
 			if (m_queue.size() != 0)
 			{
@@ -222,6 +253,19 @@ void* server::procesar(void)
 			    printf("Se agrego el mensaje a la cola de mensajes procesados.\n");
 				m_queuePost[serverMsg.clientID].add(serverMsg);
 
+			}
+			//Chekea timeouts
+			for (int i = 0; i < m_listaTimeOuts.size(); ++i)
+			{
+				if (m_listaTimeOuts.getElemAt(i))
+				{
+					if ((long double)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC >= 20)
+					{
+						printf("Timer del cliente %d = %Lf\n", i, (long double)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC);
+						printf("El cliente con id %d timeouteo.\n", i);
+						closeSocket(i);
+					}
+				}
 			}
 
 	}
@@ -294,8 +338,10 @@ void server::closeSocket(int id)
 	Logger::Instance()->LOG("Server: Se desconectó un cliente.", DEBUG);
 	reducirNumeroClientes();
 	printf("Se desconectó un cliente, hay lugar para %d chaval/es mas.\n",MAX_CLIENTES - getNumClientes());
+
 	close(m_listaDeClientes.getElemAt(id));
 	m_listaDeClientes.removeAt(id);
+	removeTimeOutTimer(id);
 
 	//terminar thread
 }
@@ -331,22 +377,22 @@ bool server::isRunning()
 	return m_svRunning;
 }
 
-void server::setTimeOut(int socketID)
+/*void server::setTimeOut(int socketID)
 {
     struct timeval timeout;
     timeout.tv_sec = TIMEOUT_SECONDS;
     timeout.tv_usec = TIMEOUT_MICROSECONDS;
 
-   /* if (setsockopt (socketID, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout)) < 0)
+    if (setsockopt (socketID, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout)) < 0)
     {
     	Logger::Instance()->LOG("Server: Error seteando timeout.", WARN);
-    }*/
+    }
 
     if (setsockopt (socketID, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout, sizeof(timeout)) < 0)
     {
     	Logger::Instance()->LOG("Server: Error seteando timeout.", WARN);
     }
-}
+}*/
 
 bool server::lecturaExitosa(int bytesLeidos, int clientID)
 {

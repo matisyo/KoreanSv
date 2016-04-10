@@ -4,6 +4,7 @@
 #include "ListaInteligente.h"
 #include "AlanTuring.h"
 #include "multiqueue.h"
+#include "../Utils/Timer.h"
 #include "MessageFactory.h"
 #include "../Utils/StringHelper.h"
 #include "../Utils/Logger.h"
@@ -54,6 +55,8 @@ class server
         bool m_svRunning;
         int m_clientNum;
         ListaInteligente<int> m_listaDeClientes;
+        ListaInteligente<Timer*> m_listaTimeOuts;
+
         std::vector<pthread_t> m_clientThreads;
         std::vector<pthread_t> m_clientResponseThreads;
 
@@ -67,6 +70,7 @@ class server
         struct sockaddr_in serv_addr, cli_addr;
         pthread_t threadDeProcesos;
 
+        bool crearCliente (int clientSocket);
         bool lecturaExitosa(int bytesLeidos, int clientID);
         void closeSocket(int id);
         void reducirNumeroClientes();
@@ -76,8 +80,10 @@ class server
         bool procesarMensaje(ServerMessage* serverMsg);
         void error(const char *msg);
         void sendMsg(int socketReceptor, Mensaje msg);
-        void setTimeOut(int socketID);
+       // void setTimeOut(int socketID);
 
+        void agregarTimeOutTimer(int clientPosition);
+        void removeTimeOutTimer(int clientPosition);
 };
 
 #endif // SERVER_H

@@ -19,7 +19,8 @@ enum MsgCode
 	msgString,
 	msgExit,
 	msgConnected,
-	msgServerFull
+	msgServerFull,
+	msgTimeOutACK
 };
 
 

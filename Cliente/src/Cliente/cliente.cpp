@@ -27,6 +27,10 @@ bool cliente::conectar()
     }
     m_connected = true;
 	leer();
+
+	serverTimeOut->Start();
+	sendTimeOutTimer->Start();
+
     return m_connected;
 }
 void cliente::desconectar()
@@ -55,9 +59,15 @@ cliente::cliente(int argc, string ip, int port, std::vector<Mensaje> listaDeMens
     serv_addr.sin_port = htons(portno);
     listaDeMensajes = listaDeMensajesCargados;
 
+    serverTimeOut = new Timer();
+    sendTimeOutTimer = new Timer();
+
 }
 cliente::~cliente()
 {
+	delete serverTimeOut;
+	delete sendTimeOutTimer;
+
 	delete m_alanTuring;
 }
 
@@ -89,6 +99,34 @@ void cliente::sendMsg(Mensaje msg)
 	Logger::Instance()->LOG(ss.str(), DEBUG);
 }
 
+//Envia mensaje de timeOut cada x tiempo
+void cliente::sendTimeOutMsg()
+{
+	printf ("%Lf\n", (long double)sendTimeOutTimer->GetTicks()/CLOCKS_PER_SEC);
+	if ((float)sendTimeOutTimer->GetTicks()/CLOCKS_PER_SEC >= 1)
+	{
+		printf("entra");
+		Mensaje timeOutMsg = MessageFactory::Instance()->createMessage("to", "",msgTimeOutACK);
+		sendMsg(timeOutMsg);
+
+		//sendTimeOutTimer->Reset();
+		//espera procesamiento del server
+		leer();
+	}
+}
+
+
+bool cliente::checkServerConnection()
+{
+	if ((float)serverTimeOut->GetTicks()/CLOCKS_PER_SEC >= TIMEOUT_SECONDS)
+	{
+		printf("Se perdio conección con el servidor.\n");
+		desconectar();
+		return false;
+	}
+	return true;
+}
+
 
 bool cliente::leer()
 {
@@ -115,6 +153,8 @@ bool cliente::leer()
     	  return false;
        }
    }
+   //llego el mensaje bien
+   serverTimeOut->Reset();
 
    NetworkMessage netMsgRecibido = m_alanTuring->decode(buffer);
    procesarMensaje(netMsgRecibido);
@@ -215,6 +255,11 @@ void cliente::procesarMensaje(NetworkMessage networkMessage)
 
 		printf("El servidor está lleno.\n");
 		Logger::Instance()->LOG("Cliente: No se pudo conectar al servidor. El servidor está lleno.", DEBUG);
+	}
+	if ((networkMessage.msg_Code[0] == 't') && (networkMessage.msg_Code[1] == 'm') && (networkMessage.msg_Code[2] == 'o'))
+	{
+		//TimeOut ACK, lo dej opor si en el futuro queremos hacer algo extra
+		//printf("Llego un time Out ACK\n");
 	}
 }
 

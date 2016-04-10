@@ -18,7 +18,9 @@ enum MsgCode
 	msgChar,
 	msgString,
 	msgExit,
-	msgConnected
+	msgConnected,
+	msgServerFull,
+	msgTimeOutACK
 };
 
 class MessageFactory

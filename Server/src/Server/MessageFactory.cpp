@@ -44,9 +44,11 @@ Mensaje MessageFactory::createMessage(const std::string& msgID,const std::string
 	case msgServerFull:
 		mensajeCreado.tipo = "serverfull";
 		break;
+	case msgTimeOutACK:
+		mensajeCreado.tipo = "timeoutACK";
+
 
 	default:
-		mensajeCreado.tipo = "string";
 		break;
 	}
 

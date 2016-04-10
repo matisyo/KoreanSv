@@ -6,6 +6,7 @@
 #include "../Cliente/multiqueue.h"
 #include "AlanTuring.h"
 #include "MessageFactory.h"
+#include "../Utils/Timer.h"
 #include "../Utils/TiposDefinidos.h"
 
 #include <stdio.h>
@@ -36,11 +37,18 @@ class cliente
         void escribir(Mensaje mensaje);
         bool leer();
         bool isConnected();
+        bool checkServerConnection();
+
+        void sendTimeOutMsg();
 
     private:
         AlanTuring* m_alanTuring;
         int sockfd, portno, n;
         bool m_connected;
+        Timer* serverTimeOut;
+        Timer* sendTimeOutTimer;
+        pthread_t timeOutThread;
+
         struct sockaddr_in serv_addr;
         struct hostent *server;
         void error(const char *msg);
@@ -54,6 +62,8 @@ class cliente
         void setTimeOut();
         bool validarMensaje(DataMessage dataMsg);
         bool lecturaExitosa(int bytesLeidos);
+
+
 
 };
 
