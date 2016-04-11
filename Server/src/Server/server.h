@@ -22,7 +22,7 @@
 #include <arpa/inet.h>
 #include "ServerMessage.h"
 
-#define TIMEOUT_SECONDS 20
+#define TIMEOUT_SECONDS 7
 #define TIMEOUT_MICROSECONDS 0
 
 class server

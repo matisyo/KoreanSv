@@ -148,8 +148,8 @@ void server::agregarTimeOutTimer(int clientPosition)
 }
 void server::removeTimeOutTimer(int clientPosition)
 {
-	//if (m_listaTimeOuts.getElemAt(clientPosition))
-		//delete m_listaTimeOuts.getElemAt(clientPosition);
+	if ((m_listaTimeOuts.isAvailable(clientPosition)) && (m_listaTimeOuts.getElemAt(clientPosition)))
+		delete m_listaTimeOuts.getElemAt(clientPosition);
 	m_listaTimeOuts.removeAt(clientPosition);
 }
 
@@ -259,7 +259,7 @@ void* server::procesar(void)
 
 				if (m_listaTimeOuts.getElemAt(i))
 				{
-					if ((long double)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC >= TIMEOUT_SECONDS)
+					if ((float)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC >= TIMEOUT_SECONDS)
 					{
 						printf("Timer del cliente %d = %Lf\n", i, (float)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC);
 						printf("El cliente con id %d timeouteo.\n", i);
@@ -336,6 +336,9 @@ void server::closeAllsockets()
 
 void server::closeSocket(int id)
 {
+	if (!m_listaDeClientes.isAvailable(id))
+		return;
+
 	Logger::Instance()->LOG("Server: Se desconectó un cliente.", DEBUG);
 	reducirNumeroClientes();
 	printf("Se desconectó un cliente, hay lugar para %d chaval/es mas.\n",MAX_CLIENTES - getNumClientes());
@@ -344,20 +347,21 @@ void server::closeSocket(int id)
 	m_listaDeClientes.removeAt(id);
 	removeTimeOutTimer(id);
 
-	//terminar thread
 }
 
 void server::aumentarNumeroClientes()
 {
     pthread_mutex_lock(&m_mutex);
-    m_clientNum++;
+    if (m_clientNum < MAX_CLIENTES)
+    	m_clientNum++;
     pthread_cond_signal(&m_condv);
     pthread_mutex_unlock(&m_mutex);
 }
 void server::reducirNumeroClientes()
 {
     pthread_mutex_lock(&m_mutex);
-    m_clientNum--;
+    if (m_clientNum > 0)
+    	m_clientNum--;
     pthread_cond_signal(&m_condv);
     pthread_mutex_unlock(&m_mutex);
 }

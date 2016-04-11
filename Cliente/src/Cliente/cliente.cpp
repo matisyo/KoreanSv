@@ -28,11 +28,14 @@ bool cliente::conectar()
     m_connected = true;
 	leer();
 
-	serverTimeOut->Reset();
-	sendTimeOutTimer->Reset();
-	serverTimeOut->Start();
-	sendTimeOutTimer->Start();
-	createTimeoutThread();
+	if (m_connected)
+	{
+		serverTimeOut->Reset();
+		sendTimeOutTimer->Reset();
+		serverTimeOut->Start();
+		sendTimeOutTimer->Start();
+		createTimeoutThread();
+	}
 
     return m_connected;
 }
