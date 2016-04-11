@@ -35,9 +35,9 @@ int main(int argc, char *argv[])
 		conectado = client->isConnected();
 
 		//cout << conectado; Para debug para ver si esta conectado el client o no
-		std::string eleccion = menu->menuzazo(conectado, listaDeMensajes);
-		int comando = menu->cmpOptionMenu(eleccion, conectado, listaDeMensajes.size()+4);
-		if(comando == 1 and !conectado)//Me quiero conectar y estoy desconectado
+		std::string eleccion = menu->menuzazo(client->isConnected(), listaDeMensajes);
+		int comando = menu->cmpOptionMenu(eleccion, client->isConnected(), listaDeMensajes.size()+4);
+		if(comando == 1 and !client->isConnected())//Me quiero conectar y estoy desconectado
 		{
 			if (client->isConnecting())
 			{
@@ -54,13 +54,13 @@ int main(int argc, char *argv[])
 				conectado = true;
 			}
 		}
-		else if((comando == 1 and conectado)or(comando == 2 and !conectado)or(comando == 3 and !conectado) )
+		else if((comando == 1 and client->isConnected())or(comando == 2 and !client->isConnected())or(comando == 3 and !client->isConnected()) )
 		//me quiero conectar pero ya estoy conectado, me quiero desconectar pero no estoy conectado
 		//Quiero ciclar o mandar mensajes pero estoy desconectado
 		{
 			conectado = true;
 		}
-		else if(comando == 3 and conectado)//Mando un mensaje y estoy conectado
+		else if(comando == 3 and client->isConnected())//Mando un mensaje y estoy conectado
 		{
 			int indice = stoi(eleccion) - 3;
 			Mensaje mensajeAEnviar = listaDeMensajes[indice];
@@ -78,13 +78,15 @@ int main(int argc, char *argv[])
 			if (lostConnection == -1)
 			{
 				client->desconectar();
+				continue;
 			}
 			else
 				conectado =true;
 		}
-		else if (comando == 2 and conectado)
+		else if (comando == 2 and client->isConnected())
 		{
 			client->desconectar();
+			continue;
 		}
 		else if(comando == -1)
 		{

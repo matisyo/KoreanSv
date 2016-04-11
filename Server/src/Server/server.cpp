@@ -215,22 +215,7 @@ void* server::procesar(void)
 	{
 
 		//Chekea timeouts
-		for (int i = 0; i < m_listaTimeOuts.size(); ++i)
-		{
-
-			if ((!m_listaTimeOuts.isAvailable(i)) || (!m_listaDeClientes.isAvailable(i)))
-				continue;
-			if (m_listaTimeOuts.getElemAt(i))
-			{
-				//printf("Timer del server = %f\n", (float)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC);
-				if ((long double)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC >= TIMEOUT_SECONDS)
-				{
-					printf("Timer del cliente %d = %f\n", i, (float)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC);
-					printf("El cliente con id %d timeouteo.\n", i);
-					closeSocket(i);
-				}
-			}
-		}
+		checkTimeOuts();
 
 		//Procesa cola
 		if (m_queue.size() != 0)
@@ -277,6 +262,27 @@ void* server::procesar(void)
 
 	}
 }
+
+void server::checkTimeOuts()
+{
+	for (int i = 0; i < m_listaTimeOuts.size(); ++i)
+	{
+
+		if ((!m_listaTimeOuts.isAvailable(i)) || (!m_listaDeClientes.isAvailable(i)))
+			continue;
+		if (m_listaTimeOuts.getElemAt(i))
+		{
+			//printf("Timer del server = %f\n", (float)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC);
+			if ((long double)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC >= TIMEOUT_SECONDS)
+			{
+				//printf("Timer del cliente %d = %f\n", i, (float)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC);
+				//printf("El cliente con id %d timeouteo.\n", i);
+				closeSocket(i);
+			}
+		}
+	}
+}
+
 void* server::postProcesamiento(void)
 {
 	int id = this->m_lastID;
@@ -350,9 +356,9 @@ void server::closeSocket(int id)
 	printf("Se desconectó un cliente, hay lugar para %d chaval/es mas.\n",MAX_CLIENTES - getNumClientes());
 
 	close(m_listaDeClientes.getElemAt(id));
-	m_listaDeClientes.removeAt(id);
-	removeTimeOutTimer(id);
 
+	removeTimeOutTimer(id);
+	m_listaDeClientes.removeAt(id);
 }
 
 void server::aumentarNumeroClientes()
@@ -430,12 +436,15 @@ bool server::procesarMensaje(ServerMessage* serverMsg)
 	bool procesamientoExitoso = true;;
 	NetworkMessage netMsg = serverMsg->networkMessage;
 	DataMessage dataMsg = m_alanTuring->decodeMessage(netMsg);
-	std::string stringValue(dataMsg.msg_value);
 
+	//los mensajes de timeout no requieren procesamiente ni ningún tipo de feedback visible
 	if ((netMsg.msg_Code[0] == 't') && (netMsg.msg_Code[1] == 'm') && (netMsg.msg_Code[2] == 'o'))
 	{
 		return true;
 	}
+
+
+	std::string stringValue(dataMsg.msg_value);
 
 	printf("Procesando mensaje con ID: %s \n", dataMsg.msg_ID);
 	std::stringstream ss;

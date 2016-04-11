@@ -73,6 +73,7 @@ class server
         pthread_t threadDeProcesos;
 
         bool crearCliente (int clientSocket);
+        void checkTimeOuts();
         bool lecturaExitosa(int bytesLeidos, int clientID);
         void closeSocket(int id);
         void reducirNumeroClientes();

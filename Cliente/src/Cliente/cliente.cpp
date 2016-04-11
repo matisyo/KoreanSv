@@ -52,7 +52,10 @@ bool cliente::conectar()
 }
 void cliente::desconectar()
 {
+	if (!m_connected)
+		return;
 	m_connected = false;
+	serverTimeOut->Stop();
 	cerrarSoket();
 	Logger::Instance()->LOG("Cliente: El cliente se ha desconectado satisfactoriamente", DEBUG);
 }
@@ -113,9 +116,12 @@ void cliente::sendMsg(Mensaje msg)
     if (n < 0)
     	Logger::Instance()->LOG("Cliente: No se pudo enviar el mensaje.", WARN);
 
-	std::stringstream ss;
-	ss << "Cliente: Se ha enviado con éxito el mensaje con ID: " << msg.id.c_str() << ".";
-	Logger::Instance()->LOG(ss.str(), DEBUG);
+    if (msg.tipo.compare("timeoutACK") != 0)
+    {
+		std::stringstream ss;
+		ss << "Cliente: Se ha enviado con éxito el mensaje con ID: " << msg.id.c_str() << ".";
+		Logger::Instance()->LOG(ss.str(), DEBUG);
+    }
 }
 
 //Envia mensaje de timeOut cada x tiempo
@@ -141,7 +147,7 @@ bool cliente::sendTimeOutMsg()
 bool cliente::checkServerConnection()
 {
 	//printf("Timer del server = %f\n", (float)serverTimeOut->GetTicks()/CLOCKS_PER_SEC);
-	if (((float)serverTimeOut->GetTicks()/CLOCKS_PER_SEC >= TIMEOUT_SECONDS))
+	if (((float)serverTimeOut->GetTicks()/CLOCKS_PER_SEC >= TIMEOUT_SECONDS) || (m_connected == false))
 	{
 		printf("Se perdio conección con el servidor.\n");
 		desconectar();
