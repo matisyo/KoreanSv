@@ -77,8 +77,7 @@ int main(int argc, char *argv[])
 		}
 		else if (comando == 2 and conectado)
 		{
-			client->sendTimeOutMsg();
-			//client->desconectar();
+			client->desconectar();
 		}
 		else if(comando == -1)
 		{

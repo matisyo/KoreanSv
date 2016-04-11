@@ -24,7 +24,7 @@
 #include <iostream>
 #include <sys/time.h>
 
-#define TIMEOUT_SECONDS 20
+#define TIMEOUT_SECONDS 7
 #define TIMEOUT_MICROSECONDS 0
 
 class cliente
@@ -43,7 +43,7 @@ class cliente
         void *sendTimeOuts(void);
         void createTimeoutThread();
         static void *timeOut_method(void *context);
-        void sendTimeOutMsg();
+        bool sendTimeOutMsg();
 
     private:
         AlanTuring* m_alanTuring;

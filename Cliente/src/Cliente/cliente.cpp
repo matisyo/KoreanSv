@@ -28,6 +28,8 @@ bool cliente::conectar()
     m_connected = true;
 	leer();
 
+	serverTimeOut->Reset();
+	sendTimeOutTimer->Reset();
 	serverTimeOut->Start();
 	sendTimeOutTimer->Start();
 	createTimeoutThread();
@@ -102,9 +104,10 @@ void cliente::sendMsg(Mensaje msg)
 }
 
 //Envia mensaje de timeOut cada x tiempo
-void cliente::sendTimeOutMsg()
+bool cliente::sendTimeOutMsg()
 {
-	checkServerConnection();
+	if (!checkServerConnection())
+		return false;
 
 	if ((float)sendTimeOutTimer->GetTicks()/CLOCKS_PER_SEC >= 1)
 	{
@@ -115,13 +118,15 @@ void cliente::sendTimeOutMsg()
 		//espera procesamiento del server
 		leer();
 	}
+	return true;
 
 }
 
 
 bool cliente::checkServerConnection()
 {
-	if ((float)serverTimeOut->GetTicks()/CLOCKS_PER_SEC >= TIMEOUT_SECONDS)
+	//printf("Timer del server = %f\n", (float)serverTimeOut->GetTicks()/CLOCKS_PER_SEC);
+	if (((float)serverTimeOut->GetTicks()/CLOCKS_PER_SEC >= TIMEOUT_SECONDS))
 	{
 		printf("Se perdio conección con el servidor.\n");
 		desconectar();
@@ -295,9 +300,10 @@ bool cliente::validarMensaje(DataMessage dataMsg)
 void *cliente::sendTimeOuts(void)
 {
 
-    while(m_connected)
+    while(true)
     {
-    	sendTimeOutMsg();
+    	if (!sendTimeOutMsg())
+    		break;
 	}
     pthread_exit(NULL);
 
@@ -310,6 +316,7 @@ void cliente::createTimeoutThread(){
 
 	pthread_create(&timeOutThread, NULL, &cliente::timeOut_method, (void*)this);
 }
+
 bool cliente::lecturaExitosa(int bytesLeidos)
 {
     if (n < 0)

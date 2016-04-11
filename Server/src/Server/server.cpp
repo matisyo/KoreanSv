@@ -143,12 +143,13 @@ void server::agregarTimeOutTimer(int clientPosition)
 	m_listaTimeOuts.addAt(clientPosition, timeOutTimer);
 
 	//comienza el timer
+	m_listaTimeOuts.getElemAt(clientPosition)->Reset();
 	m_listaTimeOuts.getElemAt(clientPosition)->Start();
 }
 void server::removeTimeOutTimer(int clientPosition)
 {
-	if (m_listaTimeOuts.getElemAt(clientPosition))
-		delete m_listaTimeOuts.getElemAt(clientPosition);
+	//if (m_listaTimeOuts.getElemAt(clientPosition))
+		//delete m_listaTimeOuts.getElemAt(clientPosition);
 	m_listaTimeOuts.removeAt(clientPosition);
 }
 
@@ -185,7 +186,8 @@ bool server::leer(int id)
     }
 
     //resetea el timer de timeout
-    m_listaTimeOuts.getElemAt(id)->Reset();
+    if ((m_listaTimeOuts.isAvailable(id)) && (m_listaTimeOuts.getElemAt(id)))
+    	m_listaTimeOuts.getElemAt(id)->Reset();
 
     NetworkMessage netMsgRecibido = m_alanTuring->decode(buffer);
 
@@ -252,9 +254,12 @@ void* server::procesar(void)
 			//Chekea timeouts
 			for (int i = 0; i < m_listaTimeOuts.size(); ++i)
 			{
-				if ((m_listaTimeOuts.isAvailable(i)) && (m_listaTimeOuts.getElemAt(i)))
+				if ((!m_listaTimeOuts.isAvailable(i)) || (!m_listaDeClientes.isAvailable(i)))
+					continue;
+
+				if (m_listaTimeOuts.getElemAt(i))
 				{
-					if ((float)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC >= TIMEOUT_SECONDS)
+					if ((long double)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC >= TIMEOUT_SECONDS)
 					{
 						printf("Timer del cliente %d = %Lf\n", i, (float)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC);
 						printf("El cliente con id %d timeouteo.\n", i);
