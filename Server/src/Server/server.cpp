@@ -140,6 +140,7 @@ bool server::crearCliente (int clientSocket)
 void server::agregarTimeOutTimer(int clientPosition)
 {
 	Timer* timeOutTimer = new Timer();
+	removeTimeOutTimer(clientPosition);
 	m_listaTimeOuts.addAt(clientPosition, timeOutTimer);
 
 	//comienza el timer
@@ -149,7 +150,11 @@ void server::agregarTimeOutTimer(int clientPosition)
 void server::removeTimeOutTimer(int clientPosition)
 {
 	if ((m_listaTimeOuts.isAvailable(clientPosition)) && (m_listaTimeOuts.getElemAt(clientPosition)))
+	{
 		delete m_listaTimeOuts.getElemAt(clientPosition);
+		//m_listaTimeOuts.getElemAt(clientPosition)->Reset();
+		//m_listaTimeOuts.getElemAt(clientPosition)->Stop();
+	}
 	m_listaTimeOuts.removeAt(clientPosition);
 }
 
@@ -209,65 +214,66 @@ void* server::procesar(void)
 	while(this->isRunning())
 	{
 
+		//Chekea timeouts
+		for (int i = 0; i < m_listaTimeOuts.size(); ++i)
+		{
 
-			if (m_queue.size() != 0)
+			if ((!m_listaTimeOuts.isAvailable(i)) || (!m_listaDeClientes.isAvailable(i)))
+				continue;
+			if (m_listaTimeOuts.getElemAt(i))
 			{
-				ServerMessage serverMsg = m_queue.remove();
-				DataMessage dataMessage = m_alanTuring->decodeMessage(serverMsg.networkMessage);
-				string messageID(dataMessage.msg_ID);
-
-				// BLOQUE DE PROCESAMIENTO
-				bool mensajeValido = procesarMensaje(&serverMsg);
-
-				if (!mensajeValido)
+				//printf("Timer del server = %f\n", (float)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC);
+				if ((long double)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC >= TIMEOUT_SECONDS)
 				{
-					std::stringstream ss;
-					ss << "Server: El Mensaje con ID: " << messageID.c_str() << " fue rechazado.";
-					Logger::Instance()->LOG(ss.str(), DEBUG);
-					//printf("mensaje rechazado\n");
-					m_alanTuring->setNetworkMessageStatus(&serverMsg.networkMessage, 'I');
-
-				}
-				else
-				{
-					//printf("mensaje valido\n");
-					std::stringstream ss;
-					ss << "Server: El Mensaje con ID: " << messageID.c_str() << " fue procesado correctamente.";
-					Logger::Instance()->LOG(ss.str(), DEBUG);
-					m_alanTuring->setNetworkMessageStatus(&serverMsg.networkMessage, 'V');
-				}
-
-				//FUNCION ANTIGUA
-				/*string buf = msg.texto;
-				printf("%s \n",buf.c_str());
-				printf("comparacion %d\n",strcmp(buf.c_str(),"KillSv\n"));
-				if (strcmp(buf.c_str(),"KillSv\n") == 0 ){
-					m_svRunning = false;
-					printf("consola: ");
-				}
-				printf("%d: %s \n",msg.id + 1,msg.texto.c_str());*/
-
-				// BLOQUE DE PROCESAMIENTO
-				m_queuePost[serverMsg.clientID].add(serverMsg);
-
-			}
-			//Chekea timeouts
-			for (int i = 0; i < m_listaTimeOuts.size(); ++i)
-			{
-				if ((!m_listaTimeOuts.isAvailable(i)) || (!m_listaDeClientes.isAvailable(i)))
-					continue;
-
-				if (m_listaTimeOuts.getElemAt(i))
-				{
-					if ((float)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC >= TIMEOUT_SECONDS)
-					{
-						printf("Timer del cliente %d = %Lf\n", i, (float)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC);
-						printf("El cliente con id %d timeouteo.\n", i);
-						closeSocket(i);
-					}
+					printf("Timer del cliente %d = %f\n", i, (float)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC);
+					printf("El cliente con id %d timeouteo.\n", i);
+					closeSocket(i);
 				}
 			}
+		}
 
+		//Procesa cola
+		if (m_queue.size() != 0)
+		{
+			ServerMessage serverMsg = m_queue.remove();
+			DataMessage dataMessage = m_alanTuring->decodeMessage(serverMsg.networkMessage);
+			string messageID(dataMessage.msg_ID);
+
+			// BLOQUE DE PROCESAMIENTO
+			bool mensajeValido = procesarMensaje(&serverMsg);
+
+			if (!mensajeValido)
+			{
+				std::stringstream ss;
+				ss << "Server: El Mensaje con ID: " << messageID.c_str() << " fue rechazado.";
+				Logger::Instance()->LOG(ss.str(), DEBUG);
+				//printf("mensaje rechazado\n");
+				m_alanTuring->setNetworkMessageStatus(&serverMsg.networkMessage, 'I');
+
+			}
+			else
+			{
+				//printf("mensaje valido\n");
+				std::stringstream ss;
+				ss << "Server: El Mensaje con ID: " << messageID.c_str() << " fue procesado correctamente.";
+				Logger::Instance()->LOG(ss.str(), DEBUG);
+				m_alanTuring->setNetworkMessageStatus(&serverMsg.networkMessage, 'V');
+			}
+
+			//FUNCION ANTIGUA
+			/*string buf = msg.texto;
+			printf("%s \n",buf.c_str());
+			printf("comparacion %d\n",strcmp(buf.c_str(),"KillSv\n"));
+			if (strcmp(buf.c_str(),"KillSv\n") == 0 ){
+				m_svRunning = false;
+				printf("consola: ");
+			}
+			printf("%d: %s \n",msg.id + 1,msg.texto.c_str());*/
+
+			// BLOQUE DE PROCESAMIENTO
+			m_queuePost[serverMsg.clientID].add(serverMsg);
+
+		}
 
 	}
 }

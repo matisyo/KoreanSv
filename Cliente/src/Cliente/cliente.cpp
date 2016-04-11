@@ -11,10 +11,16 @@ void cliente::error(const char *msg)
 
 bool cliente::conectar()
 {
+	if (m_connecting)
+		return true;
+
+	m_connecting = true;
+
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0)
     {
     	Logger::Instance()->LOG("Cliente: Error en la creación del socket", ERROR);
+    	m_connecting = false;
     	return false;
     }
 
@@ -23,6 +29,7 @@ bool cliente::conectar()
     if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
     {
     	Logger::Instance()->LOG("Cliente: El cliente no se pudo conectar satisfactoriamente", WARN);
+    	m_connecting = false;
        return false;
     }
     m_connected = true;
@@ -36,7 +43,11 @@ bool cliente::conectar()
 		sendTimeOutTimer->Start();
 		createTimeoutThread();
 	}
-
+	else
+	{
+		cerrarSoket();
+	}
+	m_connecting = false;
     return m_connected;
 }
 void cliente::desconectar()
@@ -48,6 +59,7 @@ void cliente::desconectar()
 
 cliente::cliente(int argc, string ip, int port, std::vector<Mensaje> listaDeMensajesCargados){
 	m_connected = false;
+	m_connecting = false;
 	m_alanTuring = new AlanTuring();
 
     portno = port;
@@ -175,6 +187,9 @@ bool cliente::leer()
 }
 bool cliente::isConnected(){
 	return m_connected;
+}
+bool cliente::isConnecting(){
+	return m_connecting;
 }
 void cliente::cerrarSoket()
 {

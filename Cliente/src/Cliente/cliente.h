@@ -37,6 +37,7 @@ class cliente
         void escribir(Mensaje mensaje);
         bool leer();
         bool isConnected();
+        bool isConnecting();
         bool checkServerConnection();
 
         //timeout
@@ -49,6 +50,7 @@ class cliente
         AlanTuring* m_alanTuring;
         int sockfd, portno, n;
         bool m_connected;
+        bool m_connecting;
         Timer* serverTimeOut;
         Timer* sendTimeOutTimer;
         pthread_t timeOutThread;

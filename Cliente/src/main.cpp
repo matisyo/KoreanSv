@@ -38,6 +38,12 @@ int main(int argc, char *argv[])
 		std::string eleccion = menu->menuzazo(conectado, listaDeMensajes);
 		int comando = menu->cmpOptionMenu(eleccion, conectado, listaDeMensajes.size()+4);
 		if(comando == 1 and !conectado)//Me quiero conectar y estoy desconectado
+		{
+			if (client->isConnecting())
+			{
+				printf("Conectando. Aguarde por favor...\n");
+				continue;
+			}
 			if (!client->conectar())
 				{
 					printf("No se pudo establecer conexión con el servidor.\n");
@@ -47,6 +53,7 @@ int main(int argc, char *argv[])
 			{
 				conectado = true;
 			}
+		}
 		else if((comando == 1 and conectado)or(comando == 2 and !conectado)or(comando == 3 and !conectado) )
 		//me quiero conectar pero ya estoy conectado, me quiero desconectar pero no estoy conectado
 		//Quiero ciclar o mandar mensajes pero estoy desconectado

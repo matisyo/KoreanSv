@@ -34,7 +34,9 @@ public:
 
 	T getElemAt(int indice)
 	{
-		return m_listaInterna[indice];
+		if (m_listaInterna[indice])
+			return m_listaInterna[indice];
+		return NULL;
 	}
 
 	void removeAt(int indice)

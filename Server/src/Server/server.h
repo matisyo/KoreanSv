@@ -9,6 +9,7 @@
 #include "../Utils/StringHelper.h"
 #include "../Utils/Logger.h"
 
+
 #include <stdio.h>
 #include <queue>
 #include <stdlib.h>
@@ -20,9 +21,10 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include "ServerMessage.h"
+#include <memory>
 
-#define TIMEOUT_SECONDS 7
+
+#define TIMEOUT_SECONDS 10
 #define TIMEOUT_MICROSECONDS 0
 
 class server
