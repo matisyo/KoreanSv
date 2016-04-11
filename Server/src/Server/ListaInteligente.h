@@ -76,6 +76,11 @@ public:
 		return true;
 	}
 
+	bool isAvailable(int indice)
+	{
+		return m_bitset[indice];
+	}
+
 	void clear()
 	{
 		m_listaInterna.clear();

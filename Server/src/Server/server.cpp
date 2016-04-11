@@ -174,20 +174,17 @@ bool server::leer(int id)
     if (!lecturaExitosa(n, id))
     	return false;
 
-    printf("Se leyeron %d bytes.\n", n);
     int messageLength = (int)m_alanTuring->decodeLength(buffer);
 
     //loopea hasta haber leido la totalidad de los bytes necarios
     while (n < messageLength)
     {
     	n = recv(m_listaDeClientes.getElemAt(id), buffer, 255, 0);
-    	printf("Se leyeron %d bytes.", n);
         if (!lecturaExitosa(n, id))
         	return false;
     }
 
     //resetea el timer de timeout
-    printf("Timer del cliente %d = %Lf\n", id, (long double)m_listaTimeOuts.getElemAt(id)->GetTicks()/CLOCKS_PER_SEC);
     m_listaTimeOuts.getElemAt(id)->Reset();
 
     NetworkMessage netMsgRecibido = m_alanTuring->decode(buffer);
@@ -201,7 +198,6 @@ bool server::leer(int id)
     msg.texto = my_str2;*/
 
     m_queue.add(serverMsg);
-    printf("Se agrego un mensaje a la cola satisfactoriamente.\n");
     return true;
 }
 
@@ -226,13 +222,13 @@ void* server::procesar(void)
 					std::stringstream ss;
 					ss << "Server: El Mensaje con ID: " << messageID.c_str() << " fue rechazado.";
 					Logger::Instance()->LOG(ss.str(), DEBUG);
-					printf("mensaje rechazado\n");
+					//printf("mensaje rechazado\n");
 					m_alanTuring->setNetworkMessageStatus(&serverMsg.networkMessage, 'I');
 
 				}
 				else
 				{
-					printf("mensaje valido\n");
+					//printf("mensaje valido\n");
 					std::stringstream ss;
 					ss << "Server: El Mensaje con ID: " << messageID.c_str() << " fue procesado correctamente.";
 					Logger::Instance()->LOG(ss.str(), DEBUG);
@@ -250,23 +246,23 @@ void* server::procesar(void)
 				printf("%d: %s \n",msg.id + 1,msg.texto.c_str());*/
 
 				// BLOQUE DE PROCESAMIENTO
-			    printf("Se agrego el mensaje a la cola de mensajes procesados.\n");
 				m_queuePost[serverMsg.clientID].add(serverMsg);
 
 			}
 			//Chekea timeouts
 			for (int i = 0; i < m_listaTimeOuts.size(); ++i)
 			{
-				if (m_listaTimeOuts.getElemAt(i))
+				if ((m_listaTimeOuts.isAvailable(i)) && (m_listaTimeOuts.getElemAt(i)))
 				{
-					if ((long double)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC >= 20)
+					if ((float)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC >= TIMEOUT_SECONDS)
 					{
-						printf("Timer del cliente %d = %Lf\n", i, (long double)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC);
+						printf("Timer del cliente %d = %Lf\n", i, (float)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC);
 						printf("El cliente con id %d timeouteo.\n", i);
 						closeSocket(i);
 					}
 				}
 			}
+
 
 	}
 }
@@ -420,6 +416,11 @@ bool server::procesarMensaje(ServerMessage* serverMsg)
 	NetworkMessage netMsg = serverMsg->networkMessage;
 	DataMessage dataMsg = m_alanTuring->decodeMessage(netMsg);
 	std::string stringValue(dataMsg.msg_value);
+
+	if ((netMsg.msg_Code[0] == 't') && (netMsg.msg_Code[1] == 'm') && (netMsg.msg_Code[2] == 'o'))
+	{
+		return true;
+	}
 
 	printf("Procesando mensaje con ID: %s \n", dataMsg.msg_ID);
 	std::stringstream ss;

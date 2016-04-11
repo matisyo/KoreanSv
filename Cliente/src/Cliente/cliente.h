@@ -24,7 +24,7 @@
 #include <iostream>
 #include <sys/time.h>
 
-#define TIMEOUT_SECONDS 5
+#define TIMEOUT_SECONDS 20
 #define TIMEOUT_MICROSECONDS 0
 
 class cliente
@@ -38,9 +38,11 @@ class cliente
         bool leer();
         bool isConnected();
         bool checkServerConnection();
-        void *queContas(void);
-        void hilo();
-        static void *mati_method(void *context);
+
+        //timeout
+        void *sendTimeOuts(void);
+        void createTimeoutThread();
+        static void *timeOut_method(void *context);
         void sendTimeOutMsg();
 
     private:

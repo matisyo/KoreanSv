@@ -30,7 +30,8 @@ bool cliente::conectar()
 
 	serverTimeOut->Start();
 	sendTimeOutTimer->Start();
-	hilo();
+	createTimeoutThread();
+
     return m_connected;
 }
 void cliente::desconectar()
@@ -103,12 +104,17 @@ void cliente::sendMsg(Mensaje msg)
 //Envia mensaje de timeOut cada x tiempo
 void cliente::sendTimeOutMsg()
 {
-	Mensaje timeOutMsg = MessageFactory::Instance()->createMessage("to", "",msgTimeOutACK);
-	sendMsg(timeOutMsg);
+	checkServerConnection();
 
-	//sendTimeOutTimer->Reset();
-	//espera procesamiento del server
-	leer();
+	if ((float)sendTimeOutTimer->GetTicks()/CLOCKS_PER_SEC >= 1)
+	{
+		Mensaje timeOutMsg = MessageFactory::Instance()->createMessage("to", "",msgTimeOutACK);
+		sendMsg(timeOutMsg);
+
+		sendTimeOutTimer->Reset();
+		//espera procesamiento del server
+		leer();
+	}
 
 }
 
@@ -286,23 +292,23 @@ bool cliente::validarMensaje(DataMessage dataMsg)
 	}
 	return mensajeValido;
 }
-void *cliente::queContas(void)
+void *cliente::sendTimeOuts(void)
 {
 
-    while(true)
+    while(m_connected)
     {
     	sendTimeOutMsg();
 	}
     pthread_exit(NULL);
 
 }
-void *cliente::mati_method(void *context)
+void *cliente::timeOut_method(void *context)
 {
-	return ((cliente *)context)->queContas();
+	return ((cliente *)context)->sendTimeOuts();
 }
-void cliente::hilo(){
+void cliente::createTimeoutThread(){
 
-	pthread_create(&timeOutThread, NULL, &cliente::mati_method, (void*)this);
+	pthread_create(&timeOutThread, NULL, &cliente::timeOut_method, (void*)this);
 }
 bool cliente::lecturaExitosa(int bytesLeidos)
 {
