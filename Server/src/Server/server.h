@@ -57,7 +57,7 @@ class server
         bool m_svRunning;
         int m_clientNum;
         ListaInteligente<int> m_listaDeClientes;
-        ListaInteligente<Timer*> m_listaTimeOuts;
+        ListaInteligente<Timer> m_listaTimeOuts;
 
         std::vector<pthread_t> m_clientThreads;
         std::vector<pthread_t> m_clientResponseThreads;

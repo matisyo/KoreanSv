@@ -120,7 +120,6 @@ bool server::crearCliente (int clientSocket)
 		Logger::Instance()->LOG("Server: Cliente rechazado. El servidor no puede aceptar más clientes.", WARN);
 		return false;
 	}
-	agregarTimeOutTimer(m_lastID);
 
 	printf("se agrego en la posicion %d \n", m_lastID);
 
@@ -128,6 +127,8 @@ bool server::crearCliente (int clientSocket)
 	pthread_create(&m_clientResponseThreads[m_lastID], NULL, &server::mati_method3, (void*)this);
 
 	aumentarNumeroClientes();
+
+	agregarTimeOutTimer(m_lastID);
 
 	printf("Se creo un thread %d\n", m_lastID);
 	std::stringstream ss;
@@ -139,22 +140,14 @@ bool server::crearCliente (int clientSocket)
 
 void server::agregarTimeOutTimer(int clientPosition)
 {
-	Timer* timeOutTimer = new Timer();
-	removeTimeOutTimer(clientPosition);
-	m_listaTimeOuts.addAt(clientPosition, timeOutTimer);
-
 	//comienza el timer
-	m_listaTimeOuts.getElemAt(clientPosition)->Reset();
-	m_listaTimeOuts.getElemAt(clientPosition)->Start();
+	m_listaTimeOuts.getElemAt(clientPosition).Reset();
+	m_listaTimeOuts.getElemAt(clientPosition).Start();
 }
 void server::removeTimeOutTimer(int clientPosition)
 {
-	if ((m_listaTimeOuts.isAvailable(clientPosition)) && (m_listaTimeOuts.getElemAt(clientPosition)))
-	{
-		delete m_listaTimeOuts.getElemAt(clientPosition);
-		//m_listaTimeOuts.getElemAt(clientPosition)->Reset();
-		//m_listaTimeOuts.getElemAt(clientPosition)->Stop();
-	}
+	m_listaTimeOuts.getElemAt(clientPosition).Reset();
+	m_listaTimeOuts.getElemAt(clientPosition).Stop();
 	m_listaTimeOuts.removeAt(clientPosition);
 }
 
@@ -191,8 +184,7 @@ bool server::leer(int id)
     }
 
     //resetea el timer de timeout
-    if ((m_listaTimeOuts.isAvailable(id)) && (m_listaTimeOuts.getElemAt(id)))
-    	m_listaTimeOuts.getElemAt(id)->Reset();
+    m_listaTimeOuts.getElemAt(id).Reset();
 
     NetworkMessage netMsgRecibido = m_alanTuring->decode(buffer);
 
@@ -213,7 +205,6 @@ void* server::procesar(void)
 
 	while(this->isRunning())
 	{
-
 		//Chekea timeouts
 		checkTimeOuts();
 
@@ -267,18 +258,15 @@ void server::checkTimeOuts()
 {
 	for (int i = 0; i < m_listaTimeOuts.size(); ++i)
 	{
-
 		if ((!m_listaTimeOuts.isAvailable(i)) || (!m_listaDeClientes.isAvailable(i)))
 			continue;
-		if (m_listaTimeOuts.getElemAt(i))
+		//printf("Timer del server = %f\n", (float)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC);
+		if ((long double)(m_listaTimeOuts.getElemAt(i).GetTicks()/CLOCKS_PER_SEC) >= TIMEOUT_SECONDS)
 		{
-			//printf("Timer del server = %f\n", (float)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC);
-			if ((long double)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC >= TIMEOUT_SECONDS)
-			{
-				//printf("Timer del cliente %d = %f\n", i, (float)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC);
-				//printf("El cliente con id %d timeouteo.\n", i);
-				closeSocket(i);
-			}
+			//printf("Timer del cliente %d = %f\n", i, (float)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC);
+			//printf("El cliente con id %d timeouteo.\n", i);
+			printf("Close Timeout\n");
+			closeSocket(i);
 		}
 	}
 }
@@ -351,14 +339,15 @@ void server::closeSocket(int id)
 	if (!m_listaDeClientes.isAvailable(id))
 		return;
 
-	Logger::Instance()->LOG("Server: Se desconectó un cliente.", DEBUG);
+	removeTimeOutTimer(id);
+
 	reducirNumeroClientes();
+	close(m_listaDeClientes.getElemAt(id));
+	m_listaDeClientes.removeAt(id);
+
+	Logger::Instance()->LOG("Server: Se desconectó un cliente.", DEBUG);
 	printf("Se desconectó un cliente, hay lugar para %d chaval/es mas.\n",MAX_CLIENTES - getNumClientes());
 
-	close(m_listaDeClientes.getElemAt(id));
-
-	removeTimeOutTimer(id);
-	m_listaDeClientes.removeAt(id);
 }
 
 void server::aumentarNumeroClientes()
@@ -416,16 +405,16 @@ bool server::lecturaExitosa(int bytesLeidos, int clientID)
     if (bytesLeidos < 0)
     {
     	//Cliente Desconectado
+    	printf ("Close lectura -1\n");
     	closeSocket(clientID);
-    	printf("leyo -1 el recv\n");
     	return false;
 
     }
     if (bytesLeidos == 0)
     {
     	//Cliente Desconectado. Hay diferencias con recibir -1? Sino lo ponemos to do junto, hacen lo mismo
+    	printf ("Close lectura 0\n");
     	closeSocket(clientID);
-    	printf("leyo 0 el recv\n");
     	return false;
     }
     return true;

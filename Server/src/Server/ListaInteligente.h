@@ -34,15 +34,12 @@ public:
 
 	T getElemAt(int indice)
 	{
-		if (m_listaInterna[indice])
-			return m_listaInterna[indice];
-		return NULL;
+		return m_listaInterna[indice];
 	}
 
 	void removeAt(int indice)
 	{
 
-		printf("saco al %d \n",indice);
 		unsetBitset(indice);
 
 	}
@@ -65,7 +62,6 @@ public:
 		//Existe lugar disponible
 		m_listaInterna[posicionDisponible] = elem;
 		setBitset(posicionDisponible);
-		printf("metio en %d \n",posicionDisponible);
 		return posicionDisponible;
 	}
 
