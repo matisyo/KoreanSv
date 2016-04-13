@@ -12,6 +12,10 @@ Logger* Logger::s_pInstance = 0;
 Logger::Logger()
 {
 	 std::string filename = generateFilename();
+	 //Inicializo para que loguee todos los niveles inicialmente, al procesar el XML se pisa
+	 m_debugAvailable = true;
+	 m_warningAvailable = true;
+	 m_errorAvailable = true;
 
 	m_file.open( filename.c_str(), std::ios::out|std::ios::in|std::ios::app );
 	 if (!m_file.good())
