@@ -66,6 +66,7 @@ cliente::cliente(int argc, string ip, int port, std::vector<Mensaje> listaDeMens
 	m_alanTuring = new AlanTuring();
 
     pthread_mutex_init(&m_readingMutex, NULL);
+    pthread_mutex_init(&m_writingMutex, NULL);
     pthread_cond_init(&m_condv, NULL);
 
     portno = port;
@@ -91,6 +92,7 @@ cliente::cliente(int argc, string ip, int port, std::vector<Mensaje> listaDeMens
 cliente::~cliente()
 {
     pthread_mutex_destroy(&m_readingMutex);
+    pthread_mutex_destroy(&m_writingMutex);
     pthread_cond_destroy(&m_condv);
 	delete serverTimeOut;
 	delete sendTimeOutTimer;
@@ -117,16 +119,30 @@ void cliente::sendMsg(Mensaje msg)
 {
 	char bufferEscritura[MESSAGE_BUFFER_SIZE];
 	int msgLength = m_alanTuring->encodeXMLMessage(msg, bufferEscritura);
-	int bytesEnviados =  send(sockfd, bufferEscritura , msgLength, 0);
-    if (bytesEnviados <= 0)
-    	Logger::Instance()->LOG("Cliente: No se pudo enviar el mensaje.", WARN);
+	char *ptr = (char*) bufferEscritura;
 
+    while (msgLength > 0)
+    {
+        int bytesEnviados = send(sockfd, ptr, msgLength, 0);
+        if (bytesEnviados < 1)
+        {
+        	Logger::Instance()->LOG("Server: No se pudo enviar el mensaje.", WARN);
+        	return;
+        }
+        ptr += bytesEnviados;
+        msgLength -= bytesEnviados;
+    }
+
+	/*int bytesEnviados = send(socketReceptor,bufferEscritura , msgLength, 0);
+    if (bytesEnviados <= 0)
+    	Logger::Instance()->LOG("Server: No se pudo enviar el mensaje.", WARN);
     while (bytesEnviados < msgLength)
     {
-    	bytesEnviados =  send(sockfd, bufferEscritura , msgLength, 0);
+    	bytesEnviados =  send(sockfd, bufferEscritura + bytesEnviados , msgLength, 0);
         if (bytesEnviados <= 0)
-        	Logger::Instance()->LOG("Cliente: No se pudo enviar el mensaje.", WARN);
-    }
+        	Logger::Instance()->LOG("Server: No se pudo enviar el mensaje.", WARN);
+
+    }*/
 
     if (msg.tipo.compare("timeoutACK") != 0)
     {
@@ -139,6 +155,7 @@ void cliente::sendMsg(Mensaje msg)
 //Envia mensaje de timeOut cada x tiempo
 bool cliente::sendTimeOutMsg()
 {
+	pthread_mutex_lock(&m_writingMutex);
 	if (!checkServerConnection())
 		return false;
 
@@ -151,6 +168,7 @@ bool cliente::sendTimeOutMsg()
 		//espera procesamiento del server
 		leer();
 	}
+	pthread_mutex_unlock(&m_writingMutex);
 	return true;
 
 }

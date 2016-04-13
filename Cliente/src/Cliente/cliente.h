@@ -24,7 +24,7 @@
 #include <iostream>
 #include <sys/time.h>
 
-#define TIMEOUT_SECONDS 7
+#define TIMEOUT_SECONDS 10
 #define TIMEOUT_MICROSECONDS 0
 
 class cliente
@@ -55,6 +55,7 @@ class cliente
         Timer* sendTimeOutTimer;
         pthread_t timeOutThread;
         pthread_mutex_t  m_readingMutex;
+        pthread_mutex_t  m_writingMutex;
         pthread_cond_t   m_condv;
 
         struct sockaddr_in serv_addr;

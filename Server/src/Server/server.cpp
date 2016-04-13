@@ -161,16 +161,30 @@ void server::sendMsg(int socketReceptor, Mensaje msg)
 {
 	char bufferEscritura[MESSAGE_BUFFER_SIZE];
 	int msgLength = m_alanTuring->encodeXMLMessage(msg, bufferEscritura);
+	char *ptr = (char*) bufferEscritura;
 
-	int bytesEnviados = send(socketReceptor,bufferEscritura , msgLength, 0);
+    while (msgLength > 0)
+    {
+        int bytesEnviados = send(socketReceptor, ptr, msgLength, 0);
+        if (bytesEnviados < 1)
+        {
+        	Logger::Instance()->LOG("Server: No se pudo enviar el mensaje.", WARN);
+        	return;
+        }
+        ptr += bytesEnviados;
+        msgLength -= bytesEnviados;
+    }
+
+	/*int bytesEnviados = send(socketReceptor,bufferEscritura , msgLength, 0);
     if (bytesEnviados <= 0)
     	Logger::Instance()->LOG("Server: No se pudo enviar el mensaje.", WARN);
     while (bytesEnviados < msgLength)
     {
-    	bytesEnviados =  send(sockfd, bufferEscritura , msgLength, 0);
+    	bytesEnviados =  send(sockfd, bufferEscritura + bytesEnviados , msgLength, 0);
         if (bytesEnviados <= 0)
         	Logger::Instance()->LOG("Server: No se pudo enviar el mensaje.", WARN);
-    }
+
+    }*/
 }
 
 bool server::leer(int id)
