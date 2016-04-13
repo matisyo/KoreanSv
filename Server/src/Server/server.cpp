@@ -161,7 +161,16 @@ void server::sendMsg(int socketReceptor, Mensaje msg)
 {
 	char bufferEscritura[MESSAGE_BUFFER_SIZE];
 	int msgLength = m_alanTuring->encodeXMLMessage(msg, bufferEscritura);
-	send(socketReceptor,bufferEscritura , msgLength, 0);
+
+	int bytesEnviados = send(socketReceptor,bufferEscritura , msgLength, 0);
+    if (bytesEnviados <= 0)
+    	Logger::Instance()->LOG("Server: No se pudo enviar el mensaje.", WARN);
+    while (bytesEnviados < msgLength)
+    {
+    	bytesEnviados =  send(sockfd, bufferEscritura , msgLength, 0);
+        if (bytesEnviados <= 0)
+        	Logger::Instance()->LOG("Server: No se pudo enviar el mensaje.", WARN);
+    }
 }
 
 bool server::leer(int id)
@@ -178,6 +187,7 @@ bool server::leer(int id)
     //loopea hasta haber leido la totalidad de los bytes necarios
     while (n < messageLength)
     {
+    	printf("Leyo incompleto\n");
     	n = recv(m_listaDeClientes.getElemAt(id), buffer, 255, 0);
         if (!lecturaExitosa(n, id))
         	return false;
@@ -218,22 +228,25 @@ void* server::procesar(void)
 			// BLOQUE DE PROCESAMIENTO
 			bool mensajeValido = procesarMensaje(&serverMsg);
 
-			if (!mensajeValido)
+			if (!((serverMsg.networkMessage.msg_Code[0] == 't') && (serverMsg.networkMessage.msg_Code[1] == 'm') && (serverMsg.networkMessage.msg_Code[2] == 'o')))
 			{
-				std::stringstream ss;
-				ss << "Server: El Mensaje con ID: " << messageID.c_str() << " fue rechazado.";
-				Logger::Instance()->LOG(ss.str(), DEBUG);
-				//printf("mensaje rechazado\n");
-				m_alanTuring->setNetworkMessageStatus(&serverMsg.networkMessage, 'I');
+				if (!mensajeValido)
+				{
+					std::stringstream ss;
+					ss << "Server: El Mensaje con ID: " << messageID.c_str() << " fue rechazado.";
+					Logger::Instance()->LOG(ss.str(), DEBUG);
+					//printf("mensaje rechazado\n");
+					m_alanTuring->setNetworkMessageStatus(&serverMsg.networkMessage, 'I');
 
-			}
-			else
-			{
-				//printf("mensaje valido\n");
-				std::stringstream ss;
-				ss << "Server: El Mensaje con ID: " << messageID.c_str() << " fue procesado correctamente.";
-				Logger::Instance()->LOG(ss.str(), DEBUG);
-				m_alanTuring->setNetworkMessageStatus(&serverMsg.networkMessage, 'V');
+				}
+				else
+				{
+					//printf("mensaje valido\n");
+					std::stringstream ss;
+					ss << "Server: El Mensaje con ID: " << messageID.c_str() << " fue procesado correctamente.";
+					Logger::Instance()->LOG(ss.str(), DEBUG);
+					m_alanTuring->setNetworkMessageStatus(&serverMsg.networkMessage, 'V');
+				}
 			}
 
 			//FUNCION ANTIGUA
@@ -260,7 +273,7 @@ void server::checkTimeOuts()
 	{
 		if ((!m_listaTimeOuts.isAvailable(i)) || (!m_listaDeClientes.isAvailable(i)))
 			continue;
-		//printf("Timer del server = %f\n", (float)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC);
+		printf("Timer del server = %f\n", (float)m_listaTimeOuts.getElemAt(i).GetTicks()/CLOCKS_PER_SEC);
 		if ((long double)(m_listaTimeOuts.getElemAt(i).GetTicks()/CLOCKS_PER_SEC) >= TIMEOUT_SECONDS)
 		{
 			//printf("Timer del cliente %d = %f\n", i, (float)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC);
@@ -284,7 +297,17 @@ void* server::postProcesamiento(void)
 				ServerMessage msg = m_queuePost[id].remove();
 				char bufferEscritura[MESSAGE_BUFFER_SIZE];
 				int msgLength = m_alanTuring->encodeNetworkMessage(msg.networkMessage, bufferEscritura);
-				send(m_listaDeClientes.getElemAt(id),bufferEscritura , msgLength, 0);
+
+				int n = send(m_listaDeClientes.getElemAt(id),bufferEscritura , msgLength, 0);
+
+		        if (n <= 0)
+		        	Logger::Instance()->LOG("Server: No se pudo enviar el mensaje.", WARN);
+			    while (n < msgLength)
+			    {
+			    	n =  send(sockfd, bufferEscritura , msgLength, 0);
+			        if (n <= 0)
+			        	Logger::Instance()->LOG("Server: No se pudo enviar el mensaje.", WARN);
+			    }
 
 			}
 

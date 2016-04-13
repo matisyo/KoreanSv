@@ -112,9 +112,16 @@ void cliente::sendMsg(Mensaje msg)
 {
 	char bufferEscritura[MESSAGE_BUFFER_SIZE];
 	int msgLength = m_alanTuring->encodeXMLMessage(msg, bufferEscritura);
-	int n =  send(sockfd, bufferEscritura , msgLength, 0);
-    if (n < 0)
+	int bytesLeidos =  send(sockfd, bufferEscritura , msgLength, 0);
+    if (bytesLeidos <= 0)
     	Logger::Instance()->LOG("Cliente: No se pudo enviar el mensaje.", WARN);
+
+    while (bytesLeidos < msgLength)
+    {
+    	bytesLeidos =  send(sockfd, bufferEscritura , msgLength, 0);
+        if (bytesLeidos <= 0)
+        	Logger::Instance()->LOG("Cliente: No se pudo enviar el mensaje.", WARN);
+    }
 
     if (msg.tipo.compare("timeoutACK") != 0)
     {
