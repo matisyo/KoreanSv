@@ -138,6 +138,7 @@ int Menu::ciclar(std::vector<Mensaje> listaDeMensajes, cliente* client)
 
 	while(start < ending )
 	{
+		usleep(1000);
 		int indiceModulo = indice % listaDeMensajes.size();
 		Mensaje mensajeAEnviar = listaDeMensajes[indiceModulo];
 

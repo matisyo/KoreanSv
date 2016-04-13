@@ -149,8 +149,9 @@ bool cliente::checkServerConnection()
 	//printf("Timer del server = %f\n", (float)serverTimeOut->GetTicks()/CLOCKS_PER_SEC);
 	if (((float)serverTimeOut->GetTicks()/CLOCKS_PER_SEC >= TIMEOUT_SECONDS) || (m_connected == false))
 	{
-		printf("Se perdio conección con el servidor.\n");
+		printf("Se perdio conexión con el servidor.\n");
 		desconectar();
+		printf("Presione 1 para reconectar.\n");
 		return false;
 	}
 	return true;

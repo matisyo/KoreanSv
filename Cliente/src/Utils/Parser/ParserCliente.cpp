@@ -138,8 +138,10 @@ bool ParserCliente::extraerMensajes(const pugi::xml_document* doc)
 	}
 
 	if (!validarDuplicados())
+	{
 		exito = false;
-
+		m_listaMensajes.clear();
+	}
 	return exito;
 }
 bool ParserCliente::validarDuplicados()
