@@ -121,7 +121,7 @@ bool server::crearCliente (int clientSocket)
 		return false;
 	}
 
-	printf("se agrego en la posicion %d \n", m_lastID);
+	//printf("se agrego en la posicion %d \n", m_lastID);
 
 	pthread_create(&m_clientThreads[m_lastID], NULL, &server::mati_method, (void*)this);
 	pthread_create(&m_clientResponseThreads[m_lastID], NULL, &server::mati_method3, (void*)this);
@@ -130,7 +130,7 @@ bool server::crearCliente (int clientSocket)
 
 	agregarTimeOutTimer(m_lastID);
 
-	printf("Se creo un thread %d\n", m_lastID);
+	printf("Se ha conectado un cliente %d\n", m_lastID);
 	std::stringstream ss;
 	ss << "Server: Se acepto el cliente: " << inet_ntoa(cli_addr.sin_addr);
 	Logger::Instance()->LOG(ss.str(), DEBUG);
@@ -201,7 +201,6 @@ bool server::leer(int id)
     //loopea hasta haber leido la totalidad de los bytes necarios
     while (n < messageLength)
     {
-    	printf("Leyo incompleto\n");
     	n = recv(m_listaDeClientes.getElemAt(id), buffer, 255, 0);
         if (!lecturaExitosa(n, id))
         	return false;
@@ -287,12 +286,12 @@ void server::checkTimeOuts()
 	{
 		if ((!m_listaTimeOuts.isAvailable(i)) || (!m_listaDeClientes.isAvailable(i)))
 			continue;
-		printf("Timer del server = %f\n", (float)m_listaTimeOuts.getElemAt(i).GetTicks()/CLOCKS_PER_SEC);
+		//printf("Timer del server = %f\n", (float)m_listaTimeOuts.getElemAt(i).GetTicks()/CLOCKS_PER_SEC);
 		if ((long double)(m_listaTimeOuts.getElemAt(i).GetTicks()/CLOCKS_PER_SEC) >= TIMEOUT_SECONDS)
 		{
 			//printf("Timer del cliente %d = %f\n", i, (float)m_listaTimeOuts.getElemAt(i)->GetTicks()/CLOCKS_PER_SEC);
 			//printf("El cliente con id %d timeouteo.\n", i);
-			printf("Close Timeout\n");
+			//printf("Close Timeout\n");
 			closeSocket(i);
 		}
 	}
@@ -383,7 +382,7 @@ void server::closeSocket(int id)
 	m_listaDeClientes.removeAt(id);
 
 	Logger::Instance()->LOG("Server: Se desconectó un cliente.", DEBUG);
-	printf("Se desconectó un cliente, hay lugar para %d chaval/es mas.\n",MAX_CLIENTES - getNumClientes());
+	printf("Se desconectó un cliente, hay lugar para %d clientes mas.\n",MAX_CLIENTES - getNumClientes());
 
 }
 
@@ -442,7 +441,7 @@ bool server::lecturaExitosa(int bytesLeidos, int clientID)
     if (bytesLeidos < 0)
     {
     	//Cliente Desconectado
-    	printf ("Close lectura -1\n");
+    	//printf ("Close lectura -1\n");
     	closeSocket(clientID);
     	return false;
 
@@ -450,7 +449,7 @@ bool server::lecturaExitosa(int bytesLeidos, int clientID)
     if (bytesLeidos == 0)
     {
     	//Cliente Desconectado. Hay diferencias con recibir -1? Sino lo ponemos to do junto, hacen lo mismo
-    	printf ("Close lectura 0\n");
+    	//printf ("Close lectura 0\n");
     	closeSocket(clientID);
     	return false;
     }
@@ -477,7 +476,7 @@ bool server::procesarMensaje(ServerMessage* serverMsg)
 	ss <<"Server: Procesando mensaje con ID: " << dataMsg.msg_ID << ".";
 	Logger::Instance()->LOG(ss.str(), DEBUG);
 
-	printf("Valor dle mensaje: %s\n", stringValue.c_str());
+	//printf("Valor dle mensaje: %s\n", stringValue.c_str());
 
 	//int msg
 	if ((netMsg.msg_Code[0] == 'i') && (netMsg.msg_Code[1] == 'n') && (netMsg.msg_Code[2] == 't'))

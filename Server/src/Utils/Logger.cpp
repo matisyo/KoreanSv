@@ -11,6 +11,9 @@ Logger* Logger::s_pInstance = 0;
 
 Logger::Logger()
 {
+    m_debugAvailable = true;
+    m_warningAvailable = true;
+    m_errorAvailable = true;
 	 std::string filename = generateFilename();
 
 	m_file.open( filename.c_str(), std::ios::out|std::ios::in|std::ios::app );
@@ -48,12 +51,18 @@ Logger::~Logger()
 	 switch(logLevel)
 	 {
 	 case DEBUG:
+		 if (!m_debugAvailable)
+			 return;
 		 m_file << "  DEBUG: ";
 		 break;
 	 case WARN:
+		 if (!m_warningAvailable)
+			 return;
 		 m_file << "  WARNING: ";
 		 break;
 	 case ERROR:
+		 if (!m_errorAvailable)
+			 return;
 		 m_file << "  ERROR: ";
 		 break;
 	 default:
@@ -65,12 +74,12 @@ Logger::~Logger()
 
  }
 
- /*void Logger::LOG(const std::string& message)
+ void Logger::setLoglevel(bool debug, bool warn, bool errors)
  {
-	 m_file << "  DEBUG: " << message << "\n";
-	 m_file.flush();
-
- }*/
+	 m_debugAvailable = debug;
+	 m_warningAvailable = warn;
+	 m_errorAvailable = errors;
+ }
 
  void Logger::Close()
  {

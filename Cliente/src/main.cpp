@@ -21,6 +21,10 @@ int main(int argc, char *argv[])
 
 	ParserCliente* parsersito = new ParserCliente();
     parsersito->parsearDocumento(fileName);
+
+	LoggerInfo loggerInfo = parsersito->getLoggerInfo();
+	Logger::Instance()->setLoglevel(loggerInfo.debugAvailable, loggerInfo.warningAvailable, loggerInfo.errorAvailable);
+
     string ip = parsersito->getConexionInfo().ip;
     int porto = parsersito->getConexionInfo().puerto;
     std::vector<Mensaje> listaDeMensajes = parsersito->getListaMensajes() ;

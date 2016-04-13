@@ -1,6 +1,7 @@
 
 #include "Server/server.h"
 #include "Utils/Logger.h"
+#include "Utils/TiposDefinidos.h"
 #include "Utils/Parser/ParserServidor.h"
 #include <iostream>
 using namespace std;
@@ -17,6 +18,9 @@ int main(int argc, char *argv[])
 
 	ParserServidor* servidorParser = new ParserServidor();
 	servidorParser->parsearDocumento(fileName);
+
+	LoggerInfo loggerInfo = servidorParser->getLoggerInfo();
+	Logger::Instance()->setLoglevel(loggerInfo.debugAvailable, loggerInfo.warningAvailable, loggerInfo.errorAvailable);
 
 	int porto = servidorParser->getServidorInfo().puerto ;
 	int maxClientes = servidorParser->getServidorInfo().cantMaximaClientes;

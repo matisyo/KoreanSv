@@ -43,17 +43,23 @@ Logger::~Logger()
   m_file.close();
 }
 
- void Logger::LOG(const std::string& message, LogType logLevel)
- {
+void Logger::LOG(const std::string& message, LogType logLevel)
+{
 	 switch(logLevel)
 	 {
 	 case DEBUG:
+		 if (!m_debugAvailable)
+			 return;
 		 m_file << "  DEBUG: ";
 		 break;
 	 case WARN:
+		 if (!m_warningAvailable)
+			 return;
 		 m_file << "  WARNING: ";
 		 break;
 	 case ERROR:
+		 if (!m_errorAvailable)
+			 return;
 		 m_file << "  ERROR: ";
 		 break;
 	 default:
@@ -63,14 +69,14 @@ Logger::~Logger()
 	 m_file << message << "\n";
 	 m_file.flush();
 
- }
+}
 
- /*void Logger::LOG(const std::string& message)
- {
-	 m_file << "  DEBUG: " << message << "\n";
-	 m_file.flush();
-
- }*/
+void Logger::setLoglevel(bool debug, bool warn, bool errors)
+{
+	 m_debugAvailable = debug;
+	 m_warningAvailable = warn;
+	 m_errorAvailable = errors;
+}
 
  void Logger::Close()
  {

@@ -19,6 +19,13 @@
 
 // TIPOS RELACIONADOS A ARCHIVOS XML
 
+struct LoggerInfo
+{
+	bool debugAvailable;
+	bool warningAvailable;
+	bool errorAvailable;
+};
+
 struct Servidor{
 	int cantMaximaClientes;
 	int puerto;

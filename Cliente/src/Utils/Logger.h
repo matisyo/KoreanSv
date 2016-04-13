@@ -34,6 +34,7 @@ public:
 
     //Funciones de Logueo de Mensajes
     void LOG(const std::string& message, LogType logLevel);
+    void setLoglevel(bool debug, bool warn, bool errors);
 
     //Termina el logueo de mensajes. Le da un formato mas prolijo al texto
     void Close();
@@ -41,6 +42,9 @@ public:
 private:
     //archivo en el que escribe
     std::ofstream m_file;
+    bool m_debugAvailable;
+    bool m_warningAvailable;
+    bool m_errorAvailable;
 
     string generateFilename();
 
