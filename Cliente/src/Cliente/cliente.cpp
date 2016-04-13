@@ -65,6 +65,9 @@ cliente::cliente(int argc, string ip, int port, std::vector<Mensaje> listaDeMens
 	m_connecting = false;
 	m_alanTuring = new AlanTuring();
 
+    pthread_mutex_init(&m_readingMutex, NULL);
+    pthread_cond_init(&m_condv, NULL);
+
     portno = port;
     /*sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0)
@@ -87,6 +90,8 @@ cliente::cliente(int argc, string ip, int port, std::vector<Mensaje> listaDeMens
 }
 cliente::~cliente()
 {
+    pthread_mutex_destroy(&m_readingMutex);
+    pthread_cond_destroy(&m_condv);
 	delete serverTimeOut;
 	delete sendTimeOutTimer;
 
@@ -112,14 +117,14 @@ void cliente::sendMsg(Mensaje msg)
 {
 	char bufferEscritura[MESSAGE_BUFFER_SIZE];
 	int msgLength = m_alanTuring->encodeXMLMessage(msg, bufferEscritura);
-	int bytesLeidos =  send(sockfd, bufferEscritura , msgLength, 0);
-    if (bytesLeidos <= 0)
+	int bytesEnviados =  send(sockfd, bufferEscritura , msgLength, 0);
+    if (bytesEnviados <= 0)
     	Logger::Instance()->LOG("Cliente: No se pudo enviar el mensaje.", WARN);
 
-    while (bytesLeidos < msgLength)
+    while (bytesEnviados < msgLength)
     {
-    	bytesLeidos =  send(sockfd, bufferEscritura , msgLength, 0);
-        if (bytesLeidos <= 0)
+    	bytesEnviados =  send(sockfd, bufferEscritura , msgLength, 0);
+        if (bytesEnviados <= 0)
         	Logger::Instance()->LOG("Cliente: No se pudo enviar el mensaje.", WARN);
     }
 
@@ -167,6 +172,7 @@ bool cliente::checkServerConnection()
 
 bool cliente::leer()
 {
+    pthread_mutex_lock(&m_readingMutex);
     bzero(buffer,256);
     n = recv(sockfd, buffer, 255, 0);
     /*string buf = buffer;
@@ -190,6 +196,8 @@ bool cliente::leer()
     	  return false;
        }
    }
+   pthread_cond_signal(&m_condv);
+   pthread_mutex_unlock(&m_readingMutex);
    //llego el mensaje bien
    serverTimeOut->Reset();
 

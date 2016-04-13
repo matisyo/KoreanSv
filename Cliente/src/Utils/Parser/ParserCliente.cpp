@@ -110,7 +110,7 @@ bool ParserCliente::extraerMensajes(const pugi::xml_document* doc)
 	   std::string id = msj.child("id").first_child().value();
 	   if (!validarMensajeID(id))
 	   {
-		   Logger::Instance()->LOG("Error en el parseo de mensajes. ID vacío", DEBUG);
+		   Logger::Instance()->LOG("Error en el parseo de mensajes. ID vacío", WARN);
 		   exito = false;
 		   break;
 	   }
@@ -119,14 +119,14 @@ bool ParserCliente::extraerMensajes(const pugi::xml_document* doc)
 	   {
 		   std::stringstream ss;
 		   ss << "Error en parseo de mensajes, en el mensaje con id " << id << ". Tipo de dato inválido: " << tipo;
-		   Logger::Instance()->LOG(ss.str(), DEBUG);
+		   Logger::Instance()->LOG(ss.str(), WARN);
 		   exito = false;
 		   break;
 	   }
 	   std::string valor = msj.child("valor").first_child().value();
 	   if (!validarValorMensaje(valor))
 	   {
-		   Logger::Instance()->LOG("Error en el parseo de mensajes. Los valores no pueden ser vacío", DEBUG);
+		   Logger::Instance()->LOG("Error en el parseo de mensajes. El valor de los mensajes no puede ser vacío", WARN);
 		   exito = false;
 		   break;
 	   }
@@ -141,9 +141,21 @@ bool ParserCliente::extraerMensajes(const pugi::xml_document* doc)
 	{
 		exito = false;
 		m_listaMensajes.clear();
+		Logger::Instance()->LOG("Error en el parseo de mensajes. Se ingresaron valores duplicados", WARN);
 	}
 	return exito;
 }
+
+bool ParserCliente::extraerLoggerInfo()
+{
+	return true;
+}
+
+bool ParserCliente::validarLoggerInfo()
+{
+	return true;
+}
+
 bool ParserCliente::validarDuplicados()
 {
 	for (unsigned int i = 0; i < m_listaMensajes.size(); ++i)

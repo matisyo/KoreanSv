@@ -54,6 +54,8 @@ class cliente
         Timer* serverTimeOut;
         Timer* sendTimeOutTimer;
         pthread_t timeOutThread;
+        pthread_mutex_t  m_readingMutex;
+        pthread_cond_t   m_condv;
 
         struct sockaddr_in serv_addr;
         struct hostent *server;

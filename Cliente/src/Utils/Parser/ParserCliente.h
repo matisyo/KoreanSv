@@ -52,6 +52,7 @@ private:
 	bool extraerMensajes(const pugi::xml_document* doc);
 	bool extraerConexionInfo(const pugi::xml_document* doc, bool isLoadingDefault);
 	bool extraerConexionInfoDefault();
+	bool extraerLoggerInfo();
 
 	//devuelve true si el nodo root del documento comienza con la palabra client, ignorando caracteres especiales y espacios
 	bool validarRoot(const pugi::xml_document* doc);
@@ -66,6 +67,7 @@ private:
 	bool validarMensajeID(std::string& tipoDatoString);
 	bool validarValorMensaje(std::string& valorMensajeString);
 	bool validarDuplicados();
+	bool validarLoggerInfo();
 	//void limpiarValores (std::string& tipo, std::string& valor);
 };
 
