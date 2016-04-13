@@ -232,7 +232,7 @@ bool ParserServidor::validarLoggerInfo(std::string& loggerInfoString)
 	quitarCaracteresEspeciales(loggerInfoString, false);
 	pasarAMinuscula(loggerInfoString);
 
-	if ((loggerInfoString.compare("true") != 0) || (!loggerInfoString.compare("false") != 0))
+	if ((loggerInfoString.compare("true") != 0) || (loggerInfoString.compare("false") != 0))
 	{
 		return false;
 	}
