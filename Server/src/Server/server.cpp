@@ -130,7 +130,7 @@ bool server::crearCliente (int clientSocket)
 
 	agregarTimeOutTimer(m_lastID);
 
-	printf("Se ha conectado un cliente %d\n", m_lastID);
+	printf("Se ha conectado un cliente\n");
 	std::stringstream ss;
 	ss << "Server: Se acepto el cliente: " << inet_ntoa(cli_addr.sin_addr);
 	Logger::Instance()->LOG(ss.str(), DEBUG);
