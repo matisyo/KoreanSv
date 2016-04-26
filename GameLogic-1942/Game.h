@@ -1,21 +1,18 @@
-/*
- * Game.h
- *
- *  Created on: Apr 8, 2016
- *      Author: gonzalo
- */
-
 #ifndef GAME_H_
 #define GAME_H_
 
 #include "Player.h"
+#include "Cliente/cliente.h"
+#include "Utils/Parser/ParserCliente.h"
 #include "Singletons/InputHandler.h"
 #include "Singletons/TextureManager.h"
 #include <SDL2/SDL.h>
 #include <iostream>
+#include <sstream>
 using namespace std;
 
 class Player;
+class cliente;
 
 class Game
 {
@@ -36,8 +33,13 @@ public:
 
     //Funciones generales del ciclo de jueo
     void render();
-    void update();
+    void update(Vector2D* direction);
     void handleEvents();
+    void setUpKorea();
+    void conectToKorea();
+	void sendToKorea(Vector2D m_direction);
+	void* koreaMethod(void);
+	void readFromKorea();
     void clean();
 
     SDL_Renderer* getRenderer() const { return m_pRenderer; }
@@ -50,9 +52,9 @@ public:
     //Alto y Ancho de la ventana de juego
     int getGameWidth() const { return m_gameWidth; }
     int getGameHeight() const { return m_gameHeight; }
-
+    pthread_t listenThread;
     float getScrollSpeed() { return m_scrollSpeed; }
-
+    static void *thread_method(void *context);
 
 private:
 
@@ -61,7 +63,7 @@ private:
 
     //Provisorio
     Player* m_player;
-
+    cliente* m_client;
     bool m_running;
 
     static Game* s_pInstance;

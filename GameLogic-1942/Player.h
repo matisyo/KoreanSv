@@ -27,11 +27,11 @@ public:
     virtual void load(int x, int y, int width, int height, std::string textureID, int numFrames);
 
     virtual void draw();
-    virtual void update();
+    virtual void update(Vector2D* direction);
     virtual void clean();
 
     virtual void collision();
-
+    virtual void handleInput();
 
 private:
 
@@ -40,7 +40,7 @@ private:
     bool m_controllable;
 
     //Modifica el estado del juego de acuerdo al input del jugador
-    virtual void handleInput();
+
 };
 
 

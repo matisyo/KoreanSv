@@ -33,7 +33,7 @@ public:
     virtual void draw()=0;
 
     // Actualiza el estado del objeto (posición, velocidad, etc)
-    virtual void update()=0;
+    virtual void update(Vector2D* dir)=0;
 
     // Libera memoria y los recursos que esté utilizando el GameObject
     virtual void clean()=0;

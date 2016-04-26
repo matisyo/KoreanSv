@@ -1,10 +1,3 @@
-/*
- * Player.cpp
- *
- *  Created on: Apr 9, 2016
- *      Author: gonzalo
- */
-
 #include "Player.h"
 
 using namespace std;
@@ -42,10 +35,10 @@ void Player::draw()
 	//Nave::draw();
 }
 
-void Player::update()
+void Player::update(Vector2D* direction)
 {
     handleInput();
-	Nave::update();
+	Nave::update(direction);
 	//Probar valores para animacion
 	//m_currentFrame = int(((SDL_GetTicks() / (1000 / 3)) % m_numFrames));
 }
@@ -60,33 +53,41 @@ void Player::handleInput()
 {
 	m_direction.setX(0);
 	m_direction.setY(0);
+	bool push = false;
     if(m_controllable && !m_dead)
     {
         // handle keys
         if (((InputHandler::Instance()->isKeyDown(SDL_SCANCODE_UP)) || (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_W)))
         	&& (m_position.getY() > 0))
         {
+        	push = true;
             m_direction.setY(DIRECTION_UP);
         }
         else if (((InputHandler::Instance()->isKeyDown(SDL_SCANCODE_DOWN)) || (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_S)))
         		&& ((m_position.getY() + m_height) < Game::Instance()->getGameHeight() - 10))
         {
+        	push = true;
         	m_direction.setY(DIRECTION_DOWN);
         }
 
         if (((InputHandler::Instance()->isKeyDown(SDL_SCANCODE_LEFT)) || (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_A)))
         		&& m_position.getX() > 0)
         {
+        	push = true;
         	m_direction.setX(DIRECTION_LEFT);
         }
         else if (((InputHandler::Instance()->isKeyDown(SDL_SCANCODE_RIGHT)) || (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_D)))
         		&& ((m_position.getX() + m_width) < Game::Instance()->getGameWidth()))
         {
+        	push = true;
         	m_direction.setX(DIRECTION_RIGHT);
         }
         //Se mueve a velocidades constantes. Evita que vaay a mayot velocidad en diagonal
         m_direction.normalize();
-
+        if(push){
+        	std::cout << "ENVIOOO KAIOKEEN! \n"<< m_direction.m_x << m_direction.m_y;
+        	Game::Instance()->sendToKorea(m_direction);
+        }
         //Codigo de disparo
 
     }

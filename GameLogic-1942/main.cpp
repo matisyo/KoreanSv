@@ -20,18 +20,19 @@ int main(int argc, char **argv)
 
 	std::cout << "Abriendo juego...\n";
 
-	if (Game::Instance()->init("1942 Ultraa Diesel", 400, 150, 800, 600, SDL_WINDOWPOS_CENTERED)) //flag por ejemplo: SDL_WINDOW_FULLSCREEN_DESKTOP
+	if (Game::Instance()->init("NodosGrafosAristas", 400, 150, 800, 600, SDL_WINDOWPOS_CENTERED)) //flag por ejemplo: SDL_WINDOW_FULLSCREEN_DESKTOP
 
 	{
 		std::cout << "game init success!\n";
 
+		Game::Instance()->conectToKorea();
+		std::cout << "Game Online!\n";
 		//Bucle del juego
 		while (Game::Instance()->isRunning()) {
 
 			frameStartTime = SDL_GetTicks();
 
 			Game::Instance()->handleEvents();
-			Game::Instance()->update();
 			Game::Instance()->render();
 
 			frameEndTime = SDL_GetTicks() - frameStartTime;

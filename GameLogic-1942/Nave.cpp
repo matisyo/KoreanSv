@@ -34,11 +34,13 @@ void Nave::draw()
     			//							m_currentRow, m_currentFrame, Game::Instance()->getRenderer(), m_angle, m_alpha);
 }
 
-void Nave::update()
+void Nave::update(Vector2D* direction)
 {
 	//se mueve en la dirección seteada
-    m_position.m_x += (m_direction.getX() * m_speed.getX());
-    m_position.m_y += (m_direction.getY() * m_speed.getY());
+	printf("DirectionX = %f ; Speed = %f \n", direction->getX(), m_speed.getX());
+	printf("DirectionY = %f ; Speed = %f \n", direction->getY(), m_speed.getY());
+    m_position.m_x += (direction->getX() * m_speed.getX());
+    m_position.m_y += (direction->getY() * m_speed.getY());
 }
 
 void Nave::clean()

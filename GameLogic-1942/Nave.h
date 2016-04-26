@@ -28,7 +28,7 @@ public:
     
     //Funciones Generales
     virtual void draw();
-    virtual void update();
+    virtual void update(Vector2D* direction);
     virtual void clean();
     virtual void collision();
     
