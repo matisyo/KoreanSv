@@ -131,7 +131,11 @@ void Game::sendToKorea(Vector2D m_direction)
 	mensaje1.tipo = "movex";
 
 	std::ostringstream ss;
+	//ss <<'(';
 	ss << m_direction.m_x;
+	//ss <<',';
+	//ss << m_direction.m_y;
+	//ss <<')';
 	std::string s(ss.str());
 	mensaje1.valor = s;
 
@@ -143,7 +147,7 @@ void Game::sendToKorea(Vector2D m_direction)
 	std::ostringstream gg;
 	gg << m_direction.m_y;
 	std::string g(gg.str());
-	mensaje2.valor = s;
+	mensaje2.valor = g;
 
 
 

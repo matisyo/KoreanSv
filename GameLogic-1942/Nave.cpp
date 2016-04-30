@@ -9,7 +9,7 @@
 
 Nave::Nave() :  GameObject(),
 				m_direction(0,0),
-				m_speed(5,5),
+				m_speed(1,1),
 				m_dead(false),
 				m_dying(false)
 {

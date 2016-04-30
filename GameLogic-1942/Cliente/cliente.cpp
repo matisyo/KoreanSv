@@ -24,7 +24,7 @@ bool cliente::conectar()
     	return false;
     }
 
-    setTimeOut();
+    //setTimeOut();
 
     if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
     {
@@ -37,10 +37,10 @@ bool cliente::conectar()
 
 	if (m_connected)
 	{
-		serverTimeOut->Reset();
-		sendTimeOutTimer->Reset();
-		serverTimeOut->Start();
-		sendTimeOutTimer->Start();
+		//serverTimeOut->Reset();
+		//sendTimeOutTimer->Reset();
+		//serverTimeOut->Start();
+		//sendTimeOutTimer->Start();
 		//createTimeoutThread();
 	}
 	else
@@ -55,7 +55,7 @@ void cliente::desconectar()
 	if (!m_connected)
 		return;
 	m_connected = false;
-	serverTimeOut->Stop();
+	//serverTimeOut->Stop();
 	cerrarSoket();
 	Logger::Instance()->LOG("Cliente: El cliente se ha desconectado satisfactoriamente", DEBUG);
 }
@@ -84,8 +84,8 @@ cliente::cliente(int argc, string ip, int port, std::vector<Mensaje> listaDeMens
     serv_addr.sin_port = htons(portno);
     listaDeMensajes = listaDeMensajesCargados;
 
-    serverTimeOut = new Timer();
-    sendTimeOutTimer = new Timer();
+    //serverTimeOut = new Timer();
+    //sendTimeOutTimer = new Timer();
 
 
 }
@@ -94,8 +94,8 @@ cliente::~cliente()
     pthread_mutex_destroy(&m_readingMutex);
     pthread_mutex_destroy(&m_writingMutex);
     pthread_cond_destroy(&m_condv);
-	delete serverTimeOut;
-	delete sendTimeOutTimer;
+	//delete serverTimeOut;
+	//delete sendTimeOutTimer;
 
 	delete m_alanTuring;
 }
@@ -177,7 +177,8 @@ bool cliente::sendTimeOutMsg()
 bool cliente::checkServerConnection()
 {
 	//printf("Timer del server = %f\n", (float)serverTimeOut->GetTicks()/CLOCKS_PER_SEC);
-	if (((float)serverTimeOut->GetTicks()/CLOCKS_PER_SEC >= TIMEOUT_SECONDS) || (m_connected == false))
+	//if (((float)serverTimeOut->GetTicks()/CLOCKS_PER_SEC >= TIMEOUT_SECONDS) || (m_connected == false))
+	if (m_connected == false)
 	{
 		printf("Se perdio conexión con el servidor.\n");
 		desconectar();
@@ -217,7 +218,7 @@ bool cliente::leer()
    pthread_cond_signal(&m_condv);
    pthread_mutex_unlock(&m_readingMutex);
    //llego el mensaje bien
-   serverTimeOut->Reset();
+   //serverTimeOut->Reset();
 
    NetworkMessage netMsgRecibido = m_alanTuring->decode(buffer);
    procesarMensaje(netMsgRecibido);
@@ -266,13 +267,32 @@ void cliente::procesarMensaje(NetworkMessage networkMessage)
 	if ((networkMessage.msg_Code[0] == 'm') && (networkMessage.msg_Code[1] == 'v') && (networkMessage.msg_Code[2] == 'x'))
 	{
 		printf("ACA: %s HEHE %s JOJO",dataMsg.msg_value,networkMessage.msg_Code);
-		mov = new Vector2D(stof(dataMsg.msg_value),0);
+
+		float a = 1;
+
+		float b = atof(dataMsg.msg_value);
+
+		if(b*b > 1)
+			mov = new Vector2D(1,0);
+		else
+			mov = new Vector2D(atof(dataMsg.msg_value),0);
+
 		Game::Instance()->update(mov);
 	}
 	if ((networkMessage.msg_Code[0] == 'm') && (networkMessage.msg_Code[1] == 'v') && (networkMessage.msg_Code[2] == 'y'))
 	{
+
 		printf("aca: %s jeje %s jojo",dataMsg.msg_value,networkMessage.msg_Code);
-		mov = new Vector2D(0,stof(dataMsg.msg_value));
+
+		float a = 1;
+
+		float b = atof(dataMsg.msg_value);
+
+		if(b*b > 1)
+			mov = new Vector2D(0,1);
+		else
+			mov = new Vector2D(0,atof(dataMsg.msg_value));
+
 		Game::Instance()->update(mov);
 	}
 
