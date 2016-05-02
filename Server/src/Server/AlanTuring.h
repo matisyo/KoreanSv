@@ -36,6 +36,13 @@
 class AlanTuring
 {
 public:
+	//ENCODES Y DECODES RELACIONADOS AL JUEGO
+	int encodeDrawMessage(DrawMessage msj, char* bufferSalida);
+	int encodeInputMessage(InputMessage msj, char* bufferSalida);
+
+	DrawMessage decodeDrawMessage(NetworkMessage netMsg);
+	InputMessage decodeInputMessage(NetworkMessage netMsg);
+
 	//devuelve un buffer de 256 bytes con el mensaje codificado en binario en buffeSalida y un int con el tamaño Mensaje
 	int encodeXMLMessage(Mensaje mensaje, char* bufferSalida);
 	int encodeNetworkMessage(NetworkMessage netMsg, char* bufferSalida);

@@ -15,6 +15,67 @@ AlanTuring::~AlanTuring()
 {
 
 }
+/********************************************Metodos del Juego*********************************************************************/
+int AlanTuring::encodeDrawMessage(DrawMessage drawMsg, char* bufferSalida)
+{
+	//inicializa el buffer de salida
+	bzero(bufferSalida,MESSAGE_BUFFER_SIZE);
+
+	NetworkMessage codigoEnigma;
+	bzero(codigoEnigma.msg_Data, MESSAGE_DATA_SIZE);
+	codigoEnigma.msg_Code[0] = 'd';
+	codigoEnigma.msg_Code[1] = 'm';
+	codigoEnigma.msg_Code[2] = 's';
+
+
+	//copia el draw message en el buffer de network message data
+	bzero(codigoEnigma.msg_Data, DRAW_MESSAGE_SIZE + 1);
+	memcpy(codigoEnigma.msg_Data, &drawMsg, DRAW_MESSAGE_SIZE);
+
+	codigoEnigma.msg_Length = DRAW_MESSAGE_SIZE + MESSAGE_LENGTH_BYTES + MESSAGE_CODE_BYTES;
+
+	//copia el mensaje de red al buffer ingresado
+	memcpy(bufferSalida, &codigoEnigma, sizeof(NetworkMessage));
+
+	return codigoEnigma.msg_Length;
+}
+int AlanTuring::encodeInputMessage(InputMessage inputMsg, char* bufferSalida)
+{
+	//inicializa el buffer de salida
+	bzero(bufferSalida, MESSAGE_BUFFER_SIZE);
+
+	NetworkMessage codigoEnigma;
+	bzero(codigoEnigma.msg_Data, MESSAGE_DATA_SIZE);
+	codigoEnigma.msg_Code[0] = 'i';
+	codigoEnigma.msg_Code[1] = 'm';
+	codigoEnigma.msg_Code[2] = 's';
+
+
+	//copia el draw message en el buffer de network message data
+	bzero(codigoEnigma.msg_Data, INPUT_MESSAGE_SIZE + 1);
+	memcpy(codigoEnigma.msg_Data, &inputMsg, INPUT_MESSAGE_SIZE);
+
+	codigoEnigma.msg_Length = INPUT_MESSAGE_SIZE + MESSAGE_LENGTH_BYTES + MESSAGE_CODE_BYTES;
+
+	//copia el mensaje de red al buffer ingresado
+	memcpy(bufferSalida, &codigoEnigma, sizeof(NetworkMessage));
+
+	return codigoEnigma.msg_Length;
+}
+
+DrawMessage AlanTuring::decodeDrawMessage (NetworkMessage netMsg)
+{
+	DrawMessage drawMsg;
+	memcpy(&drawMsg, netMsg.msg_Data, sizeof(DataMessage));
+	return drawMsg;
+}
+InputMessage AlanTuring::decodeInputMessage (NetworkMessage netMsg)
+{
+	InputMessage inputMsg;
+	memcpy(&inputMsg, netMsg.msg_Data, sizeof(DataMessage));
+	return inputMsg;
+}
+/**********************************************************************************************************************************/
 
 int AlanTuring::encodeXMLMessage(Mensaje mensaje, char* bufferSalida)
 {

@@ -15,6 +15,9 @@
 #define MESSAGE_DATA_SIZE (MESSAGE_BUFFER_SIZE - MESSAGE_LENGTH_BYTES - MESSAGE_CODE_BYTES)
 #define MESSAGE_VALUE_SIZE (MESSAGE_DATA_SIZE - MESSAGE_ID_BYTES_LIMIT - 1)
 
+#define DRAW_MESSAGE_SIZE 12
+#define INPUT_MESSAGE_SIZE 16
+
 #include <string>
 
 // TIPOS RELACIONADOS A ARCHIVOS XML
@@ -49,6 +52,28 @@ struct NetworkMessage
 	unsigned short msg_Length;
 	char msg_Code[MESSAGE_CODE_BYTES];
 	char msg_Data[MESSAGE_DATA_SIZE];
+};
+
+struct DrawMessage
+{
+	short objectID;
+	short textureID;
+	short posX;
+	short posY;
+	short row;
+	short column;
+};
+
+struct InputMessage
+{
+	short objectID;
+	short buttonUp;
+	short buttonDown;
+	short buttonRight;
+	short buttonLeft;
+	short buttonShoot;
+	short buttonReserved;//2 bytes reserved for future
+	short actionID;
 };
 
 struct DataMessage
