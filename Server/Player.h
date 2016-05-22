@@ -3,13 +3,13 @@
 
 
 #include "MoveableObject.h"
-#include "Weapons/Weapon.h"
 #include "Vector2D.h"
 #include "Singletons/InputHandler.h"
 #include "Singletons/TextureManager.h"
 #include "Singletons/GameTimeHelper.h"
 #include "Utils/TiposDefinidos.h"
-#include "Weapons/BasicWeapon.h"
+#include "Weapons/PlayerWeapons/BasicWeapon.h"
+class Weapon;
 
 
 class Player : public MoveableObject
@@ -38,6 +38,7 @@ public:
     void setWeaponStats(int shootingSpeed, int shootingCooldown, int ownerID, int teamID);
     void setShootingSpeed(int speed);
     void setShootingCooldown(int cooldown);
+    void setCollisionDamage(int collisionDamage) { m_collisionDamage = collisionDamage; }
 
     void setTeamNumber(int number) { m_teamNumber = number; }
     void refreshDirty() { m_movedByPlayer = false; m_dirty = true;}
@@ -49,6 +50,9 @@ public:
     bool isDying() { return m_dying; }
     bool isConnected() { return m_connected; }
     int getTeamNumber() { return m_teamNumber; }
+    int getCollisionDamage() { return m_collisionDamage; }
+
+    void damage(int damageReceived);
 
 
 private:
@@ -76,6 +80,7 @@ private:
 
     /*******************/
     int m_health;
+    int m_collisionDamage;
     bool m_movedByPlayer;
     int m_teamNumber;
 

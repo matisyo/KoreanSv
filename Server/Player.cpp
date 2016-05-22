@@ -19,6 +19,7 @@ Player::Player() :  MoveableObject(),
 					m_dead(false),
 					m_dying(false),
 					m_health(100),
+					m_collisionDamage(100),
 					m_movedByPlayer(false),
 					m_teamNumber(1)
 {
@@ -33,6 +34,16 @@ void Player::collision()
 
 }
 
+void Player::damage(int damageReceived)
+{
+	m_health -= damageReceived;
+	if (m_health <= 0)
+	{
+		//Hacer explosion, setear dying en true, etc
+		m_dead = true;
+	}
+}
+
 void Player::setShootingSpeed(int speed)
 {
 	if (m_currentWeapon)
@@ -45,6 +56,17 @@ void Player::setShootingCooldown(int cooldown)
 	if (m_currentWeapon)
 	{
 		m_currentWeapon->setShootingCooldown(cooldown);
+	}
+}
+
+void Player::setWeaponStats(int shootingSpeed, int shootingCooldown, int ownerID, int teamID)
+{
+	if (m_currentWeapon)
+	{
+		m_currentWeapon->setBulletSpeed(shootingSpeed);
+		m_currentWeapon->setShootingCooldown(shootingCooldown);
+		m_currentWeapon->setOwnerID(ownerID);
+		m_currentWeapon->setOwnerTeam(teamID);
 	}
 }
 
@@ -215,6 +237,7 @@ void Player::handleInput(InputMessage inputMsg)
     }
     //update();
 }
+
 
 void Player::sendDrawMessage(bool isAlive)
 {

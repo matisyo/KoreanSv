@@ -6,24 +6,27 @@
 #include "Server/DrawMessagesPacker.h"
 #include "Utils/Parser/ParserServidor.h"
 #include "Background/Level.h"
-#include "Background/Island.h"
-#include "Background/Background.h"
+#include "Enemies/Enemy.h"
+
+#include "Singletons/CollisionHandler.h"
 #include "Singletons/InputHandler.h"
 #include "Singletons/TextureManager.h"
 #include "Weapons/BulletsHandler.h"
+
 #include "Utils/TextureHelper.h"
 #include "Utils/Parser/ParserNivel.h"
 #include "Player.h"
+
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <sstream>
 #include <map>
 #include <string>
 #include <pthread.h>
+
 using namespace std;
 
-class Island;
-class Background;
+//class Enemy;
 class Player;
 class Level;
 class server;
@@ -111,10 +114,7 @@ private:
     Level* m_level;
     TextureHelper* m_textureHelper;
 
-    //Provisorio
-    Player* m_player;
-    Background* m_background;
-    Island* m_island;
+    Enemy* enemy;
 
     server* m_server;
     DrawMessagesPacker* m_drawMessagePacker;

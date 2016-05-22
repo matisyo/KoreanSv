@@ -26,6 +26,7 @@ public:
 
     void sendDrawMessage(bool isAlive);
 
+    void kill() { m_dead = true; }
     void setOwnerID(int ID) { m_ownerID = ID; }
     int getOwnerID() { return m_ownerID; }
     int getOwnerTeamNumber() { return m_ownerTeamNumber; }

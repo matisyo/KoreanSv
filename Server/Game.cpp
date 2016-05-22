@@ -46,6 +46,10 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height)
     m_level = new Level();
     m_level->loadFromXML();
 
+    enemy = new Enemy();
+    enemy->load(0,0,50,50,0,1);
+    CollitionHandler::Instance()->addEnemy(enemy);
+
     //tudo ben
     m_running = true;
 
@@ -65,6 +69,10 @@ bool Game::createPlayer(int clientID,  const std::string& playerName)
 	{
 		int actualPlayerID = getFromNameID(playerName);
 		Player* player = m_listOfPlayer[actualPlayerID];
+
+		//agrega jugador al manejador de colisiones
+		CollitionHandler::Instance()->addPlayer(player);
+
 		if (player->isConnected()) //El jugador con ese nombre ya esta conectado
 		{
 			ss <<"Server: El jugador con nombre" << playerName << " ya se encuentra conectado.";
@@ -177,16 +185,26 @@ void Game::update()
 
 	m_level->update();
 
+	enemy->update();
+
 	for (std::map<int,Player*>::iterator it=m_listOfPlayer.begin(); it != m_listOfPlayer.end(); ++it)
 	{
 		//printf("objectID = %d \n", it->second.getObjectId());
-	     it->second->update();
+		if (it->second)
+		{
+			it->second->update();
+		}
 	}
 	for (std::map<int,GameObject*>::iterator it=m_listOfGameObjects.begin(); it != m_listOfGameObjects.end(); ++it)
 	{
 		//printf("objectID = %d \n", it->second.getObjectId());
-	     it->second->update();
+		if (it->second)
+		{
+			it->second->update();
+		}
 	}
+
+	CollitionHandler::Instance()->handleCollitions();
 
 }
 
@@ -338,6 +356,8 @@ void Game::clean()
     delete m_level;
     delete m_textureHelper;
 
+    CollitionHandler::Instance()->clean();
+
     InputHandler::Instance()->clean();
     TextureManager::Instance()->clearTextureMap();
 
@@ -363,6 +383,7 @@ void Game::resetGame()
 	pthread_mutex_lock(&m_resetMutex);
 	 BulletsHandler::Instance()->clearBullets();
 	 InputHandler::Instance()->clean();
+	 CollitionHandler::Instance()->reset();
 	 //delete m_background;
 	 //delete m_island;
 	 //m_listOfGameObjects.clear();

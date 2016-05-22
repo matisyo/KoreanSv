@@ -23,6 +23,7 @@ public:
     				m_position(0,0),
                     m_width(0),
                     m_height(0),
+					m_hitRadius(0),
 					m_numFrames(0),
                     m_angle(0),
                     m_alpha(255),
@@ -65,10 +66,14 @@ public:
     int getObjectId() { return m_objectId; }
     int getLayer() { return m_layer; }
     int getTextureID() { return m_textureID; }
+    int getHitRadius() { return m_hitRadius; }
+
+
     void setObjectID(int objectId) {m_objectId = objectId;}
     void setTextureID(int textureID) {m_textureID = textureID;}
     void setLayer(int layer) {m_layer = layer;}
     void setDirty( bool dirty ) { m_dirty = true; }
+    void setHitRadius( int hitRadius ) { m_hitRadius = hitRadius; }
 
     // En este ejemplo de scroll, scrollea to do menos los objetos con tag player
    void scroll(float scrollSpeed)
