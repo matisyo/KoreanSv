@@ -1,5 +1,5 @@
 #include "Game.h"
-
+#include "Enemies/Mati.h"
 Game* Game::s_pInstance = 0;
 
 Game::Game():
@@ -46,8 +46,8 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height)
     m_level = new Level();
     m_level->loadFromXML();
 
-    enemy = new Enemy();
-    enemy->load(0,0,50,50,0,1);
+    enemy = new Mati();
+    enemy->load(150,200,50,50,0,1);
     CollitionHandler::Instance()->addEnemy(enemy);
 
     //tudo ben
@@ -125,6 +125,9 @@ bool Game::createPlayer(int clientID,  const std::string& playerName)
 
 	m_listOfPlayer[newPlayer->getObjectId()]= newPlayer;
 	printf("Player: %s inicializado con objectID: %d y textureID: %d\n",m_playerNames[clientID].c_str(), newPlayer->getObjectId(), clientID);
+
+	//Cargo Player al map
+	CollitionHandler::Instance()->addPlayer(newPlayer);
 
 	return true;
 }

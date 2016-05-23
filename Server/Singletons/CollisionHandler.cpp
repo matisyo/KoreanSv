@@ -147,9 +147,12 @@ bool CollitionHandler::areColliding(GameObject* gameObjectOne, GameObject* gameO
 	//calcula la distancia
 	Vector2D distanceVector = gameObjectOneCenter - gameObjectTwoCenter;
 	//calcula la longitud del vector distancia
-	float distance = distanceVector.length();
+	float distance = distanceVector.m_x *distanceVector.m_x + distanceVector.m_y *distanceVector.m_y ;
+	minimumCollisionDistance = minimumCollisionDistance*minimumCollisionDistance;
+	//printf("distance =%d , min= %d\n",distance,minimumCollisionDistance);
 	if (distance <= minimumCollisionDistance)
 	{
+
 		//Hubo colision
 		collision = true;
 	}

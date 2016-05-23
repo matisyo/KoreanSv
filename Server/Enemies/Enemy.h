@@ -38,9 +38,9 @@ public:
     void damage(int damageReceived);
 
     void sendDrawMessage(bool isAlive);
-    Enemy();
-private:
 
+protected:
+    Enemy();
 
     Weapon* m_enemyWeapon;
 

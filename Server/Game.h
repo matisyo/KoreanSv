@@ -8,6 +8,7 @@
 #include "Background/Level.h"
 #include "Enemies/Enemy.h"
 
+
 #include "Singletons/CollisionHandler.h"
 #include "Singletons/InputHandler.h"
 #include "Singletons/TextureManager.h"
@@ -31,6 +32,7 @@ class Player;
 class Level;
 class server;
 class DrawMessagesPacker;
+class Mati;
 
 #define USE_DRAWMESSAGE_PACKAGING 0
 
